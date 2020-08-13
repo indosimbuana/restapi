@@ -51,10 +51,18 @@ class RegAkun extends RestController
     {
         $this->load->library('enkripdekrip');
 
-        $nama = $this->post('nama');
-        $email = $this->post('email');
-        $telp = $this->post('telp');
-        $password = $this->enkripdekrip->proses($this->post('password'));
+        $d = file_get_contents('php://input');
+        $data = json_decode($d, true);
+
+        $nama = $data['nama'];
+        $email = $data['email'];
+        $telp = $data['telp'];
+        $password = $this->enkripdekrip->proses($data['password']);
+
+        // $nama = $this->post('nama');
+        // $email = $this->post('email');
+        // $telp = $this->post('telp');
+        // $password = $this->enkripdekrip->proses($this->post('password'));
 
         $this->response([
             'nama' => $nama,

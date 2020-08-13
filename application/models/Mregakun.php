@@ -13,4 +13,8 @@ class Mregakun extends CI_Model
     {
         return $this->db->query("SELECT * FROM RegAkun WHERE NamaAkun = '$id'")->result();
     }
+
+    function regAkun($data)
+    {
+    }
 }
