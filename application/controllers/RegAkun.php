@@ -48,7 +48,7 @@ class RegAkun extends RestController
                         'message' => 'Akun dengan Email '.$dt['email'].' sudah terdaftar'
                     ], 409);
                 } else {
-                    if($this->mregakun->regAkun($data)) {
+                    if($this->mregakun->regAkun($dt)) {
                         $this->response([
                             'status' => true,
                             'message' => 'Registrasi akun berhasil'
