@@ -77,10 +77,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'DESKTOP-LLHROCD\SQLEXPRESS',
-	'username' => '',
-	'password' => '',
-	'database' => 'DB',
+	'hostname' => '182.168.7.161\SQLEXPRESS',
+	'username' => 'sa',
+	'password' => '@dm1n',
+	'database' => 'DBPN',
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

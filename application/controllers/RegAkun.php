@@ -12,41 +12,6 @@ class RegAkun extends RestController
         $this->load->model('mregakun');
     }
 
-    function index_get()
-    {
-        $id = $this->get('id');
-
-        if ($id === null) {
-            $b = $this->mbagian->getBagian();
-            if ($b) {
-                $this->response([
-                    'status' => true,
-                    'message' => 'Data found',
-                    'data' => $b
-                ], 200);
-            } else {
-                $this->response([
-                    'status' => false,
-                    'message' => 'No users were found'
-                ], 404);
-            }
-        } else {
-            $b = $this->mbagian->getBagianById($id);
-            if ($b) {
-                $this->response([
-                    'status' => true,
-                    'message' => 'Data found',
-                    'data' => $b
-                ], 200);
-            } else {
-                $this->response([
-                    'status' => false,
-                    'message' => 'No users were found'
-                ], 404);
-            }
-        }
-    }
-
     public function index_post()
     {
         $this->load->library('enkripdekrip');
@@ -54,21 +19,51 @@ class RegAkun extends RestController
         $d = file_get_contents('php://input');
         $data = json_decode($d, true);
 
-        $nama = $data['nama'];
-        $email = $data['email'];
-        $telp = $data['telp'];
-        $password = $this->enkripdekrip->proses($data['password']);
+        $dt = array();
+        $dt['nama'] = $data['nama'];
+        $dt['email'] = $data['email'];
+        $dt['telp'] = $data['telp'];
+        $dt['password'] = $this->enkripdekrip->proses($data['password']);
 
-        // $nama = $this->post('nama');
-        // $email = $this->post('email');
-        // $telp = $this->post('telp');
-        // $password = $this->enkripdekrip->proses($this->post('password'));
+        $this->load->model('mregakun');
+        $ceknama = $this->mregakun->getAkunByNama($dt['nama']);
+        $cektelp = $this->mregakun->getAkunByTelp($dt['telp']);
+        $cekemail = $this->mregakun->getAkunByEmail($dt['email']);
 
-        $this->response([
-            'nama' => $nama,
-            'email' => $email,
-            'telp' => $telp,
-            'password' => $password
-        ], 200);
+        if($ceknama) {
+            $this->response([
+                'status' => false,
+                'message' => 'Akun dengan Nama '.$dt['nama'].' sudah terdaftar'
+            ], 409);
+        } else {
+            if($cektelp) {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Akun dengan No Telp '.$dt['telp'].' sudah terdaftar'
+                ], 409);
+            } else {
+                if($cekemail) {
+                    $this->response([
+                        'status' => false,
+                        'message' => 'Akun dengan Email '.$dt['email'].' sudah terdaftar'
+                    ], 409);
+                } else {
+                    if($this->mregakun->regAkun($data)) {
+                        $this->response([
+                            'status' => true,
+                            'message' => 'Registrasi akun berhasil'
+                        ], 201);
+                    } else {
+                        $this->response([
+                            'status' => false,
+                            'message' => 'Gagal simpan data'
+                        ], 500);
+                    }
+                }
+                
+            }
+        }
+        
+
     }
 }
