@@ -51,6 +51,70 @@ Data yang dikirim berupa format JSON dengan struktur:
 	"passwordbaru": "password baru"
 }
 
+**************************
+Lupa Password dan Akun
+**************************
+
+URL Request : http://hostname/restapi/lupa
+
+Method POST
+
+Data yang dikirim berupa format JSON dengan struktur:
+
+{
+	"type": "password (untuk lupa password) atau akun (untuk lupa akun)",
+	"user": "email atau no telp atau nama akun (kondisional tergantung parameter type di atas)"
+}
+
+**************************
+Ubah Email
+**************************
+
+URL Request : http://hostname/restapi/ubahemail
+
+Method POST
+
+Data yang dikirim berupa format JSON dengan struktur:
+
+{
+	"user": "email atau no telp atau nama akun",
+	"password": "password saat ini, untuk konfirmasi kebenaran akun",
+	"email": "email baru"
+}
+
+**************************
+Ubah Telpon
+**************************
+
+URL Request : http://hostname/restapi/ubahtelp
+
+Method POST
+
+Data yang dikirim berupa format JSON dengan struktur:
+
+{
+	"user": "email atau no telp atau nama akun",
+	"password": "password saat ini, untuk konfirmasi kebenaran akun",
+	"telp": "no telpon baru"
+}
+
+**************************
+Reset Password 
+**************************
+
+URL Request : http://hostname/restapi/resetpassword
+
+Method POST
+
+Reset password dijalankan setelah dapat email kode permintaan lupa password. Data yang dikirim berupa format JSON dengan struktur:
+
+{
+	"telp": "no telp",
+	"kode": "kode lupa password dari email pengguna",
+	"passwordbaru": "password baru"
+}
+
+
 ###################
 Instalasi Aplikasi
 ###################
@@ -71,7 +135,7 @@ Tools
 Petunjuk
 **************************
 
-- Instal Git
+- Instal Git, download di https://git-scm.com/download/win
 
 - Instal XAMPP, download di https://downloadsapachefriends.global.ssl.fastly.net/7.4.8/xampp-windows-x64-7.4.8-0-VC15-installer.exe?from_af=true
 

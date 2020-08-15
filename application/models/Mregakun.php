@@ -11,22 +11,22 @@ class Mregakun extends CI_Model
 
     function getAkunByNama($id)
     {
-        return $this->db->query("SELECT * FROM RegAkun WHERE NamaAkun = '$id'")->result();
+        return $this->db->query("SELECT * FROM RegAkun WHERE NamaAkun = '$id'")->row();
     }
 
     function getAkunByTelp($id)
     {
-        return $this->db->query("SELECT * FROM RegAkun WHERE NoTelpon = '$id'")->result();
+        return $this->db->query("SELECT * FROM RegAkun WHERE NoTelpon = '$id'")->row();
     }
 
     function getAkunByEmail($id)
     {
-        return $this->db->query("SELECT * FROM RegAkun WHERE Email = '$id'")->result();
+        return $this->db->query("SELECT * FROM RegAkun WHERE Email = '$id'")->row();
     }
 
     function regAkun($data)
     {
         return $this->db->query("INSERT INTO RegAkun (NamaAkun, Email, NoTelpon, Password)
-        VALUES (".$this->db->escape($data['nama']).",".$this->db->escape($data['email']).",".$this->db->escape($data['telp']).",".$this->db->escape($data['password']).");");
+        VALUES (" . $this->db->escape($data['nama']) . "," . $this->db->escape($data['email']) . "," . $this->db->escape($data['telp']) . "," . $this->db->escape($data['password']) . ");");
     }
 }

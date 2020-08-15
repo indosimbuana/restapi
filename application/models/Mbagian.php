@@ -11,6 +11,6 @@ class Mbagian extends CI_Model
 
     function getBagianById($id)
     {
-        return $this->db->query("SELECT * FROM BAGIAN WHERE KodeBagian = '$id'")->result();
+        return $this->db->query("SELECT * FROM BAGIAN WHERE KodeBagian = '$id'")->row();
     }
 }
