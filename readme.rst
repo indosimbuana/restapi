@@ -35,6 +35,22 @@ Data yang dikirim berupa format JSON dengan struktur:
 	"password": "password pengguna"
 }
 
+**************************
+Ubah Password
+**************************
+
+URL Request : http://hostname/restapi/ubahpassword
+
+Method POST
+
+Data yang dikirim berupa format JSON dengan struktur:
+
+{
+	"user": "nama akun atau email atau no telpon",
+	"password": "password sekarang",
+	"passwordbaru": "password baru"
+}
+
 ###################
 Instalasi Aplikasi
 ###################

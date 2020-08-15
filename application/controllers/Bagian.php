@@ -9,13 +9,13 @@ class Bagian extends RestController
     function __construct()
     {
         parent::__construct();
-        $this->load->model('mbagian');
     }
 
     public function index_get()
     {
         $id = $this->get('id');
 
+        $this->load->model('mbagian');
         if ($id === null) {
             $b = $this->mbagian->getBagian();
             if ($b) {

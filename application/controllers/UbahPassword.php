@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class LoginAkun extends RestController
+class Ubahpassword extends RestController
 {
 
     function __construct()
@@ -21,20 +21,22 @@ class LoginAkun extends RestController
         $dt = array();
         $dt['user'] = $data['user'];
         $dt['password'] = $this->enkripdekrip->proses($data['password']);
+        $dt['passwordbaru'] = $this->enkripdekrip->proses($data['passwordbaru']);
 
-        $this->load->model('mlogin');
-        $cek = $this->mlogin->cekAkun($dt);
+        $this->load->model('mubahpassword');
+        $cekakun = $this->mubahpassword->cekakun($dt);
 
-        if ($cek) {
+        if ($cekakun) {
+            $this->mubahpassword->ubahPassword($dt);
             $this->response([
                 'status' => true,
-                'message' => 'Login berhasil'
+                'message' => 'Password berhasil diubah'
             ], 200);
         } else {
             $this->response([
                 'status' => false,
-                'message' => 'Informasi akun tidak ditemukan'
-            ], 404);
+                'message' => 'Gagal ubah password'
+            ], 500);
         }
     }
 }

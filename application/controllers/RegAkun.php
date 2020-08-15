@@ -9,7 +9,6 @@ class RegAkun extends RestController
     function __construct()
     {
         parent::__construct();
-        $this->load->model('mregakun');
     }
 
     public function index_post()
@@ -30,25 +29,25 @@ class RegAkun extends RestController
         $cektelp = $this->mregakun->getAkunByTelp($dt['telp']);
         $cekemail = $this->mregakun->getAkunByEmail($dt['email']);
 
-        if($ceknama) {
+        if ($ceknama) {
             $this->response([
                 'status' => false,
-                'message' => 'Akun dengan Nama '.$dt['nama'].' sudah terdaftar'
+                'message' => 'Akun dengan Nama ' . $dt['nama'] . ' sudah terdaftar'
             ], 409);
         } else {
-            if($cektelp) {
+            if ($cektelp) {
                 $this->response([
                     'status' => false,
-                    'message' => 'Akun dengan No Telp '.$dt['telp'].' sudah terdaftar'
+                    'message' => 'Akun dengan No Telp ' . $dt['telp'] . ' sudah terdaftar'
                 ], 409);
             } else {
-                if($cekemail) {
+                if ($cekemail) {
                     $this->response([
                         'status' => false,
-                        'message' => 'Akun dengan Email '.$dt['email'].' sudah terdaftar'
+                        'message' => 'Akun dengan Email ' . $dt['email'] . ' sudah terdaftar'
                     ], 409);
                 } else {
-                    if($this->mregakun->regAkun($dt)) {
+                    if ($this->mregakun->regAkun($dt)) {
                         $this->response([
                             'status' => true,
                             'message' => 'Registrasi akun berhasil'
@@ -60,10 +59,7 @@ class RegAkun extends RestController
                         ], 500);
                     }
                 }
-                
             }
         }
-        
-
     }
 }
