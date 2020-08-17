@@ -39,7 +39,9 @@ class Lupa extends RestController
                             $this->response([
                                 'status' => true,
                                 'message' => 'Kode konfirmasi lupa password telah dikirim ke email yang terdaftar ' . $cekakun->Email,
-                                'code' => $kd['kode']
+                                'user' => $cekakun->NamaAkun,
+                                'email' => $cekakun->Email,
+                                'telp' => $cekakun->NoTelpon
                             ], 200);
                         } else {
                             $this->response([
@@ -63,7 +65,10 @@ class Lupa extends RestController
                     if ($this->mail->kirim($cekakun->Email, $body['judul'], $body) == true) {
                         $this->response([
                             'status' => true,
-                            'message' => 'Informasi akun telah dikirim ke email ' . $cekakun->Email
+                            'message' => 'Informasi akun telah dikirim ke email ' . $cekakun->Email,
+                            'user' => $cekakun->NamaAkun,
+                            'email' => $cekakun->Email,
+                            'telp' => $cekakun->NoTelpon
                         ], 200);
                     } else {
                         $this->response([
