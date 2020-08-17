@@ -28,7 +28,10 @@ class LoginAkun extends RestController
         if ($cek) {
             $this->response([
                 'status' => true,
-                'message' => 'Login berhasil'
+                'message' => 'Login berhasil',
+                'user' => $cek->NamaAkun,
+                'email' => $cek->Email,
+                'telp' => $cek->NoTelpon
             ], 200);
         } else {
             $this->response([
