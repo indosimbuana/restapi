@@ -30,7 +30,10 @@ class UbahTelp extends RestController
             $this->mubahtelp->ubahTelp($dt);
             $this->response([
                 'status' => true,
-                'message' => 'No Telpon berhasil diubah ke ' . $dt['notelp']
+                'message' => 'No Telpon berhasil diubah ke ' . $dt['notelp'],
+                'user' => $cekakun->NamaAkun,
+                'email' => $cekakun->Email,
+                'telp' => $cekakun->NoTelpon
             ], 200);
         } else {
             $this->response([

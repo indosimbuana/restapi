@@ -30,7 +30,10 @@ class Ubahpassword extends RestController
             $this->mubahpassword->ubahPassword($dt);
             $this->response([
                 'status' => true,
-                'message' => 'Password berhasil diubah'
+                'message' => 'Password berhasil diubah',
+                'user' => $cekakun->NamaAkun,
+                'email' => $cekakun->Email,
+                'telp' => $cekakun->NoTelpon
             ], 200);
         } else {
             $this->response([
