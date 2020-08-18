@@ -32,7 +32,7 @@ class UbahEmail extends RestController
                 'status' => true,
                 'message' => 'Email berhasil diubah ke ' . $dt['email'],
                 'user' => $cekakun->NamaAkun,
-                'email' => $cekakun->Email,
+                'email' => $dt['email'],
                 'telp' => $cekakun->NoTelpon
             ], 200);
         } else {

@@ -21,7 +21,7 @@ class UbahTelp extends RestController
         $dt = array();
         $dt['user'] = $data['user'];
         $dt['password'] = $this->enkripdekrip->proses($data['password']);
-        $dt['notelp'] = $this->enkripdekrip->proses($data['notelp']);
+        $dt['notelp'] = $data['notelp'];
 
         $this->load->model('mubahtelp');
         $cekakun = $this->mubahtelp->cekakun($dt);
@@ -33,7 +33,7 @@ class UbahTelp extends RestController
                 'message' => 'No Telpon berhasil diubah ke ' . $dt['notelp'],
                 'user' => $cekakun->NamaAkun,
                 'email' => $cekakun->Email,
-                'telp' => $cekakun->NoTelpon
+                'telp' => $dt['notelp']
             ], 200);
         } else {
             $this->response([
