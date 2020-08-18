@@ -32,8 +32,6 @@ class Resetpassword extends RestController
                 $this->response([
                     'status' => true,
                     'message' => 'Password berhasil diubah',
-                    'user' => $cek->NamaAkun,
-                    'email' => $cek->Email,
                     'telp' => $cek->NoTelpon
                 ], 200);
             } else {
