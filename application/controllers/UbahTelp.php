@@ -21,7 +21,7 @@ class UbahTelp extends RestController
         $dt = array();
         $dt['user'] = $data['user'];
         $dt['password'] = $this->enkripdekrip->proses($data['password']);
-        $dt['notelp'] = $data['notelp'];
+        $dt['notelp'] = $data['telp'];
 
         $this->load->model('mubahtelp');
         $cekakun = $this->mubahtelp->cekakun($dt);
