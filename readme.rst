@@ -230,6 +230,39 @@ URL Request Data By ID : http://hostname/restapi/mstpenjamin?id=<idpenjamin>
 
 Method GET
 
+**************************
+Master Bahasa 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstbahasa
+
+URL Request Data By ID : http://hostname/restapi/mstbahasa?id=<idbahasa>
+
+Method GET
+
+**************************
+Master Suku 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstsuku
+
+URL Request Data By ID : http://hostname/restapi/mstsuku?id=<idsuku>
+
+Method GET
+
+**************************
+Pilih Poli
+**************************
+
+URL Request : http://hostname/restapi/pilihpoli?jns=<jeniswaktupoli>&tgl=<tanggalperiksa>
+
+Method GET
+
+Format Parameter:
+- jns : P atau S
+- tgl : yyyy-mm-dd (ex. 2020-08-23)
+
+
 ###################
 Instalasi Aplikasi
 ###################
