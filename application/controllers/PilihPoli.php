@@ -73,6 +73,7 @@ class PilihPoli extends RestController
                         }
                     }
                     $data[$n]['buka'] = $bk;
+                    $data[$n]['ket'] = $dt['Keterangan'];
                     $n++;
                 }
                 $this->response([
