@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class Mstprovinsi extends RestController
+class Mstkecamatan extends RestController
 {
 
     function __construct()
@@ -13,16 +13,19 @@ class Mstprovinsi extends RestController
 
     public function index_get()
     {
-        $id = $this->get('id');
+        $prov = $this->get('prov');
+        $kab = $this->get('kab');
 
-        $this->load->model('mprovinsi');
-        if ($id === null) {
-            $p = $this->mprovinsi->getProvinsi();
-            if ($p) {
+        $this->load->model('mkecamatan');
+        if ($prov === null && $kab === null) {
+            $k = $this->mkecamatan->getKecamatan();
+            if ($k) {
                 $n = 0;
-                foreach ($p as $dt) {
+                foreach ($k as $dt) {
                     $data[$n]['kdprov'] = $dt['KODEPROV'];
-                    $data[$n]['nmprov'] = $dt['PROVINCE'];
+                    $data[$n]['kdkab'] = $dt['KODEKOTA'];
+                    $data[$n]['kdkec'] = $dt['KODEKEC'];
+                    $data[$n]['nmkec'] = $dt['NAMAKEC'];
                     $n++;
                 }
                 $this->response([
@@ -33,14 +36,18 @@ class Mstprovinsi extends RestController
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'No provinsi were found'
+                    'message' => 'No kecamatan were found'
                 ], 404);
             }
         } else {
-            $dp = $this->mprovinsi->getProvinsiById($id);
-            if ($dp) {
-                $data['kdprov'] = $dp->KODEPROV;
-                $data['nmprov'] = $dp->PROVINCE;
+            $dk = $this->mkecamatan->getKecamatanByKab($prov, $kab);
+            if ($dk) {
+                $n = 0;
+                foreach ($dk as $dt) {
+                    $data[$n]['kdkec'] = $dt['KODEKEC'];
+                    $data[$n]['nmkec'] = $dt['NAMAKEC'];
+                    $n++;
+                }
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',
@@ -49,7 +56,7 @@ class Mstprovinsi extends RestController
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'No provinsi were found'
+                    'message' => 'No kecamatan were found'
                 ], 404);
             }
         }

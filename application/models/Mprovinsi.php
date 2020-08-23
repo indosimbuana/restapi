@@ -6,11 +6,11 @@ class Mprovinsi extends CI_Model
 
     function getProvinsi()
     {
-        return $this->db->query("SELECT * FROM MasterProvinsi")->result_array();
+        return $this->db->query("SELECT KODEPROV, PROVINCE FROM MasterProvinsi")->result_array();
     }
 
     function getProvinsiById($id)
     {
-        return $this->db->query("SELECT * FROM MasterProvinsi WHERE KODEPROV = '$id'")->row();
+        return $this->db->query("SELECT KODEPROV, PROVINCE FROM MasterProvinsi WHERE KODEPROV = '$id'")->row();
     }
 }

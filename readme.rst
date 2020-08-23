@@ -137,6 +137,85 @@ URL Request Data By ID : http://hostname/restapi/mstprovinsi?id=<kodeprovinsi>
 
 Method GET
 
+**************************
+Master Kabupaten 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstkabupaten
+
+URL Request Data By ID Provinsi : http://hostname/restapi/mstkabupaten?prov=<kodeprovinsi>
+
+Method GET
+
+**************************
+Master Kecamatan 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstkecamatan?prov=0014&kab=0002
+
+URL Request Data By ID Provinsi & ID Kabupaten : http://hostname/restapi/mstkecamatan?prov=<kodeprovinsi>&kab=<kodekabupaten>
+
+Method GET
+
+**************************
+Master Agama 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstagama
+
+URL Request Data By ID : http://hostname/restapi/mstagama?id=<kodeagama>
+
+Method GET
+
+**************************
+Master Golongan Darah 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstgoldarah
+
+URL Request Data By ID : http://hostname/restapi/mstgoldarah?id=<idgoldarah>
+
+Method GET
+
+**************************
+Master Pendidikan 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstpendidikan
+
+URL Request Data By ID : http://hostname/restapi/mstpendidikan?id=<idpendidikan>
+
+Method GET
+
+**************************
+Master Pekerjaan 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstpekerjaan
+
+URL Request Data By ID : http://hostname/restapi/mstpekerjaan?id=<idpekerjaan>
+
+Method GET
+
+**************************
+Master Status Kawin 
+**************************
+
+URL Request All Data : http://hostname/restapi/mststatuskawin
+
+URL Request Data By ID : http://hostname/restapi/mststatuskawin?id=<idstatuskawin>
+
+Method GET
+
+**************************
+Master Penjamin 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstpenjamin
+
+URL Request Data By ID : http://hostname/restapi/mstpenjamin?id=<idpenjamin>
+
+Method GET
 
 ###################
 Instalasi Aplikasi

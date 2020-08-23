@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class Mstprovinsi extends RestController
+class Mststatuskawin extends RestController
 {
 
     function __construct()
@@ -15,14 +15,14 @@ class Mstprovinsi extends RestController
     {
         $id = $this->get('id');
 
-        $this->load->model('mprovinsi');
+        $this->load->model('mstskwn');
         if ($id === null) {
-            $p = $this->mprovinsi->getProvinsi();
-            if ($p) {
+            $a = $this->mstskwn->getStsKwn();
+            if ($a) {
                 $n = 0;
-                foreach ($p as $dt) {
-                    $data[$n]['kdprov'] = $dt['KODEPROV'];
-                    $data[$n]['nmprov'] = $dt['PROVINCE'];
+                foreach ($a as $dt) {
+                    $data[$n]['kdsts'] = $dt['KodeStatus'];
+                    $data[$n]['nmsts'] = trim($dt['NamaStatus']);
                     $n++;
                 }
                 $this->response([
@@ -33,14 +33,14 @@ class Mstprovinsi extends RestController
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'No provinsi were found'
+                    'message' => 'No status kawin were found'
                 ], 404);
             }
         } else {
-            $dp = $this->mprovinsi->getProvinsiById($id);
-            if ($dp) {
-                $data['kdprov'] = $dp->KODEPROV;
-                $data['nmprov'] = $dp->PROVINCE;
+            $da = $this->mstskwn->getStsKwnById($id);
+            if ($da) {
+                $data['kdsts'] = $da->KodeStatus;
+                $data['nmsts'] = trim($da->NamaStatus);
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',
@@ -49,7 +49,7 @@ class Mstprovinsi extends RestController
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'No provinsi were found'
+                    'message' => 'No status kawin were found'
                 ], 404);
             }
         }

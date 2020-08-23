@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class Mstprovinsi extends RestController
+class Mstagama extends RestController
 {
 
     function __construct()
@@ -15,14 +15,14 @@ class Mstprovinsi extends RestController
     {
         $id = $this->get('id');
 
-        $this->load->model('mprovinsi');
+        $this->load->model('magama');
         if ($id === null) {
-            $p = $this->mprovinsi->getProvinsi();
-            if ($p) {
+            $a = $this->magama->getAgama();
+            if ($a) {
                 $n = 0;
-                foreach ($p as $dt) {
-                    $data[$n]['kdprov'] = $dt['KODEPROV'];
-                    $data[$n]['nmprov'] = $dt['PROVINCE'];
+                foreach ($a as $dt) {
+                    $data[$n]['kdagama'] = $dt['KodeAgama'];
+                    $data[$n]['nmagama'] = trim($dt['NamaAgama']);
                     $n++;
                 }
                 $this->response([
@@ -33,14 +33,14 @@ class Mstprovinsi extends RestController
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'No provinsi were found'
+                    'message' => 'No agama were found'
                 ], 404);
             }
         } else {
-            $dp = $this->mprovinsi->getProvinsiById($id);
-            if ($dp) {
-                $data['kdprov'] = $dp->KODEPROV;
-                $data['nmprov'] = $dp->PROVINCE;
+            $da = $this->magama->getAgamaById($id);
+            if ($da) {
+                $data['kdagama'] = $da->KodeAgama;
+                $data['nmagama'] = trim($da->NamaAgama);
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',
@@ -49,7 +49,7 @@ class Mstprovinsi extends RestController
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'No provinsi were found'
+                    'message' => 'No agama were found'
                 ], 404);
             }
         }
