@@ -127,6 +127,16 @@ Method GET
 
 Master Level Akun digunakan untuk registrasi user dengan level tertentu.
 
+**************************
+Master Provinsi 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstprovinsi
+
+URL Request Data By ID : http://hostname/restapi/mstprovinsi?id=<kodeprovinsi>
+
+Method GET
+
 
 ###################
 Instalasi Aplikasi
