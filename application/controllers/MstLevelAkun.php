@@ -19,10 +19,16 @@ class Mstlevelakun extends RestController
         if ($id === null) {
             $b = $this->mlevelakun->getLevel();
             if ($b) {
+                $n = 0;
+                foreach ($b as $dt) {
+                    $data[$n]['idlevel'] = $dt['IDLevel'];
+                    $data[$n]['nmlevel'] = $dt['NamaLevel'];
+                    $n++;
+                }
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',
-                    'data' => $b
+                    'data' => $data
                 ], 200);
             } else {
                 $this->response([
@@ -33,10 +39,12 @@ class Mstlevelakun extends RestController
         } else {
             $b = $this->mlevelakun->getLevelById($id);
             if ($b) {
+                $data['idlevel'] = $b->IDLevel;
+                $data['nmlevel'] = $b->NamaLevel;
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',
-                    'data' => $b
+                    'data' => $data
                 ], 200);
             } else {
                 $this->response([
