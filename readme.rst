@@ -116,6 +116,19 @@ Reset password dijalankan setelah dapat email kode permintaan lupa password. Dat
 }
 
 **************************
+Cari Pasien Lama
+**************************
+
+URL Request : http://hostname/restapi/cekpasienlama
+
+Method POST
+
+{
+	"nopasien": "no pasien",
+	"tgllahir": "yyyy-mm-dd"
+}
+
+**************************
 Master Level Akun 
 **************************
 
