@@ -23,6 +23,7 @@ class RegAkun extends RestController
         $dt['email'] = $data['email'];
         $dt['telp'] = $data['telp'];
         $dt['password'] = $this->enkripdekrip->proses($data['password']);
+        $dt['level'] = $data['level'];
 
         $this->load->model('mregakun');
         $ceknama = $this->mregakun->getAkunByNama($dt['nama']);

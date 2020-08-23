@@ -74,9 +74,11 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 // DESKTOP-LLHROCD\SQLEXPRESS
+// 182.168.7.161\SQLEXPRESS
 
 $db['default'] = array(
 	'dsn'	=> '',
+	// 'hostname' => 'DESKTOP-BLKCQ8M',
 	'hostname' => '182.168.7.161\SQLEXPRESS',
 	'username' => 'sa',
 	'password' => '@dm1n',

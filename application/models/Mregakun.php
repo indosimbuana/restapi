@@ -26,7 +26,7 @@ class Mregakun extends CI_Model
 
     function regAkun($data)
     {
-        return $this->db->query("INSERT INTO RegAkun (NamaAkun, Email, NoTelpon, Password)
-        VALUES (" . $this->db->escape($data['nama']) . "," . $this->db->escape($data['email']) . "," . $this->db->escape($data['telp']) . "," . $this->db->escape($data['password']) . ");");
+        return $this->db->query("INSERT INTO RegAkun (NamaAkun, Email, NoTelpon, Password, LevelAkun)
+        VALUES (" . $this->db->escape($data['nama']) . "," . $this->db->escape($data['email']) . "," . $this->db->escape($data['telp']) . "," . $this->db->escape($data['password']) . "," . $this->db->escape($data['level']) . ");");
     }
 }

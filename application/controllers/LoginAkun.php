@@ -31,7 +31,8 @@ class LoginAkun extends RestController
                 'message' => 'Login berhasil',
                 'user' => $cek->NamaAkun,
                 'email' => $cek->Email,
-                'telp' => $cek->NoTelpon
+                'telp' => $cek->NoTelpon,
+                'level' => $cek->LevelAkun
             ], 200);
         } else {
             $this->response([

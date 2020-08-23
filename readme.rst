@@ -16,7 +16,8 @@ Data yang dikirim berupa format JSON dengan struktur:
 	"nama": "nama akun",
 	"email": "email pengguna",
 	"telp": "no telpon pengguna",
-	"password": "password pengguna (max. 50 karakter)"
+	"password": "password pengguna (max. 50 karakter)",
+	"level": "level akun, didapat dari load ws mstlevelakun, kirim kode levelnya (IDLevel) saja"
 }
 
 
@@ -113,6 +114,18 @@ Reset password dijalankan setelah dapat email kode permintaan lupa password. Dat
 	"kode": "kode lupa password dari email pengguna",
 	"passwordbaru": "password baru"
 }
+
+**************************
+Master Level Akun 
+**************************
+
+URL Request All Data : http://hostname/restapi/mstlevelakun
+
+URL Request Data By ID : http://hostname/restapi/mstlevelakun?id=<idlevel>
+
+Method GET
+
+Master Level Akun digunakan untuk registrasi user dengan level tertentu.
 
 
 ###################
