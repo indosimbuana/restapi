@@ -61,10 +61,13 @@ class PilihPoli extends RestController
                     $data[$n]['nmklinik'] = $dt['NamaBagian'];
                     $data[$n]['kddokter'] = $dt['KodeDokter'];
                     $data[$n]['nmdokter'] = $dt['Nama'];
+                    $klanak = array(date('yy-m-d', strtotime('second sat of august this year')), date('yy-m-d', strtotime('fourth sat of august this year')));
                     if ($kl) {
                         $bk = "Libur - " . $kl->Keterangan;
                     } else if ($dr) {
                         $bk = "Libur - " . $dr->Keterangan;
+                    } else if ($dt['KodeKlinik'] == "6104" && in_array($tgl, $klanak)) {
+                        $bk = "Libur";
                     } else {
                         if ($dt[$hari] === NULL) {
                             $bk = "Libur";

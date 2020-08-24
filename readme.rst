@@ -262,6 +262,18 @@ Format Parameter:
 - jns : P atau S
 - tgl : yyyy-mm-dd (ex. 2020-08-23)
 
+Poli anak pada hari Sabtu minggu ke-2 dan ke-4 libur
+
+**************************
+Pilih Tanggal Periksa 
+**************************
+
+URL Request : http://hostname/restapi/pilihtanggal
+
+Method GET
+
+Skip hari Minggu dan hari libur, H+7 H-1
+
 
 ###################
 Instalasi Aplikasi
