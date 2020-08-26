@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
  */
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 include_once './vendor/autoload.php';
+date_default_timezone_set("Asia/Jakarta");
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

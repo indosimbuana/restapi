@@ -274,6 +274,88 @@ Method GET
 
 Skip hari Minggu dan hari libur, H+7 H-1
 
+**************************
+Tambah Anggota Keluarga 
+**************************
+
+URL Request : http://hostname/restapi/reganggota
+
+Method POST
+
+{
+	"hubungan": "<max 50 varchar>",
+	"idakun":"<namauser akun pendaftar>",
+	"nopasien":"<nopasien wajib diisi untuk pasien lama>",
+	"namalengkap":"<namalengkap max 300 varchar>",
+	"ktp":"<noktp untuk pasien baru wajib diisi ya, untuk pengecekan data>",
+	"jeniskelamin":"<jeniskelamin L/P>",
+	"tempatlahir":"<tmptlahir max 100 varchar>",
+	"tgllahir":"<tgllahir format yyyy-mm-dd ex. 1990-01-01>",
+	"alamat":"<alamat dgn kelurahan max 500 varchar>",
+	"provinsi":"<kodeprovinsi>",
+	"kabupaten":"<kodekabupaten>",
+	"kecamatan":"<kodekecamatan>",
+	"kodepos":"<kodepos>",
+	"agama":"<kodeagama>",
+	"goloangandarah":"<kodegoldarah>",
+	"pendidikan":"<kodependidikan>",
+	"statuskawin":"<kodestatuskawin>",
+	"pekerjaan":"<kodepekerjaan>",
+	"wni":"<wni 1/0>",
+	"negara":"<negara text max 15 char>",
+	"suku":"<kodesuku>",
+	"bahasa":"<kodebahasa>",
+	"alergi":"<text max 40 varchar>",
+	"alamatkantor":"<max 500 varchar>",
+	"telpkantor":"<notelp>",
+	"namakeluarga":"<namakeluarga max 200 varchar>",
+	"namaayah":"<namaayah max 200 varchar>",
+	"namaibu":"<namaibu max 200 varchar>",
+	"namasuamiistri":"<namasuamiistri max 200 varchar>",
+	"notelpon":"<notelp max 14 char>",
+	"email":"<email max 50 varchar>"
+}
+
+Jika parameter nopasien kosong atau null maka dianggap sebagai pasien baru.
+Pasien lama hanya membutuhkan parameter hubungan, idakun, nopasien, dan parameter yang lain tetap dikirimkan.
+Untuk link pasien baru dan lama sama saja, dan parameter yang dikirimkan juga jumlahnya sama, yang membedakan hanya pada kondisi value dari parameter nopasien.
+
+**************************
+Simpan Booking 
+**************************
+
+URL Request : http://hostname/restapi/regbooking
+
+Method POST
+
+{
+"idanggotakeluarga": "<idanggotakeluarga>",
+"bagian":"<kodebagian>",
+"penjamin":"<kodepenjamin>",
+"nopenjamin":"<no kartu penjamin>",
+"norujukan":"<norujukan jika bpjs",
+"dokter":"<kodedokter>",
+"tanggal":"<yyyy-mm-dd>",
+"waktu":"<P/S>"
+}
+
+**************************
+Anggota Keluarga 
+**************************
+
+URL Request : http://hostname/restapi/anggotakeluarga?akun=<namaakun>
+
+Method GET
+
+**************************
+Riwayat Booking 
+**************************
+
+URL Request Daftar Riwayat : http://hostname/restapi/riwayatreg?anggota=<idanggotakeluarga>
+
+URL Request Detail Riwayat : http://hostname/restapi/riwayatreg?kode=<kodebooking>
+
+Method GET
 
 ###################
 Instalasi Aplikasi
