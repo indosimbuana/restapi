@@ -282,10 +282,11 @@ URL Request : http://hostname/restapi/reganggota
 
 Method POST
 
+Pasien Baru :
+
 {
 	"hubungan": "<max 50 varchar>",
 	"idakun":"<namauser akun pendaftar>",
-	"nopasien":"<nopasien wajib diisi untuk pasien lama>",
 	"namalengkap":"<namalengkap max 300 varchar>",
 	"ktp":"<noktp untuk pasien baru wajib diisi ya, untuk pengecekan data>",
 	"jeniskelamin":"<jeniskelamin L/P>",
@@ -314,6 +315,15 @@ Method POST
 	"namasuamiistri":"<namasuamiistri max 200 varchar>",
 	"notelpon":"<notelp max 14 char>",
 	"email":"<email max 50 varchar>"
+}
+
+Pasien Lama:
+
+{
+	"nopasien": "<nopasien>",
+	"tgllahir": "<yyyy-mm-dd>",
+	"idakun": "<idakun>",
+	"hubungan": "<hubungan>"
 }
 
 Jika parameter nopasien kosong atau null maka dianggap sebagai pasien baru.
