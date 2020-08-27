@@ -61,18 +61,33 @@ class RegBooking extends RestController
             ], 400);
         } else {
             $hitungbooking = $this->mregbooking->hitungBooking($data['tanggal']);
-            $hitungpendaftaran = $this->mregbooking->hitungPendaftaran($data['tanggal']);
-            $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], $data['tanggal'], $data['waktu']);
-            $dt['kodebooking'] = $date . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
-            $dt['noantripendaftaran'] = str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
-            $dt['noantripoli'] = str_pad($hitungpoli + 1, 4, "0", STR_PAD_LEFT);
+            $dt['kodebooking'] = str_replace("-", "", $data['tanggal']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
 
-            $time = strtotime('07:00');
-            $jml = $hitungpendaftaran;
-            $pelayanan = 5;
-            $wkt = $jml * $pelayanan;
-            $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
-            $dt['jamdilayani'] = $jamdilayani;
+            if ($data['bagian'] == "6101") {
+                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn($data['tanggal'], $data['waktu']);
+                $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], $data['tanggal'], $data['waktu']);
+                $dt['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                $dt['noantripoli'] = "A" . str_pad($hitungpoli + 1, 4, "0", STR_PAD_LEFT);
+
+                $time = strtotime('07:00');
+                $jml = $hitungpendaftaran;
+                $pelayanan = 5;
+                $wkt = $jml * $pelayanan;
+                $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                $dt['jamdilayani'] = $jamdilayani;
+            } else {
+                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain($data['tanggal']);
+                $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], $data['tanggal'], $data['waktu']);
+                $dt['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                $dt['noantripoli'] = str_pad($hitungpoli + 1, 4, "0", STR_PAD_LEFT);
+
+                $time = strtotime('07:00');
+                $jml = $hitungpendaftaran;
+                $pelayanan = 5;
+                $wkt = $jml * $pelayanan;
+                $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                $dt['jamdilayani'] = $jamdilayani;
+            }
 
             if ($this->mregbooking->simpanBooking($dt)) {
                 $this->response([

@@ -14,9 +14,14 @@ class Mregbooking extends CI_Model
         return $this->db->query("SELECT * FROM RegOnline WHERE tglPemeriksaan = '$tgl'")->num_rows();
     }
 
-    function hitungPendaftaran($tgl)
+    function hitungPendaftaranLain($tgl)
     {
-        return $this->db->query("SELECT * FROM RegOnline WHERE tglPemeriksaan = '$tgl'")->num_rows();
+        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian != '6101' AND tglPemeriksaan = '$tgl'")->num_rows();
+    }
+
+    function hitungPendaftaranObsgyn($tgl, $wkt)
+    {
+        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian = '6101' AND tglPemeriksaan = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
     }
 
     function hitungPoli($bag, $tgl, $wkt)
