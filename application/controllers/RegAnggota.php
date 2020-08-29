@@ -62,13 +62,13 @@ class Reganggota extends RestController
                 // Pasien Lama
                 if ($data['nopasien'] == '' || $data['nopasien'] == null) {
                     $this->response([
-                        'status' => true,
+                        'status' => false,
                         'message' => 'Gagal Simpan Pasien Lama, no pasien harus diisi'
                     ], 400);
                 } else {
                     if ($this->mreganggota->getAnggotaPasienLama($data['idakun'], $data['nopasien'])) {
                         $this->response([
-                            'status' => true,
+                            'status' => false,
                             'message' => 'Gagal Simpan Pasien Lama, anggota keluarga sudah terdaftar'
                         ], 400);
                     } else {
@@ -86,13 +86,13 @@ class Reganggota extends RestController
                                 ], 200);
                             } else {
                                 $this->response([
-                                    'status' => true,
+                                    'status' => false,
                                     'message' => 'Gagal Simpan Pasien Lama'
                                 ], 400);
                             }
                         } else {
                             $this->response([
-                                'status' => true,
+                                'status' => false,
                                 'message' => 'Gagal Simpan, data pasien lama tidak ditemukan'
                             ], 400);
                         }
@@ -102,7 +102,7 @@ class Reganggota extends RestController
                 // Pasien Baru
                 if ($this->mreganggota->getAnggotaPasienBaru($data['idakun'], $data['ktp'])) {
                     $this->response([
-                        'status' => true,
+                        'status' => false,
                         'message' => 'Gagal Simpan Pasien Baru, anggota keluarga sudah terdaftar'
                     ], 400);
                 } else {
@@ -117,7 +117,7 @@ class Reganggota extends RestController
                         ], 200);
                     } else {
                         $this->response([
-                            'status' => true,
+                            'status' => false,
                             'message' => 'Gagal Simpan Pasien Baru'
                         ], 400);
                     }
@@ -125,7 +125,7 @@ class Reganggota extends RestController
             }
         } else {
             $this->response([
-                'status' => true,
+                'status' => false,
                 'message' => 'Gagal Simpan, akun tidak terdaftar'
             ], 400);
         }

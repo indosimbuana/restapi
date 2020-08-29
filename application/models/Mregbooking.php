@@ -11,7 +11,7 @@ class Mregbooking extends CI_Model
 
     function hitungBooking($tgl)
     {
-        return $this->db->query("SELECT * FROM RegOnline WHERE tglPemeriksaan = '$tgl'")->num_rows();
+        return $this->db->query("SELECT * FROM RegOnline WHERE LEFT(kodeBooking,8) = '$tgl'")->num_rows();
     }
 
     function hitungPendaftaranLain($tgl)

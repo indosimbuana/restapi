@@ -60,7 +60,7 @@ class RegBooking extends RestController
                 'message' => 'Maaf pasien ini sudah terdaftar di klinik yang sama pada tanggal yang sama'
             ], 400);
         } else {
-            $hitungbooking = $this->mregbooking->hitungBooking($data['tanggal']);
+            $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $data['tanggal']));
             $dt['kodebooking'] = str_replace("-", "", $data['tanggal']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
             $jam = "07:00";
             $time = strtotime($jam);
@@ -94,21 +94,23 @@ class RegBooking extends RestController
 
             if ($this->mregbooking->simpanBooking($dt)) {
                 $this->response([
-                    'kodebooking' => $dt['kodebooking'],
-                    'noantripendaftaran' => $dt['noantripendaftaran'],
-                    'noantripoli' => $dt['noantripoli'],
+                    'status' => true,
+                    'message' => 'Berhasil Simpan Booking',
+                    'kodebooking' => trim($dt['kodebooking']),
+                    'noantripendaftaran' => trim($dt['noantripendaftaran']),
+                    'noantripoli' => trim($dt['noantripoli']),
                     'jamdilayani' => $dt['jamdilayani'],
-                    'namapoli' => $dt['namabagian'],
-                    'namadokter' => $dt['namadokter'],
+                    'namapoli' => trim($dt['namabagian']),
+                    'namadokter' => trim($dt['namadokter']),
                     'tanggal' => $dt['tanggal'],
                     'waktu' => $dt['waktu'],
-                    'namapenjamin' => $dt['namapenjamin'],
-                    'nopenjamin' => $dt['nopenjamin'],
-                    'norujukan' => $dt['norujukan']
+                    'namapenjamin' => trim($dt['namapenjamin']),
+                    'nopenjamin' => trim($dt['nopenjamin']),
+                    'norujukan' => trim($dt['norujukan'])
                 ], 200);
             } else {
                 $this->response([
-                    'status' => true,
+                    'status' => false,
                     'message' => 'Gagal Simpan Booking'
                 ], 400);
             }

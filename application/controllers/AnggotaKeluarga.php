@@ -31,6 +31,7 @@ class Anggotakeluarga extends RestController
                         $data[$n]['idanggota'] = $dt['idAnggotaKeluarga'];
                         $data[$n]['hubungan'] = trim($dt['hubunganAkun']);
                         $data[$n]['nopasien'] = trim($dt['noPasien']);
+                        $data[$n]['namalengkap'] = trim($dt['NamaLengkap']);
                         $data[$n]['jnskelamin'] = trim($dt['JenisKelamin']);
                         $data[$n]['tgllahir'] = trim($dt['TglLahir']);
                         $n++;
@@ -53,6 +54,7 @@ class Anggotakeluarga extends RestController
                 $data['idanggota'] = $da->idAnggotaKeluarga;
                 $data['hubungan'] = trim($da->hubunganAkun);
                 $data['nopasien'] = trim($da->noPasien);
+                $data['namalengkap'] = trim($da->NamaLengkap);
                 $data['jnskelamin'] = trim($da->JenisKelamin);
                 $data['tgllahir'] = trim($da->TglLahir);
                 $this->response([

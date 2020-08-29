@@ -31,7 +31,9 @@ class Cekpasienlama extends RestController
                 'nopasien' => $cek->Nopasien,
                 'tgllahir' => $cek->TglLahir,
                 'jnskel' => $cek->JenisKelamin,
-                'alamat' => $cek->AlamatPasien
+                'alamat' => $cek->AlamatPasien,
+                'telp' => $cek->TlpPasien,
+                'email' => '-'
             ], 200);
         } else {
             $this->response([
