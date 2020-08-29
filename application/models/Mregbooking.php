@@ -77,6 +77,6 @@ class Mregbooking extends CI_Model
         ," . $this->db->escape($data['dokter']) . "
         ," . $this->db->escape($data['namadokter']) . "
         ," . $this->db->escape($data['tanggal']) . "
-        ," . $this->db->escape($data['waktu']) . ");");
+        ," . $this->db->escape($data['datetime']) . ");");
     }
 }
