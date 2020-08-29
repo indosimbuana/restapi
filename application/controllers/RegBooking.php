@@ -62,6 +62,9 @@ class RegBooking extends RestController
         } else {
             $hitungbooking = $this->mregbooking->hitungBooking($data['tanggal']);
             $dt['kodebooking'] = str_replace("-", "", $data['tanggal']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
+            $jam = "07:00";
+            $time = strtotime($jam);
+            $datetime = date("Y-m-d H:i", strtotime($dt['tanggal'] . $jam));
 
             if ($data['bagian'] == "6101") {
                 $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn($data['tanggal'], $data['waktu']);
@@ -69,24 +72,24 @@ class RegBooking extends RestController
                 $dt['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
                 $dt['noantripoli'] = "A" . str_pad($hitungpoli + 1, 4, "0", STR_PAD_LEFT);
 
-                $time = strtotime('07:00');
                 $jml = $hitungpendaftaran;
                 $pelayanan = 5;
                 $wkt = $jml * $pelayanan;
                 $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
                 $dt['jamdilayani'] = $jamdilayani;
+                $dt['datetime'] = $datetime;
             } else {
                 $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain($data['tanggal']);
                 $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], $data['tanggal'], $data['waktu']);
                 $dt['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
                 $dt['noantripoli'] = str_pad($hitungpoli + 1, 4, "0", STR_PAD_LEFT);
 
-                $time = strtotime('07:00');
                 $jml = $hitungpendaftaran;
                 $pelayanan = 5;
                 $wkt = $jml * $pelayanan;
                 $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
                 $dt['jamdilayani'] = $jamdilayani;
+                $dt['datetime'] = $datetime;
             }
 
             if ($this->mregbooking->simpanBooking($dt)) {
