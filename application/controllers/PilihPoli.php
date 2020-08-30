@@ -61,6 +61,7 @@ class PilihPoli extends RestController
                     $data[$n]['nmklinik'] = $dt['NamaBagian'];
                     $data[$n]['kddokter'] = $dt['KodeDokter'];
                     $data[$n]['nmdokter'] = $dt['Nama'];
+                    $data[$n]['buka'] = date_format(date_create($dt[$hari]), "H:i");
                     $data[$n]['ket'] = $dt['Keterangan'];
                     // }
                     $n++;
