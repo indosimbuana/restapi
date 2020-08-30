@@ -24,17 +24,25 @@ class UbahEmail extends RestController
         $dt['email'] = $data['email'];
 
         $this->load->model('mubahemail');
-        $cekakun = $this->mubahemail->cekakun($dt);
+        $cekakun = $this->mubahemail->cekAkun($dt);
+        $cekemail = $this->mubahemail->cekEmail($dt);
 
         if ($cekakun) {
-            $this->mubahemail->ubahEmail($dt);
-            $this->response([
-                'status' => true,
-                'message' => 'Email berhasil diubah ke ' . $dt['email'],
-                'user' => $cekakun->NamaAkun,
-                'email' => $dt['email'],
-                'telp' => $cekakun->NoTelpon
-            ], 200);
+            if ($cekemail) {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Email sudah terdaftar'
+                ], 500);
+            } else {
+                $this->mubahemail->ubahEmail($dt);
+                $this->response([
+                    'status' => true,
+                    'message' => 'Email berhasil diubah ke ' . $dt['email'],
+                    'user' => $cekakun->NamaAkun,
+                    'email' => $dt['email'],
+                    'telp' => $cekakun->NoTelpon
+                ], 200);
+            }
         } else {
             $this->response([
                 'status' => false,

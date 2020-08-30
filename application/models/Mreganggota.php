@@ -33,6 +33,8 @@ class Mreganggota extends CI_Model
             , noPasien
             , NamaLengkap
             , TglLahir
+            , NoTelpon
+            , Email
         )
         VALUES (
         " . $this->db->escape($data['idanggotakeluarga']) . "
@@ -40,7 +42,9 @@ class Mreganggota extends CI_Model
         ," . $this->db->escape($data['hubungan']) . "
         ," . $this->db->escape($data['nopasien']) . "
         ," . $this->db->escape($data['namalengkap']) . "
-        ," . $this->db->escape($data['tgllahir']) . ");");
+        ," . $this->db->escape($data['tgllahir']) . "
+        ," . $this->db->escape($data['notelpon']) . "
+        ," . $this->db->escape($data['email']) . ");");
     }
 
     function simpanPasienBaru($data)

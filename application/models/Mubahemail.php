@@ -9,6 +9,11 @@ class Mubahemail extends CI_Model
         return $this->db->query("SELECT * FROM RegAkun WHERE (NamaAkun = '" . $dt['user'] . "' OR Email = '" . $dt['user'] . "' OR NoTelpon = '" . $dt['user'] . "') AND password = '" . $dt['password'] . "'")->row();
     }
 
+    function cekEmail($dt)
+    {
+        return $this->db->query("SELECT * FROM RegAkun WHERE (NamaAkun = '" . $dt['user'] . "' OR Email = '" . $dt['user'] . "' OR NoTelpon = '" . $dt['user'] . "') AND Email = '" . $dt['email'] . "'")->row();
+    }
+
     function ubahEmail($dt)
     {
         return $this->db->query("UPDATE RegAkun SET Email = " . $this->db->escape($dt['email']) . "  WHERE (NamaAkun = '" . $dt['user'] . "' OR Email = '" . $dt['user'] . "' OR NoTelpon = '" . $dt['user'] . "') ");

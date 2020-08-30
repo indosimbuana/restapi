@@ -6,7 +6,7 @@ class Mriwayatreg extends CI_Model
 
     function getRiwayatReg($id)
     {
-        return $this->db->query("SELECT * FROM RegOnline WHERE idAnggotaKeluarga = '$id'")->result_array();
+        return $this->db->query("SELECT * FROM RegOnline WHERE idAnggotaKeluarga = '$id' ORDER BY tglPemeriksaan DESC")->result_array();
     }
 
     function getRiwayatById($id)

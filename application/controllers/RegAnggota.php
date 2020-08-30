@@ -25,6 +25,8 @@ class Reganggota extends RestController
 
         if (isset($data['nopasien'])) {
             $dt['nopasien'] = $data['nopasien'];
+            $dt['notelpon'] = $data['notelpon'];
+            $dt['email'] = $data['email'];
         } else {
             $dt['ktp'] = $data['ktp'];
             $dt['jeniskelamin'] = $data['jeniskelamin'];
