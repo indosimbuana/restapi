@@ -6,7 +6,7 @@ class Mregbooking extends CI_Model
 
     function cekBooking($id, $bag, $tgl, $wkt)
     {
-        return $this->db->query("SELECT * FROM RegOnline WHERE idAnggotaKeluarga = '$id' AND kodeBagian = '$bag' AND tglPemeriksaan = '$tgl' AND waktuPemeriksaan = '$wkt'")->row();
+        return $this->db->query("SELECT * FROM RegOnline WHERE idAnggotaKeluarga = '$id' AND kodeBagian = '$bag' AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->row();
     }
 
     function hitungBooking($tgl)
@@ -16,17 +16,17 @@ class Mregbooking extends CI_Model
 
     function hitungPendaftaranLain($tgl)
     {
-        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian != '6101' AND tglPemeriksaan = '$tgl'")->num_rows();
+        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian != '6101' AND LEFT(kodeBooking,8) = '$tgl'")->num_rows();
     }
 
     function hitungPendaftaranObsgyn($tgl, $wkt)
     {
-        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian = '6101' AND tglPemeriksaan = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
+        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian = '6101' AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
     }
 
     function hitungPoli($bag, $tgl, $wkt)
     {
-        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian = '$bag' AND tglPemeriksaan = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
+        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian = '$bag' AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
     }
 
     function getBagian($id)
@@ -42,6 +42,11 @@ class Mregbooking extends CI_Model
     function getDokter($id)
     {
         return $this->db->query("SELECT * FROM MasterDokter WHERE idDokter = '$id'")->row();
+    }
+
+    function getJamPoli($bag, $wkt, $dr, $hari)
+    {
+        return $this->db->query("SELECT $hari FROM RegJadwalKlinik WHERE KodeKlinik = '$bag' AND JenisWaktu = '$wkt' AND KodeDokter = '$dr'")->row();
     }
 
     function simpanBooking($data)

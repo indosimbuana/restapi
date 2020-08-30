@@ -13,4 +13,9 @@ class Mriwayatreg extends CI_Model
     {
         return $this->db->query("SELECT * FROM RegOnline WHERE kodeBooking = '$id'")->row();
     }
+
+    function getJamPoli($bag, $wkt, $dr, $hari)
+    {
+        return $this->db->query("SELECT $hari FROM RegJadwalKlinik WHERE KodeKlinik = '$bag' AND JenisWaktu = '$wkt' AND KodeDokter = '$dr'")->row();
+    }
 }

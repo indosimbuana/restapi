@@ -50,13 +50,46 @@ class Riwayatreg extends RestController
         } else {
             $da = $this->mriwayatreg->getRiwayatById($id);
             if ($da) {
+                $t = new DateTime($da->tglPemeriksaan);
+
+                switch ($t->format('D')) {
+                    case "Sun":
+                        $hari = "Minggu";
+                        break;
+                    case "Mon":
+                        $hari = "Senin";
+                        break;
+                    case "Tue":
+                        $hari = "Selasa";
+                        break;
+                    case "Wed":
+                        $hari = "Rabu";
+                        break;
+                    case "Thu":
+                        $hari = "Kamis";
+                        break;
+                    case "Fri":
+                        $hari = "Jumat";
+                        break;
+                    case "Sat":
+                        $hari = "Sabtu";
+                        break;
+                    default:
+                        $hari = "";
+                }
+
+                $jdwpoli = $this->mriwayatreg->getJamPoli($da->kodeBagian, $da->waktuPemeriksaan, $da->kodeDokter, $hari);
+
+                $jp = date_format(date_create($jdwpoli->$hari), "H:i");
+
                 $data['kodebooking'] = trim($da->kodeBooking);
                 $data['antriandaftar'] = trim($da->noAntrianPendaftaran);
                 $data['antrianpoli'] = trim($da->noAntrianKlinik);
-                $data['jamdilayani'] = trim($da->jamDilayani);
+                $data['jamdilayani'] = date_format(date_create($da->jamDilayani), "H:i");
                 $data['idanggotakeluarga'] = trim($da->idAnggotaKeluarga);
                 $data['poli'] = trim($da->namaBagian);
                 $data['waktu'] = trim($da->waktuPemeriksaan);
+                $data['jampoli'] = $jp;
                 $data['tglperiksa'] = date_format(date_create($da->tglPemeriksaan), "d-m-yy");
                 $data['penjamin'] = trim($da->namaPenjamin);
                 $data['nopenjamin'] = trim($da->noPenjamin);
