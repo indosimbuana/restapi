@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class PilihPoli extends RestController
+class PilihSemuaPoli extends RestController
 {
 
     function __construct()
@@ -50,19 +50,33 @@ class PilihPoli extends RestController
                 'message' => 'Jenis Waktu dan Tanggal harus diisi'
             ], 404);
         } else {
-            $p = $this->mpilihpoli->getJadwalPoliBuka($jns, $hari);
+            $p = $this->mpilihpoli->getJadwalPoli($jns);
 
             if ($p) {
                 $n = 0;
                 foreach ($p as $dt) {
-                    // $klanak = array(date('yy-m-d', strtotime('second sat of august this year')), date('yy-m-d', strtotime('fourth sat of august this year')));
-                    // if ($dt['KodeKlinik'] != "6104" && !in_array($tgl, $klanak)) {
+                    $dr = $this->mpilihpoli->getDokterLibur($tgl, $dt['KodeDokter']);
+                    $kl = $this->mpilihpoli->getKlinikLibur($tgl, $dt['KodeKlinik']);
                     $data[$n]['kdklinik'] = $dt['KodeKlinik'];
                     $data[$n]['nmklinik'] = $dt['NamaBagian'];
                     $data[$n]['kddokter'] = $dt['KodeDokter'];
                     $data[$n]['nmdokter'] = $dt['Nama'];
+                    $klanak = array(date('yy-m-d', strtotime('second sat of august this year')), date('yy-m-d', strtotime('fourth sat of august this year')));
+                    if ($kl) {
+                        $bk = "Libur - " . $kl->Keterangan;
+                    } else if ($dr) {
+                        $bk = "Libur - " . $dr->Keterangan;
+                    } else if ($dt['KodeKlinik'] == "6104" && in_array($tgl, $klanak)) {
+                        $bk = "Libur";
+                    } else {
+                        if ($dt[$hari] === NULL) {
+                            $bk = "Libur";
+                        } else {
+                            $bk = date_format(date_create($dt[$hari]), "H:i");
+                        }
+                    }
+                    $data[$n]['buka'] = $bk;
                     $data[$n]['ket'] = $dt['Keterangan'];
-                    // }
                     $n++;
                 }
                 $this->response([
@@ -74,7 +88,7 @@ class PilihPoli extends RestController
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'No data were found'
+                    'message' => 'No users were found'
                 ], 404);
             }
         }

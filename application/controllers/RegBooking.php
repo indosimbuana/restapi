@@ -88,7 +88,7 @@ class RegBooking extends RestController
         $cekbooking = $this->mregbooking->cekBooking($data['idanggotakeluarga'], $data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
         if ($cekbooking) {
             $this->response([
-                'status' => true,
+                'status' => false,
                 'message' => 'Maaf pasien ini sudah terdaftar di klinik yang sama pada tanggal yang sama'
             ], 400);
         } else {
