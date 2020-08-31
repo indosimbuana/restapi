@@ -105,7 +105,7 @@ class RegBooking extends RestController
                 $dt['noantripoli'] = "A" . str_pad($hitungpoli + 1, 4, "0", STR_PAD_LEFT);
 
                 $jml = $hitungpendaftaran;
-                $pelayanan = 5;
+                $pelayanan = 3;
                 $wkt = $jml * $pelayanan;
                 $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
                 $dt['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggal'])) . " " . $jamdilayani;
@@ -117,7 +117,7 @@ class RegBooking extends RestController
                 $dt['noantripoli'] = str_pad($hitungpoli + 1, 4, "0", STR_PAD_LEFT);
 
                 $jml = $hitungpendaftaran;
-                $pelayanan = 5;
+                $pelayanan = 3;
                 $wkt = $jml * $pelayanan;
                 $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
                 $dt['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggal'])) . " " . $jamdilayani;

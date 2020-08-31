@@ -88,7 +88,7 @@ class PilihSemuaPoli extends RestController
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'No users were found'
+                    'message' => 'No poli were found'
                 ], 404);
             }
         }

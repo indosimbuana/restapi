@@ -367,6 +367,16 @@ URL Request Detail Riwayat : http://hostname/restapi/riwayatreg?kode=<kodebookin
 
 Method GET
 
+**************************
+Jadwal Klinik 
+**************************
+
+URL Request Semua Klinik : http://hostname/restapi/jadwalpoli
+
+URL Request Klinik Tertentu : http://hostname/restapi/jadwalpoli?id=<idklinik>
+
+Method GET
+
 ###################
 Instalasi Aplikasi
 ###################
