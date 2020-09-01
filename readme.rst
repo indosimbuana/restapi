@@ -377,6 +377,39 @@ URL Request Klinik Tertentu : http://hostname/restapi/jadwalpoli?id=<idklinik>
 
 Method GET
 
+**************************
+Kritik Saran
+**************************
+
+URL Request Semua Kritik Saran : http://hostname/restapi/kritiksaran
+
+URL Request Kritik Saran By Id : http://hostname/restapi/kritiksaran?id=<idkritsar>
+
+URL Request Kritik Saran By Bagian KS : http://hostname/restapi/kritiksaran?bag=<kodebagian>
+
+Method GET
+
+URL Request Kirim Kritik Saran : http://hostname/restapi/kritiksaran
+
+Method POST
+
+{
+	"idakun": "<idakun>",
+	"kritik": "<isi>",
+	"saran": "<isi>",
+	"bagian": "<kodeBagianKritikSaran>"
+}
+
+URL Request Jawab Kritik Saran : http://hostname/restapi/kritiksaran/jawab
+
+{
+	"idkritsar": "<idkritsar>",
+	"jawaban": "<jawaban>",
+	"penjawab": "<idakunpenjawab>"
+}
+
+Method POST
+
 ###################
 Instalasi Aplikasi
 ###################
