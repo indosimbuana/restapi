@@ -410,6 +410,16 @@ URL Request Jawab Kritik Saran : http://hostname/restapi/kritiksaran/jawab
 
 Method POST
 
+**************************
+Bagian Kritik Saran 
+**************************
+
+URL Request Semua Bagian : http://hostname/restapi/mstbagianks
+
+URL Request Bagian By Id : http://hostname/restapi/mstbagianks?id=<idbagian>
+
+Method GET
+
 ###################
 Instalasi Aplikasi
 ###################
