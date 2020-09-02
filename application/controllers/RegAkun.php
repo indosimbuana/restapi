@@ -49,10 +49,21 @@ class RegAkun extends RestController
                     ], 409);
                 } else {
                     if ($this->mregakun->regAkun($dt)) {
-                        $this->response([
-                            'status' => true,
-                            'message' => 'Registrasi akun berhasil'
-                        ], 201);
+                        $this->load->library('mail');
+                        $body['judul'] = "Registrasi Akun";
+                        $body['sapaan'] = "SELAMAT, akun registrasi online RSUD PANTI NUGRAHA anda berhasil dibuat:";
+                        $body['isi'] = "Nama Akun: " . $dt['nama'] . ", Nomor Handphone: " . $dt['telp'] . ", Alamat Email: " . $dt['email'];
+                        if ($this->mail->kirim($dt['email'], $body['judul'], $body) == true) {
+                            $this->response([
+                                'status' => true,
+                                'message' => 'Registrasi akun berhasil'
+                            ], 201);
+                        } else {
+                            $this->response([
+                                'status' => false,
+                                'message' => 'Gagal kirim email'
+                            ], 500);
+                        }
                     } else {
                         $this->response([
                             'status' => false,
