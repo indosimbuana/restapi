@@ -20,8 +20,26 @@ class Mkritiksaran extends CI_Model
 
     function kirimKritSar($data)
     {
-        return $this->db->query("INSERT INTO KritikSaran (idKritSar, idAkun, kritik, saran, kodeBagian)
-        VALUES (" . $this->db->escape($data['idKritSar']) . "," . $this->db->escape($data['idAkun']) . "," . $this->db->escape($data['kritik']) . "," . $this->db->escape($data['saran']) . "," . $this->db->escape($data['kodeBagian']) . ");");
+        return $this->db->query("INSERT INTO KritikSaran (
+        idKritSar
+        ,idAkun
+        ,nama
+        ,alamat
+        ,kodeBagian
+        ,telp
+        ,email
+        ,kritikSaran
+        )
+        VALUES (
+        " . $this->db->escape($data['idKritSar']) . "
+        ," . $this->db->escape($data['idAkun']) . "
+        ," . $this->db->escape($data['nama']) . "
+        ," . $this->db->escape($data['alamat']) . "
+        ," . $this->db->escape($data['kodeBagian']) . "
+        ," . $this->db->escape($data['telp']) . "
+        ," . $this->db->escape($data['email']) . "
+        ," . $this->db->escape($data['kritikSaran']) . "
+    );");
     }
 
     function jawabKritSar($data)

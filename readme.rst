@@ -395,9 +395,12 @@ Method POST
 
 {
 	"idakun": "<idakun>",
-	"kritik": "<isi>",
-	"saran": "<isi>",
-	"bagian": "<kodeBagianKritikSaran>"
+	"nama": "<nama>",
+	"alamat": "<alamat>",
+	"bagian": "<kodebagianKS>",
+	"telp": "<telp>",
+	"email": "<email>",
+	"kritiksaran": "<isi>"
 }
 
 URL Request Jawab Kritik Saran : http://hostname/restapi/kritiksaran/jawab
@@ -417,6 +420,16 @@ Bagian Kritik Saran
 URL Request Semua Bagian : http://hostname/restapi/mstbagianks
 
 URL Request Bagian By Id : http://hostname/restapi/mstbagianks?id=<idbagian>
+
+Method GET
+
+**************************
+Master Poli 
+**************************
+
+URL Request Semua Poli : http://hostname/restapi/mstpoli
+
+URL Request Poli By Id : http://hostname/restapi/mstpoli?id=<idpoli>
 
 Method GET
 

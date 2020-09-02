@@ -24,14 +24,17 @@ class Kritiksaran extends RestController
                 foreach ($a as $dt) {
                     $data[$n]['idkritsar'] = $dt['idKritSar'];
                     $data[$n]['idakun'] = trim($dt['idAkun']);
-                    $data[$n]['kritik'] = trim($dt['kritik']);
-                    $data[$n]['saran'] = trim($dt['saran']);
-                    $data[$n]['jawaban'] = trim($dt['jawaban']);
+                    $data[$n]['nama'] = trim($dt['nama']);
+                    $data[$n]['alamat'] = trim($dt['alamat']);
                     $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
-                    $data[$n]['status'] = trim($dt['status']);
-                    $data[$n]['tgltanya'] = trim($dt['tglTanya']);
+                    $data[$n]['telp'] = trim($dt['telp']);
+                    $data[$n]['email'] = trim($dt['email']);
+                    $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
+                    $data[$n]['tgltanya'] = $dt['tglTanya'] == NULL ? '' : date_format(date_create($dt['tglTanya']), "d-m-Y H:i");
+                    $data[$n]['jawaban'] = trim($dt['jawaban']);
                     $data[$n]['penjawab'] = trim($dt['penjawab']);
-                    $data[$n]['tgljawab'] = trim($dt['tglJawab']);
+                    $data[$n]['tgljawab'] = $dt['tglJawab'] == NULL ? '' : date_format(date_create($dt['tglJawab']), "d-m-Y H:i");
+                    $data[$n]['status'] = trim($dt['status']);
                     $n++;
                 }
                 $this->response([
@@ -52,14 +55,17 @@ class Kritiksaran extends RestController
                 foreach ($a as $dt) {
                     $data[$n]['idkritsar'] = $dt['idKritSar'];
                     $data[$n]['idakun'] = trim($dt['idAkun']);
-                    $data[$n]['kritik'] = trim($dt['kritik']);
-                    $data[$n]['saran'] = trim($dt['saran']);
-                    $data[$n]['jawaban'] = trim($dt['jawaban']);
+                    $data[$n]['nama'] = trim($dt['nama']);
+                    $data[$n]['alamat'] = trim($dt['alamat']);
                     $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
-                    $data[$n]['status'] = trim($dt['status']);
-                    $data[$n]['tgltanya'] = trim($dt['tglTanya']);
+                    $data[$n]['telp'] = trim($dt['telp']);
+                    $data[$n]['email'] = trim($dt['email']);
+                    $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
+                    $data[$n]['tgltanya'] = $dt['tglTanya'] == NULL ? '' : date_format(date_create($dt['tglTanya']), "d-m-Y H:i");
+                    $data[$n]['jawaban'] = trim($dt['jawaban']);
                     $data[$n]['penjawab'] = trim($dt['penjawab']);
-                    $data[$n]['tgljawab'] = trim($dt['tglJawab']);
+                    $data[$n]['tgljawab'] = $dt['tglJawab'] == NULL ? '' : date_format(date_create($dt['tglJawab']), "d-m-Y H:i");
+                    $data[$n]['status'] = trim($dt['status']);
                     $n++;
                 }
                 $this->response([
@@ -78,14 +84,17 @@ class Kritiksaran extends RestController
             if ($da) {
                 $data['idkritsar'] = $da->idKritSar;
                 $data['idakun'] = trim($da->idAkun);
-                $data['kritik'] = trim($da->kritik);
-                $data['saran'] = trim($da->saran);
-                $data['jawaban'] = trim($da->jawaban);
+                $data['nama'] = trim($da->nama);
+                $data['alamat'] = trim($da->alamat);
                 $data['kodebagian'] = trim($da->kodeBagian);
-                $data['status'] = trim($da->status);
-                $data['tgltanya'] = trim($da->tglTanya);
+                $data['telp'] = trim($da->telp);
+                $data['email'] = trim($da->email);
+                $data['kritiksaran'] = trim($da->kritikSaran);
+                $data['tgltanya'] = $da->tglTanya == NULL ? '' : date_format(date_create($da->tglTanya), "d-m-Y H:i");
+                $data['jawaban'] = trim($da->jawaban);
                 $data['penjawab'] = trim($da->penjawab);
-                $data['tgljawab'] = trim($da->tglJawab);
+                $data['tgljawab'] = $da->tglJawab == NULL ? '' : date_format(date_create($da->tglJawab), "d-m-Y H:i");
+                $data['status'] = trim($da->status);
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',
@@ -110,9 +119,12 @@ class Kritiksaran extends RestController
         $dt = array();
         $dt['idKritSar'] = $date . rand(1000, 10000);
         $dt['idAkun'] = $data['idakun'];
-        $dt['kritik'] = $data['kritik'];
-        $dt['saran'] = $data['saran'];
+        $dt['nama'] = $data['nama'];
+        $dt['alamat'] = $data['alamat'];
         $dt['kodeBagian'] = $data['bagian'];
+        $dt['telp'] = $data['telp'];
+        $dt['email'] = $data['email'];
+        $dt['kritikSaran'] = $data['kritiksaran'];
 
         $this->load->model('mkritiksaran');
 
