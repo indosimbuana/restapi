@@ -78,8 +78,8 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'DESKTOP-BLKCQ8M',
-	// 'hostname' => '182.168.6.78\SQLEXPRESS',
+	// 'hostname' => 'DESKTOP-BLKCQ8M',
+	'hostname' => '182.168.6.78\SQLEXPRESS',
 	'username' => 'sa',
 	'password' => '@dm1n',
 	'database' => 'DBPN',
