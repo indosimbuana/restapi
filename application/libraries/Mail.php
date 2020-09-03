@@ -7,8 +7,8 @@ class Mail
         $config['protocol'] = 'smtp';
         $config['smtp_host'] = 'ssl://smtp.googlemail.com';
         $config['smtp_port'] = 465;
-        $config['smtp_user'] = 'agungpasific@gmail.com';
-        $config['smtp_pass'] = 'qxsnmdembbfsuwqq';
+        $config['smtp_user'] = 'rsudpantinugroho@purbalinggakab.go.id';
+        $config['smtp_pass'] = 'zxcvbnm456';
         $config['mailtype'] = 'html';
         $config['charset'] = 'iso-8859-1';
         $config['wordwrap'] = TRUE;
@@ -18,7 +18,7 @@ class Mail
         $body = $CI->load->view('mail/template', $msg, true); //$this->load->view(view,data,true);
         $CI->email->set_newline("\r\n");
 
-        $CI->email->from('agungpasific@gmail.com', 'Agung Prabowo');
+        $CI->email->from('rsudpantinugroho@purbalinggakab.go.id', 'RSUD Panti Nugroho');
         $CI->email->to($to);
         $CI->email->subject($sbj);
         $CI->email->message($body);
