@@ -33,6 +33,10 @@ class ComposerStaticInit8036729cb66a0d18662744e5ac85be8a
         array (
             'Prophecy\\' => 9,
         ),
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
@@ -66,6 +70,10 @@ class ComposerStaticInit8036729cb66a0d18662744e5ac85be8a
         'Prophecy\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

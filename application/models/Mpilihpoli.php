@@ -6,16 +6,16 @@ class Mpilihpoli extends CI_Model
 
     function getJadwalPoli($jns)
     {
-        return $this->db->query("SELECT jk.*, mi.NamaBagian, md.idDokter, md.Nama FROM RegJadwalKlinik jk 
-        LEFT JOIN MasterDokter md ON md.idDokter = jk.KodeDokter
+        return $this->db->query("SELECT jk.*, mi.NamaBagian, md.KodeDokter, md.NamaDokter FROM RegJadwalKlinik jk 
+        LEFT JOIN MasterDokter md ON md.KodeDokter = jk.KodeDokter
         LEFT JOIN MasterInstalasi mi ON mi.KodeBagian = jk.KodeKlinik
         WHERE jk.StsAktif = 'Y' AND JenisWaktu = '$jns'")->result_array();
     }
 
     function getJadwalPoliBuka($jns, $hari)
     {
-        return $this->db->query("SELECT jk.*, mi.NamaBagian, md.idDokter, md.Nama FROM RegJadwalKlinik jk 
-        LEFT JOIN MasterDokter md ON md.idDokter = jk.KodeDokter
+        return $this->db->query("SELECT jk.*, mi.NamaBagian, md.KodeDokter, md.NamaDokter FROM RegJadwalKlinik jk 
+        LEFT JOIN MasterDokter md ON md.KodeDokter = jk.KodeDokter
         LEFT JOIN MasterInstalasi mi ON mi.KodeBagian = jk.KodeKlinik
         WHERE jk.StsAktif = 'Y' AND JenisWaktu = '$jns' AND $hari IS NOT NULL")->result_array();
     }

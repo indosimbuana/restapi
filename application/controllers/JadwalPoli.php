@@ -9,6 +9,13 @@ class Jadwalpoli extends RestController
     function __construct()
     {
         parent::__construct();
+        $cek = $this->token->cek();
+        if ($cek['status'] == false) {
+            $this->response([
+                'status' => $cek['status'],
+                'message' => $cek['message']
+            ], $cek['code']);
+        }
     }
 
     public function index_get()
@@ -25,7 +32,7 @@ class Jadwalpoli extends RestController
                     $data[$n]['kodeklinik'] = $p['KodeKlinik'];
                     $data[$n]['namaklinik'] = $p['NamaBagian'];
                     $data[$n]['jnswkt'] = $p['JenisWaktu'];
-                    $data[$n]['dokter'] = $p['Nama'];
+                    $data[$n]['dokter'] = $p['NamaDokter'];
                     $data[$n]['senin'] = $p['Senin'] == NULL ? "Libur" : date_format(date_create($p['Senin']), "H:s");
                     $data[$n]['selasa'] = $p['Selasa'] == NULL ? "Libur" : date_format(date_create($p['Selasa']), "H:s");
                     $data[$n]['rabu'] = $p['Rabu'] == NULL ? "Libur" : date_format(date_create($p['Rabu']), "H:s");
@@ -57,7 +64,7 @@ class Jadwalpoli extends RestController
                     $data[$n]['kodeklinik'] = $p['KodeKlinik'];
                     $data[$n]['namaklinik'] = $p['NamaBagian'];
                     $data[$n]['jnswkt'] = $p['JenisWaktu'];
-                    $data[$n]['dokter'] = $p['Nama'];
+                    $data[$n]['dokter'] = $p['NamaDokter'];
                     $data[$n]['senin'] = $p['Senin'] == NULL ? "Libur" : date_format(date_create($p['Senin']), "H:s");
                     $data[$n]['selasa'] = $p['Selasa'] == NULL ? "Libur" : date_format(date_create($p['Selasa']), "H:s");
                     $data[$n]['rabu'] = $p['Rabu'] == NULL ? "Libur" : date_format(date_create($p['Rabu']), "H:s");

@@ -9,6 +9,13 @@ class RegBooking extends RestController
     function __construct()
     {
         parent::__construct();
+        $cek = $this->token->cek();
+        if ($cek['status'] == false) {
+            $this->response([
+                'status' => $cek['status'],
+                'message' => $cek['message']
+            ], $cek['code']);
+        }
     }
 
     public function index_post()
@@ -45,7 +52,7 @@ class RegBooking extends RestController
         $dt['dokter'] = $data['dokter'];
         $getd = $this->mregbooking->getDokter($data['dokter']);
         if ($getd) {
-            $dt['namadokter'] = $getd->Nama;
+            $dt['namadokter'] = $getd->NamaDokter;
         } else {
             $dt['namadokter'] = "";
         }

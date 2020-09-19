@@ -41,7 +41,7 @@ class Mregbooking extends CI_Model
 
     function getDokter($id)
     {
-        return $this->db->query("SELECT * FROM MasterDokter WHERE idDokter = '$id'")->row();
+        return $this->db->query("SELECT * FROM MasterDokter WHERE KodeDokter = '$id'")->row();
     }
 
     function getJamPoli($bag, $wkt, $dr, $hari)

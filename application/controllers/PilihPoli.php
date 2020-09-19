@@ -9,6 +9,13 @@ class PilihPoli extends RestController
     function __construct()
     {
         parent::__construct();
+        $cek = $this->token->cek();
+        if ($cek['status'] == false) {
+            $this->response([
+                'status' => $cek['status'],
+                'message' => $cek['message']
+            ], $cek['code']);
+        }
     }
 
     public function index_get()
@@ -60,7 +67,7 @@ class PilihPoli extends RestController
                     $data[$n]['kdklinik'] = $dt['KodeKlinik'];
                     $data[$n]['nmklinik'] = $dt['NamaBagian'];
                     $data[$n]['kddokter'] = $dt['KodeDokter'];
-                    $data[$n]['nmdokter'] = $dt['Nama'];
+                    $data[$n]['nmdokter'] = $dt['NamaDokter'];
                     $data[$n]['buka'] = date_format(date_create($dt[$hari]), "H:i");
                     $data[$n]['ket'] = $dt['Keterangan'];
                     // }

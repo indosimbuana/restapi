@@ -9,6 +9,13 @@ class PilihSemuaPoli extends RestController
     function __construct()
     {
         parent::__construct();
+        $cek = $this->token->cek();
+        if ($cek['status'] == false) {
+            $this->response([
+                'status' => $cek['status'],
+                'message' => $cek['message']
+            ], $cek['code']);
+        }
     }
 
     public function index_get()
@@ -60,7 +67,7 @@ class PilihSemuaPoli extends RestController
                     $data[$n]['kdklinik'] = $dt['KodeKlinik'];
                     $data[$n]['nmklinik'] = $dt['NamaBagian'];
                     $data[$n]['kddokter'] = $dt['KodeDokter'];
-                    $data[$n]['nmdokter'] = $dt['Nama'];
+                    $data[$n]['nmdokter'] = $dt['NamaDokter'];
                     $klanak = array(date('yy-m-d', strtotime('second sat of august this year')), date('yy-m-d', strtotime('fourth sat of august this year')));
                     if ($kl) {
                         $bk = "Libur - " . $kl->Keterangan;
