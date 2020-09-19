@@ -21,7 +21,7 @@ class Token
                 $decoded = JWT::decode($token, $key, array('HS256'));
 
                 $currentTimestamp = time();
-                $userLastActivity = $decoded;
+                $userLastActivity = $decoded->timestamp;
                 $timeLapse = (($currentTimestamp - $userLastActivity) / 60);
 
                 if ($timeLapse >= 5) {
