@@ -91,6 +91,7 @@ class RegBooking extends RestController
         $jdwpoli = $this->mregbooking->getJamPoli($data['bagian'], $data['waktu'], $data['dokter'], $hari);
 
         $jp = date_format(date_create($jdwpoli->$hari), "H:i");
+        $jptutup = date_format(date_create($jdwpoli->$hari . 'Tutup'), "H:i");
 
         $cekbooking = $this->mregbooking->cekBooking($data['idanggotakeluarga'], $data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
         if ($cekbooking) {
@@ -140,6 +141,7 @@ class RegBooking extends RestController
                 $databooking['poli'] = trim($dt['namabagian']);
                 $databooking['waktu'] = $dt['waktu'];
                 $databooking['jampoli'] = $jp;
+                $databooking['jamtutuppoli'] = $jptutup;
                 $databooking['tglperiksa'] =  date_format(date_create($data['tanggal']), "d-m-yy");
                 $databooking['penjamin'] = trim($dt['namapenjamin']);
                 $databooking['nopenjamin'] = trim($dt['nopenjamin']);

@@ -20,43 +20,14 @@ class Kritiksaran extends RestController
 
     public function index_get()
     {
+        $akun = $this->get('akun');
         $id = $this->get('id');
         $bag = $this->get('bag');
+        $tgl = $this->get('tgl');
 
         $this->load->model('mkritiksaran');
-        if ($id === null && $bag === null) {
-            $a = $this->mkritiksaran->getKritSar();
-            if ($a) {
-                $n = 0;
-                foreach ($a as $dt) {
-                    $data[$n]['idkritsar'] = $dt['idKritSar'];
-                    $data[$n]['idakun'] = trim($dt['idAkun']);
-                    $data[$n]['nama'] = trim($dt['nama']);
-                    $data[$n]['alamat'] = trim($dt['alamat']);
-                    $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
-                    $data[$n]['telp'] = trim($dt['telp']);
-                    $data[$n]['email'] = trim($dt['email']);
-                    $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
-                    $data[$n]['tgltanya'] = $dt['tglTanya'] == NULL ? '' : date_format(date_create($dt['tglTanya']), "d-m-Y H:i");
-                    $data[$n]['jawaban'] = trim($dt['jawaban']);
-                    $data[$n]['penjawab'] = trim($dt['penjawab']);
-                    $data[$n]['tgljawab'] = $dt['tglJawab'] == NULL ? '' : date_format(date_create($dt['tglJawab']), "d-m-Y H:i");
-                    $data[$n]['status'] = trim($dt['status']);
-                    $n++;
-                }
-                $this->response([
-                    'status' => true,
-                    'message' => 'Data found',
-                    'data' => $data
-                ], 200);
-            } else {
-                $this->response([
-                    'status' => false,
-                    'message' => 'No kritik saran were found'
-                ], 404);
-            }
-        } else if ($id === null && $bag != null) {
-            $a = $this->mkritiksaran->getKritSarByBag($bag);
+        if ($akun === null) {
+            $a = $this->mkritiksaran->getKritSarByAkun($akun);
             if ($a) {
                 $n = 0;
                 foreach ($a as $dt) {
@@ -87,31 +58,161 @@ class Kritiksaran extends RestController
                 ], 404);
             }
         } else {
-            $da = $this->mkritiksaran->cekKritSar($id);
-            if ($da) {
-                $data['idkritsar'] = $da->idKritSar;
-                $data['idakun'] = trim($da->idAkun);
-                $data['nama'] = trim($da->nama);
-                $data['alamat'] = trim($da->alamat);
-                $data['kodebagian'] = trim($da->kodeBagian);
-                $data['telp'] = trim($da->telp);
-                $data['email'] = trim($da->email);
-                $data['kritiksaran'] = trim($da->kritikSaran);
-                $data['tgltanya'] = $da->tglTanya == NULL ? '' : date_format(date_create($da->tglTanya), "d-m-Y H:i");
-                $data['jawaban'] = trim($da->jawaban);
-                $data['penjawab'] = trim($da->penjawab);
-                $data['tgljawab'] = $da->tglJawab == NULL ? '' : date_format(date_create($da->tglJawab), "d-m-Y H:i");
-                $data['status'] = trim($da->status);
-                $this->response([
-                    'status' => true,
-                    'message' => 'Data found',
-                    'data' => $data
-                ], 200);
+            if ($id === null && $bag === null) {
+                if ($tgl === null) {
+                    $a = $this->mkritiksaran->getKritSar();
+                    if ($a) {
+                        $n = 0;
+                        foreach ($a as $dt) {
+                            $data[$n]['idkritsar'] = $dt['idKritSar'];
+                            $data[$n]['idakun'] = trim($dt['idAkun']);
+                            $data[$n]['nama'] = trim($dt['nama']);
+                            $data[$n]['alamat'] = trim($dt['alamat']);
+                            $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
+                            $data[$n]['telp'] = trim($dt['telp']);
+                            $data[$n]['email'] = trim($dt['email']);
+                            $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
+                            $data[$n]['tgltanya'] = $dt['tglTanya'] == NULL ? '' : date_format(date_create($dt['tglTanya']), "d-m-Y H:i");
+                            $data[$n]['jawaban'] = trim($dt['jawaban']);
+                            $data[$n]['penjawab'] = trim($dt['penjawab']);
+                            $data[$n]['tgljawab'] = $dt['tglJawab'] == NULL ? '' : date_format(date_create($dt['tglJawab']), "d-m-Y H:i");
+                            $data[$n]['status'] = trim($dt['status']);
+                            $n++;
+                        }
+                        $this->response([
+                            'status' => true,
+                            'message' => 'Data found',
+                            'data' => $data
+                        ], 200);
+                    } else {
+                        $this->response([
+                            'status' => false,
+                            'message' => 'No kritik saran were found'
+                        ], 404);
+                    }
+                } else {
+                    $a = $this->mkritiksaran->getKritSarByTgl($tgl);
+                    if ($a) {
+                        $n = 0;
+                        foreach ($a as $dt) {
+                            $data[$n]['idkritsar'] = $dt['idKritSar'];
+                            $data[$n]['idakun'] = trim($dt['idAkun']);
+                            $data[$n]['nama'] = trim($dt['nama']);
+                            $data[$n]['alamat'] = trim($dt['alamat']);
+                            $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
+                            $data[$n]['telp'] = trim($dt['telp']);
+                            $data[$n]['email'] = trim($dt['email']);
+                            $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
+                            $data[$n]['tgltanya'] = $dt['tglTanya'] == NULL ? '' : date_format(date_create($dt['tglTanya']), "d-m-Y H:i");
+                            $data[$n]['jawaban'] = trim($dt['jawaban']);
+                            $data[$n]['penjawab'] = trim($dt['penjawab']);
+                            $data[$n]['tgljawab'] = $dt['tglJawab'] == NULL ? '' : date_format(date_create($dt['tglJawab']), "d-m-Y H:i");
+                            $data[$n]['status'] = trim($dt['status']);
+                            $n++;
+                        }
+                        $this->response([
+                            'status' => true,
+                            'message' => 'Data found',
+                            'data' => $data
+                        ], 200);
+                    } else {
+                        $this->response([
+                            'status' => false,
+                            'message' => 'No kritik saran were found'
+                        ], 404);
+                    }
+                }
+            } else if ($id === null && $bag != null) {
+                if ($tgl === null) {
+                    $a = $this->mkritiksaran->getKritSarByBag($bag);
+                    if ($a) {
+                        $n = 0;
+                        foreach ($a as $dt) {
+                            $data[$n]['idkritsar'] = $dt['idKritSar'];
+                            $data[$n]['idakun'] = trim($dt['idAkun']);
+                            $data[$n]['nama'] = trim($dt['nama']);
+                            $data[$n]['alamat'] = trim($dt['alamat']);
+                            $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
+                            $data[$n]['telp'] = trim($dt['telp']);
+                            $data[$n]['email'] = trim($dt['email']);
+                            $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
+                            $data[$n]['tgltanya'] = $dt['tglTanya'] == NULL ? '' : date_format(date_create($dt['tglTanya']), "d-m-Y H:i");
+                            $data[$n]['jawaban'] = trim($dt['jawaban']);
+                            $data[$n]['penjawab'] = trim($dt['penjawab']);
+                            $data[$n]['tgljawab'] = $dt['tglJawab'] == NULL ? '' : date_format(date_create($dt['tglJawab']), "d-m-Y H:i");
+                            $data[$n]['status'] = trim($dt['status']);
+                            $n++;
+                        }
+                        $this->response([
+                            'status' => true,
+                            'message' => 'Data found',
+                            'data' => $data
+                        ], 200);
+                    } else {
+                        $this->response([
+                            'status' => false,
+                            'message' => 'No kritik saran were found'
+                        ], 404);
+                    }
+                } else {
+                    $a = $this->mkritiksaran->getKritSarByBagByTgl($bag, $tgl);
+                    if ($a) {
+                        $n = 0;
+                        foreach ($a as $dt) {
+                            $data[$n]['idkritsar'] = $dt['idKritSar'];
+                            $data[$n]['idakun'] = trim($dt['idAkun']);
+                            $data[$n]['nama'] = trim($dt['nama']);
+                            $data[$n]['alamat'] = trim($dt['alamat']);
+                            $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
+                            $data[$n]['telp'] = trim($dt['telp']);
+                            $data[$n]['email'] = trim($dt['email']);
+                            $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
+                            $data[$n]['tgltanya'] = $dt['tglTanya'] == NULL ? '' : date_format(date_create($dt['tglTanya']), "d-m-Y H:i");
+                            $data[$n]['jawaban'] = trim($dt['jawaban']);
+                            $data[$n]['penjawab'] = trim($dt['penjawab']);
+                            $data[$n]['tgljawab'] = $dt['tglJawab'] == NULL ? '' : date_format(date_create($dt['tglJawab']), "d-m-Y H:i");
+                            $data[$n]['status'] = trim($dt['status']);
+                            $n++;
+                        }
+                        $this->response([
+                            'status' => true,
+                            'message' => 'Data found',
+                            'data' => $data
+                        ], 200);
+                    } else {
+                        $this->response([
+                            'status' => false,
+                            'message' => 'No kritik saran were found'
+                        ], 404);
+                    }
+                }
             } else {
-                $this->response([
-                    'status' => false,
-                    'message' => 'No kritik saran were found'
-                ], 404);
+                $da = $this->mkritiksaran->cekKritSar($id);
+                if ($da) {
+                    $data['idkritsar'] = $da->idKritSar;
+                    $data['idakun'] = trim($da->idAkun);
+                    $data['nama'] = trim($da->nama);
+                    $data['alamat'] = trim($da->alamat);
+                    $data['kodebagian'] = trim($da->kodeBagian);
+                    $data['telp'] = trim($da->telp);
+                    $data['email'] = trim($da->email);
+                    $data['kritiksaran'] = trim($da->kritikSaran);
+                    $data['tgltanya'] = $da->tglTanya == NULL ? '' : date_format(date_create($da->tglTanya), "d-m-Y H:i");
+                    $data['jawaban'] = trim($da->jawaban);
+                    $data['penjawab'] = trim($da->penjawab);
+                    $data['tgljawab'] = $da->tglJawab == NULL ? '' : date_format(date_create($da->tglJawab), "d-m-Y H:i");
+                    $data['status'] = trim($da->status);
+                    $this->response([
+                        'status' => true,
+                        'message' => 'Data found',
+                        'data' => $data
+                    ], 200);
+                } else {
+                    $this->response([
+                        'status' => false,
+                        'message' => 'No kritik saran were found'
+                    ], 404);
+                }
             }
         }
     }

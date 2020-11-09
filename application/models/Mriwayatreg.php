@@ -16,6 +16,6 @@ class Mriwayatreg extends CI_Model
 
     function getJamPoli($bag, $wkt, $dr, $hari)
     {
-        return $this->db->query("SELECT $hari FROM RegJadwalKlinik WHERE KodeKlinik = '$bag' AND JenisWaktu = '$wkt' AND KodeDokter = '$dr'")->row();
+        return $this->db->query("SELECT * FROM RegJadwalKlinik WHERE KodeKlinik = '$bag' AND JenisWaktu = '$wkt' AND KodeDokter = '$dr'")->row();
     }
 }
