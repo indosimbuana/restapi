@@ -104,4 +104,142 @@ class Jadwalpoli extends RestController
             }
         }
     }
+
+    public function index_post()
+    {
+        $d = file_get_contents('php://input');
+        $data = json_decode($d, true);
+
+        $date = date('Y-m-d H:i:s');
+
+        $dt = array();
+        $dt['KodeKlinik'] = $data['KodeKlinik'] == '' ? NULL : $data['KodeKlinik'];
+        $dt['JenisWaktu'] = $data['JenisWaktu'] == '' ? NULL : $data['JenisWaktu'];
+        $dt['KodeDokter'] = $data['KodeDokter']  == '' ? NULL : $data['KodeDokter'];
+        $dt['Senin'] = $data['Senin']  == '' ? NULL : $data['Senin'];
+        $dt['SeninTutup'] = $data['SeninTutup']  == '' ? NULL : $data['SeninTutup'];
+        $dt['Selasa'] = $data['Selasa']  == '' ? NULL : $data['Selasa'];
+        $dt['SelasaTutup'] = $data['SelasaTutup']  == '' ? NULL : $data['SelasaTutup'];
+        $dt['Rabu'] = $data['Rabu']  == '' ? NULL : $data['Rabu'];
+        $dt['RabuTutup'] = $data['RabuTutup']  == '' ? NULL : $data['RabuTutup'];
+        $dt['Kamis'] = $data['Kamis']  == '' ? NULL : $data['Kamis'];
+        $dt['KamisTutup'] = $data['KamisTutup']  == '' ? NULL : $data['KamisTutup'];
+        $dt['Jumat'] = $data['Jumat']  == '' ? NULL : $data['Jumat'];
+        $dt['JumatTutup'] = $data['JumatTutup']  == '' ? NULL : $data['JumatTutup'];
+        $dt['Sabtu'] = $data['Sabtu']  == '' ? NULL : $data['Sabtu'];
+        $dt['SabtuTutup'] = $data['SabtuTutup']  == '' ? NULL : $data['SabtuTutup'];
+        $dt['Minggu'] = $data['Minggu']  == '' ? NULL : $data['Minggu'];
+        $dt['MingguTutup'] = $data['MingguTutup']  == '' ? NULL : $data['MingguTutup'];
+        $dt['JamBukaPendaftaran'] = $data['JamBukaPendaftaran']  == '' ? NULL : $data['JamBukaPendaftaran'];
+        $dt['JamTutupPendaftaran'] = $data['JamTutupPendaftaran']  == '' ? NULL : $data['JamTutupPendaftaran'];
+        $dt['Keterangan'] = $data['Keterangan']  == '' ? NULL : $data['Keterangan'];
+        $dt['UserUpdate'] = $data['UserUpdate']  == '' ? NULL : $data['UserUpdate'];
+        $dt['UpdateTime'] = $date;
+
+        $this->load->model('mjadwalpoli');
+
+        if (($data['KodeKlinik'] == NULL || $data['KodeKlinik'] == '') && ($data['JenisWaktu'] == NULL || $data['JenisWaktu'] == '') && ($data['KodeDokter'] == NULL || $data['KodeDokter'] == '')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Gagal simpan Jadwal Poli'
+            ], 400);
+        } else {
+            $cek = $this->mjadwalpoli->cekJadwalPoli($dt);
+            if ($cek) {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Gagal simpan Jadwal Poli, Jadwal sudah ada'
+                ], 400);
+            } else {
+                if ($this->mjadwalpoli->simpanJadwalPoli($dt)) {
+                    $this->response([
+                        'status' => true,
+                        'message' => 'Jadwal Poli berhasil tersimpan'
+                    ], 200);
+                } else {
+                    $this->response([
+                        'status' => false,
+                        'message' => 'Gagal simpan Jadwal Poli'
+                    ], 400);
+                }
+            }
+        }
+    }
+
+    function index_put()
+    {
+        $d = file_get_contents('php://input');
+        $data = json_decode($d, true);
+
+        $date = date('Y-m-d H:i:s');
+
+        $dt = array();
+        $dt['KodeKlinik'] = $data['KodeKlinik'] == '' ? NULL : $data['KodeKlinik'];
+        $dt['JenisWaktu'] = $data['JenisWaktu'] == '' ? NULL : $data['JenisWaktu'];
+        $dt['KodeDokter'] = $data['KodeDokter']  == '' ? NULL : $data['KodeDokter'];
+        $dt['Senin'] = $data['Senin']  == '' ? NULL : $data['Senin'];
+        $dt['SeninTutup'] = $data['SeninTutup']  == '' ? NULL : $data['SeninTutup'];
+        $dt['Selasa'] = $data['Selasa']  == '' ? NULL : $data['Selasa'];
+        $dt['SelasaTutup'] = $data['SelasaTutup']  == '' ? NULL : $data['SelasaTutup'];
+        $dt['Rabu'] = $data['Rabu']  == '' ? NULL : $data['Rabu'];
+        $dt['RabuTutup'] = $data['RabuTutup']  == '' ? NULL : $data['RabuTutup'];
+        $dt['Kamis'] = $data['Kamis']  == '' ? NULL : $data['Kamis'];
+        $dt['KamisTutup'] = $data['KamisTutup']  == '' ? NULL : $data['KamisTutup'];
+        $dt['Jumat'] = $data['Jumat']  == '' ? NULL : $data['Jumat'];
+        $dt['JumatTutup'] = $data['JumatTutup']  == '' ? NULL : $data['JumatTutup'];
+        $dt['Sabtu'] = $data['Sabtu']  == '' ? NULL : $data['Sabtu'];
+        $dt['SabtuTutup'] = $data['SabtuTutup']  == '' ? NULL : $data['SabtuTutup'];
+        $dt['Minggu'] = $data['Minggu']  == '' ? NULL : $data['Minggu'];
+        $dt['MingguTutup'] = $data['MingguTutup']  == '' ? NULL : $data['MingguTutup'];
+        $dt['JamBukaPendaftaran'] = $data['JamBukaPendaftaran']  == '' ? NULL : $data['JamBukaPendaftaran'];
+        $dt['JamTutupPendaftaran'] = $data['JamTutupPendaftaran']  == '' ? NULL : $data['JamTutupPendaftaran'];
+        $dt['Keterangan'] = $data['Keterangan']  == '' ? NULL : $data['Keterangan'];
+        $dt['UserUpdate'] = $data['UserUpdate']  == '' ? NULL : $data['UserUpdate'];
+        $dt['UpdateTime'] = $date;
+
+        $this->load->model('mjadwalpoli');
+
+        if (($data['KodeKlinik'] == NULL || $data['KodeKlinik'] == '') && ($data['JenisWaktu'] == NULL || $data['JenisWaktu'] == '') && ($data['KodeDokter'] == NULL || $data['KodeDokter'] == '')) {
+            $this->response([
+                'status' => false,
+                'message' => 'Gagal update Jadwal Poli'
+            ], 400);
+        } else {
+            $cek = $this->mjadwalpoli->cekJadwalPoli($dt);
+            if ($cek) {
+                if ($this->mjadwalpoli->updateJadwalPoli($dt)) {
+                    $this->response([
+                        'status' => true,
+                        'message' => 'Jadwal Poli berhasil diupdate'
+                    ], 200);
+                } else {
+                    $this->response([
+                        'status' => false,
+                        'message' => 'Gagal update Jadwal Poli'
+                    ], 400);
+                }
+            } else {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Gagal update Jadwal Poli, Jadwal tidak ditemukan'
+                ], 400);
+            }
+        }
+    }
+
+    function index_delete()
+    {
+        $poli = $this->delete('poli');
+        $waktu = $this->delete('waktu');
+        $dokter = $this->delete('dokter');
+        $this->db->where('KodeKlinik', $poli);
+        $this->db->where('JenisWaktu', $waktu);
+        $this->db->where('KodeDokter', $dokter);
+        $delete = $this->db->delete('RegJadwalKlinik');
+        if ($delete) {
+            $this->response(array('status' => true), 200);
+        } else {
+            $this->response(array('status' => false, 502));
+        }
+    }
 }

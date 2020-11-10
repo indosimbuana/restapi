@@ -433,6 +433,34 @@ URL Request Poli By Id : http://hostname/restapi/mstpoli?id=<idpoli>
 
 Method GET
 
+**************************
+Insert, update, delete jadwal poli
+**************************
+
+{ 
+	"KodeKlinik": "6104", 
+	"JenisWaktu":"S", 
+	"KodeDokter":"DR03", 
+	"Senin":"07:00", 
+	"SeninTutup":"12:00", 
+	"Selasa":"09:00", 
+	"SelasaTutup":"13:00", 
+	"Rabu":"08:00", 
+	"RabuTutup":"13:00",
+	"Kamis":"07:00", 
+	"KamisTutup":"10:00", 
+	"Jumat":"08:00", 
+	"JumatTutup":"09:00", 
+	"Sabtu":"09:00", 
+	"SabtuTutup":"17:00",
+	"Minggu":"", 
+	"MingguTutup":"", 
+	"JamBukaPendaftaran":"07:00", 
+	"JamTutupPendaftaran":"10:00",
+	"Keterangan":"Jadwal Fleksibel",
+	"UserUpdate":"agung"
+}
+
 ###################
 Instalasi Aplikasi
 ###################

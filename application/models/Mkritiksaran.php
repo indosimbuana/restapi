@@ -36,25 +36,25 @@ class Mkritiksaran extends CI_Model
     function kirimKritSar($data)
     {
         return $this->db->query("INSERT INTO KritikSaran (
-        idKritSar
-        ,idAkun
-        ,nama
-        ,alamat
-        ,kodeBagian
-        ,telp
-        ,email
-        ,kritikSaran
-        )
-        VALUES (
-        " . $this->db->escape($data['idKritSar']) . "
-        ," . $this->db->escape($data['idAkun']) . "
-        ," . $this->db->escape($data['nama']) . "
-        ," . $this->db->escape($data['alamat']) . "
-        ," . $this->db->escape($data['kodeBagian']) . "
-        ," . $this->db->escape($data['telp']) . "
-        ," . $this->db->escape($data['email']) . "
-        ," . $this->db->escape($data['kritikSaran']) . "
-    );");
+            idKritSar
+            ,idAkun
+            ,nama
+            ,alamat
+            ,kodeBagian
+            ,telp
+            ,email
+            ,kritikSaran
+            )
+            VALUES (
+            " . $this->db->escape($data['idKritSar']) . "
+            ," . $this->db->escape($data['idAkun']) . "
+            ," . $this->db->escape($data['nama']) . "
+            ," . $this->db->escape($data['alamat']) . "
+            ," . $this->db->escape($data['kodeBagian']) . "
+            ," . $this->db->escape($data['telp']) . "
+            ," . $this->db->escape($data['email']) . "
+            ," . $this->db->escape($data['kritikSaran']) . "
+        );");
     }
 
     function jawabKritSar($data)

@@ -28,7 +28,7 @@ class Mstpenjamin extends RestController
             if ($a) {
                 $n = 0;
                 foreach ($a as $dt) {
-                    $data[$n]['kdpenjamin'] = $dt['idPenjamin'];
+                    $data[$n]['kdpenjamin'] = $dt['KodePT'];
                     $data[$n]['nmpenjamin'] = trim($dt['Nama']);
                     $n++;
                 }
