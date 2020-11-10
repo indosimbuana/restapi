@@ -46,7 +46,7 @@ class Mstpenjamin extends RestController
         } else {
             $da = $this->mpenjamin->getPenjaminById($id);
             if ($da) {
-                $data['kdpenjamin'] = $da->idPenjamin;
+                $data['kdpenjamin'] = $da->KodePT;
                 $data['nmpenjamin'] = trim($da->Nama);
                 $this->response([
                     'status' => true,

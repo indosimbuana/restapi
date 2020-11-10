@@ -36,7 +36,7 @@ class Mregbooking extends CI_Model
 
     function getPenjamin($id)
     {
-        return $this->db->query("SELECT * FROM MasterPenjamin WHERE idPenjamin = '$id'")->row();
+        return $this->db->query("SELECT * FROM MasterPenjamin WHERE KodePT = '$id'")->row();
     }
 
     function getDokter($id)
