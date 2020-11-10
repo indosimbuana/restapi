@@ -113,7 +113,7 @@ class RegBooking extends RestController
                 $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $data['tanggal']), $data['waktu']);
                 $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
                 $dt['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
-                $dt['noantripoli'] = "A" . str_pad($hitungpoli + 1, 4, "0", STR_PAD_LEFT);
+                $dt['noantripoli'] = "A" . str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
                 $jml = $hitungpendaftaran;
                 $pelayanan = 3;
@@ -125,7 +125,7 @@ class RegBooking extends RestController
                 $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $data['tanggal']));
                 $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
                 $dt['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
-                $dt['noantripoli'] = str_pad($hitungpoli + 1, 4, "0", STR_PAD_LEFT);
+                $dt['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
                 $jml = $hitungpendaftaran;
                 $pelayanan = 3;
