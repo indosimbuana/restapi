@@ -88,10 +88,13 @@ class RegBooking extends RestController
                 $hari = "";
         }
 
-        $jdwpoli = $this->mregbooking->getJamPoli($data['bagian'], $data['waktu'], $data['dokter'], $hari);
+        $jdwpoli = $this->mregbooking->getJamPoli($data['bagian'], $data['waktu'], $data['dokter']);
 
-        $jp = date_format(date_create($jdwpoli->$hari), "H:i");
-        $jptutup = date_format(date_create($jdwpoli->$hari . 'Tutup'), "H:i");
+        if ($jdwpoli) {
+            $jp = date_format(date_create($jdwpoli->$hari), "H:i");
+            $ttp = $hari . 'Tutup';
+            $jptutup = date_format(date_create($jdwpoli->$ttp), "H:i");
+        }
 
         $cekbooking = $this->mregbooking->cekBooking($data['idanggotakeluarga'], $data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
         if ($cekbooking) {
@@ -140,8 +143,8 @@ class RegBooking extends RestController
                 $databooking['idanggotakeluarga'] = $data['idanggotakeluarga'];
                 $databooking['poli'] = trim($dt['namabagian']);
                 $databooking['waktu'] = $dt['waktu'];
-                $databooking['jampoli'] = $jp;
-                $databooking['jamtutuppoli'] = $jptutup;
+                $databooking['jampoli'] = isset($jp) ? $jp : '';
+                $databooking['jamtutuppoli'] = isset($jptutup) ? $jptutup : '';
                 $databooking['tglperiksa'] =  date_format(date_create($data['tanggal']), "d-m-yy");
                 $databooking['penjamin'] = trim($dt['namapenjamin']);
                 $databooking['nopenjamin'] = trim($dt['nopenjamin']);
