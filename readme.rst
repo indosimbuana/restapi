@@ -437,6 +437,12 @@ Method GET
 Insert, update, delete jadwal poli
 **************************
 
+URL Tambah Jadwal Poli : http://hostname/restapi/jadwalpoli
+Method POST
+
+URL Update Jadwal Poli : http://hostname/restapi/jadwalpoli
+Method PUT
+
 { 
 	"KodeKlinik": "6104", 
 	"JenisWaktu":"S", 
@@ -460,6 +466,9 @@ Insert, update, delete jadwal poli
 	"Keterangan":"Jadwal Fleksibel",
 	"UserUpdate":"agung"
 }
+
+URL Delete Jadwal Poli : http://hostname/restapi/jadwalpoli?KodeKlinik=<kodeklinik>&JenisWaktu=<P atau S>&KodeDokter=<kodedokter>
+Method DELETE
 
 ###################
 Instalasi Aplikasi
