@@ -6,11 +6,11 @@ class Mpenjamin extends CI_Model
 
     function getPenjamin()
     {
-        return $this->db->query("SELECT idPenjamin, Nama FROM MasterPenjamin WHERE Aktif = 'y'")->result_array();
+        return $this->db->query("SELECT KodePT, Nama FROM MasterPenjamin WHERE Aktif = 'y'")->result_array();
     }
 
     function getPenjaminById($id)
     {
-        return $this->db->query("SELECT idPenjamin, Nama FROM MasterPenjamin WHERE idPenjamin = '$id' AND Aktif = 'y'")->row();
+        return $this->db->query("SELECT KodePT, Nama FROM MasterPenjamin WHERE KodePT = '$id' AND Aktif = 'y'")->row();
     }
 }
