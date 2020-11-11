@@ -87,8 +87,11 @@ class Riwayatreg extends RestController
 
                 $jdwpoli = $this->mriwayatreg->getJamPoli($da->kodeBagian, $da->waktuPemeriksaan, $da->kodeDokter, $hari);
 
-                $jp = date_format(date_create($jdwpoli->$hari), "H:i");
-                $jptutup = date_format(date_create($jdwpoli->$hari . 'Tutup'), "H:i");
+                if ($jdwpoli) {
+                    $jp = date_format(date_create($jdwpoli->$hari), "H:i");
+                    $ttp = $hari . 'Tutup';
+                    $jptutup = date_format(date_create($jdwpoli->$ttp), "H:i");
+                }
 
                 $data['kodebooking'] = trim($da->kodeBooking);
                 $data['antriandaftar'] = trim($da->noAntrianPendaftaran);
@@ -97,8 +100,8 @@ class Riwayatreg extends RestController
                 $data['idanggotakeluarga'] = trim($da->idAnggotaKeluarga);
                 $data['poli'] = trim($da->namaBagian);
                 $data['waktu'] = trim($da->waktuPemeriksaan);
-                $data['jampoli'] = $jp;
-                $data['jamtutuppoli'] = $jptutup;
+                $data['jampoli'] = isset($jp) ? $jp : '';
+                $data['jamtutuppoli'] = isset($jptutup) ? $jptutup : '';
                 $data['tglperiksa'] = date_format(date_create($da->tglPemeriksaan), "d-m-yy");
                 $data['penjamin'] = trim($da->namaPenjamin);
                 $data['nopenjamin'] = trim($da->noPenjamin);
