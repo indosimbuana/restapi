@@ -38,6 +38,7 @@ class Kritiksaran extends RestController
                             $data[$n]['nama'] = trim($dt['nama']);
                             $data[$n]['alamat'] = trim($dt['alamat']);
                             $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
+                            $data[$n]['namabagian'] = trim($dt['NamaBagian']);
                             $data[$n]['telp'] = trim($dt['telp']);
                             $data[$n]['email'] = trim($dt['email']);
                             $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
@@ -69,6 +70,7 @@ class Kritiksaran extends RestController
                             $data[$n]['nama'] = trim($dt['nama']);
                             $data[$n]['alamat'] = trim($dt['alamat']);
                             $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
+                            $data[$n]['namabagian'] = trim($dt['NamaBagian']);
                             $data[$n]['telp'] = trim($dt['telp']);
                             $data[$n]['email'] = trim($dt['email']);
                             $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
@@ -102,6 +104,7 @@ class Kritiksaran extends RestController
                             $data[$n]['nama'] = trim($dt['nama']);
                             $data[$n]['alamat'] = trim($dt['alamat']);
                             $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
+                            $data[$n]['namabagian'] = trim($dt['NamaBagian']);
                             $data[$n]['telp'] = trim($dt['telp']);
                             $data[$n]['email'] = trim($dt['email']);
                             $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
@@ -133,6 +136,7 @@ class Kritiksaran extends RestController
                             $data[$n]['nama'] = trim($dt['nama']);
                             $data[$n]['alamat'] = trim($dt['alamat']);
                             $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
+                            $data[$n]['namabagian'] = trim($dt['NamaBagian']);
                             $data[$n]['telp'] = trim($dt['telp']);
                             $data[$n]['email'] = trim($dt['email']);
                             $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
@@ -163,6 +167,7 @@ class Kritiksaran extends RestController
                     $data['nama'] = trim($da->nama);
                     $data['alamat'] = trim($da->alamat);
                     $data['kodebagian'] = trim($da->kodeBagian);
+                    $data['namabagian'] = trim($da->NamaBagian);
                     $data['telp'] = trim($da->telp);
                     $data['email'] = trim($da->email);
                     $data['kritiksaran'] = trim($da->kritikSaran);
@@ -193,6 +198,7 @@ class Kritiksaran extends RestController
                     $data[$n]['nama'] = trim($dt['nama']);
                     $data[$n]['alamat'] = trim($dt['alamat']);
                     $data[$n]['kodebagian'] = trim($dt['kodeBagian']);
+                    $data[$n]['namabagian'] = trim($dt['NamaBagian']);
                     $data[$n]['telp'] = trim($dt['telp']);
                     $data[$n]['email'] = trim($dt['email']);
                     $data[$n]['kritiksaran'] = trim($dt['kritikSaran']);
