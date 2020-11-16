@@ -25,12 +25,12 @@ class Mkritiksaran extends CI_Model
 
     function getKritSarByBag($id)
     {
-        return $this->db->query("SELECT * FROM KritikSaran ks LEFT JOIN RegBagianKS bk ON bk.KodeBagian = ks.kodeBagian WHERE ks.kodeBagian = 'KS03' ORDER BY ks.status,ks.tglTanya DESC")->result_array();
+        return $this->db->query("SELECT * FROM KritikSaran ks LEFT JOIN RegBagianKS bk ON bk.KodeBagian = ks.kodeBagian WHERE ks.kodeBagian = '$id' ORDER BY ks.status,ks.tglTanya DESC")->result_array();
     }
 
     function getKritSarByBagByTgl($id, $tgl)
     {
-        return $this->db->query("SELECT * FROM KritikSaran ks LEFT JOIN RegBagianKS bk ON bk.KodeBagian = ks.kodeBagian WHERE ks.kodeBagian = 'KS03' AND DATEDIFF(DAY, ks.tglTanya, '$tgl') = 0 ORDER BY ks.status,ks.tglTanya DESC")->result_array();
+        return $this->db->query("SELECT * FROM KritikSaran ks LEFT JOIN RegBagianKS bk ON bk.KodeBagian = ks.kodeBagian WHERE ks.kodeBagian = '$id' AND DATEDIFF(DAY, ks.tglTanya, '$tgl') = 0 ORDER BY ks.status,ks.tglTanya DESC")->result_array();
     }
 
     function kirimKritSar($data)
