@@ -20,21 +20,37 @@ class Infott extends RestController
 
     public function index_get()
     {
+        $kls = $this->get('kls');
 
         $this->load->model('minfott');
-
-        $i = $this->minfott->getInfoTT();
-        if ($i) {
-            $this->response([
-                'status' => true,
-                'message' => 'Data found',
-                'data' => $i
-            ], 200);
+        if ($kls === null) {
+            $i = $this->minfott->getInfoTT();
+            if ($i) {
+                $this->response([
+                    'status' => true,
+                    'message' => 'Data found',
+                    'data' => $i
+                ], 200);
+            } else {
+                $this->response([
+                    'status' => false,
+                    'message' => 'No info were found'
+                ], 404);
+            }
         } else {
-            $this->response([
-                'status' => false,
-                'message' => 'No info were found'
-            ], 404);
+            $i = $this->minfott->detailInfoTT($kls);
+            if ($i) {
+                $this->response([
+                    'status' => true,
+                    'message' => 'Data found',
+                    'data' => $i
+                ], 200);
+            } else {
+                $this->response([
+                    'status' => false,
+                    'message' => 'No info were found'
+                ], 404);
+            }
         }
     }
 }
