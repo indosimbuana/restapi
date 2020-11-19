@@ -30,6 +30,9 @@ class Cekpasienlama extends RestController
         $this->load->model('mcekpasienlama');
         $cek = $this->mcekpasienlama->cekPasien($dt);
 
+        $this->load->model('mcekpasienserverlama');
+        $cekserverlama = $this->mcekpasienserverlama->cekPasien($dt);
+
         if ($cek) {
             $this->response([
                 'status' => true,
@@ -43,10 +46,24 @@ class Cekpasienlama extends RestController
                 'email' => '-'
             ], 200);
         } else {
-            $this->response([
-                'status' => false,
-                'message' => 'Informasi pasien tidak ditemukan'
-            ], 404);
+            if ($cekserverlama) {
+                $this->response([
+                    'status' => true,
+                    'message' => 'Pasien ditemukan',
+                    'nama' => $cekserverlama->NamaPasien,
+                    'nopasien' => $cekserverlama->Nopasien,
+                    'tgllahir' => $cekserverlama->TglLahir,
+                    'jnskel' => $cekserverlama->JenisKelamin,
+                    'alamat' => $cekserverlama->AlamatPasien,
+                    'telp' => $cekserverlama->TlpPasien,
+                    'email' => '-'
+                ], 200);
+            } else {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Informasi pasien tidak ditemukan'
+                ], 404);
+            }
         }
     }
 }
