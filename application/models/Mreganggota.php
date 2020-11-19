@@ -32,6 +32,7 @@ class Mreganggota extends CI_Model
             , hubunganAkun
             , noPasien
             , NamaLengkap
+            , NamaPanggilan
             , TglLahir
             , NoTelpon
             , Email
@@ -42,6 +43,7 @@ class Mreganggota extends CI_Model
         ," . $this->db->escape($data['hubungan']) . "
         ," . $this->db->escape($data['nopasien']) . "
         ," . $this->db->escape($data['namalengkap']) . "
+        ," . $this->db->escape($data['namapanggilan']) . "
         ," . $this->db->escape($data['tgllahir']) . "
         ," . $this->db->escape($data['notelpon']) . "
         ," . $this->db->escape($data['email']) . ");");
@@ -54,11 +56,14 @@ class Mreganggota extends CI_Model
             ,idAkun
             ,hubunganAkun
             ,NamaLengkap
+            ,NamaPanggilan
             ,KTP
             ,JenisKelamin
             ,TempatLahir
             ,TglLahir
             ,Alamat
+            ,RT
+            ,RW
             ,Provinsi
             ,Kabupaten
             ,Kecamatan
@@ -87,11 +92,14 @@ class Mreganggota extends CI_Model
         ," . $this->db->escape($data['idakun']) . "
         ," . $this->db->escape($data['hubungan']) . "
         ," . $this->db->escape($data['namalengkap']) . "
+        ," . $this->db->escape($data['namapanggilan']) . "
         ," . $this->db->escape($data['ktp']) . "
         ," . $this->db->escape($data['jeniskelamin']) . "
         ," . $this->db->escape($data['tempatlahir']) . "
         ," . $this->db->escape($data['tgllahir']) . "
         ," . $this->db->escape($data['alamat']) . "
+        ," . $this->db->escape($data['rt']) . "
+        ," . $this->db->escape($data['rw']) . "
         ," . $this->db->escape($data['provinsi']) . "
         ," . $this->db->escape($data['kabupaten']) . "
         ," . $this->db->escape($data['kecamatan']) . "

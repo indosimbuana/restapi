@@ -40,6 +40,8 @@ class Reganggota extends RestController
             $dt['tempatlahir'] = $data['tempatlahir'];
             $dt['tgllahir'] = $data['tgllahir'];
             $dt['alamat'] = $data['alamat'];
+            $dt['rt'] = $data['rt'];
+            $dt['rw'] = $data['rw'];
             $dt['provinsi'] = $data['provinsi'];
             $dt['kabupaten'] = $data['kabupaten'];
             $dt['kecamatan'] = $data['kecamatan'];
@@ -88,6 +90,7 @@ class Reganggota extends RestController
                             if ($this->mreganggota->simpanPasienLama($dt)) {
                                 $pl['idanggotakeluarga'] = $dt['idanggotakeluarga'];
                                 $pl['namalengkap'] = $pslama->NamaPasien;
+                                $pl['namapanggilan'] = $pslama->NamaPanggilan;
                                 $this->response([
                                     'status' => true,
                                     'message' => 'Berhasil Simpan Pasien Lama',
@@ -119,6 +122,7 @@ class Reganggota extends RestController
                     if ($this->mreganggota->simpanPasienBaru($dt)) {
                         $pb['idanggotakeluarga'] = $dt['idanggotakeluarga'];
                         $pb['namalengkap'] = $data['namalengkap'];
+                        $pb['namapanggilan'] = $data['namapanggilan'];
                         $this->response([
                             'status' => true,
                             'message' => 'Berhasil Simpan Pasien Baru',
