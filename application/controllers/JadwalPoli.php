@@ -33,6 +33,7 @@ class Jadwalpoli extends RestController
                     $data[$n]['namaklinik'] = $p['NamaBagian'];
                     $data[$n]['jnswkt'] = $p['JenisWaktu'];
                     $data[$n]['dokter'] = $p['NamaDokter'];
+                    $data[$n]['kodedokter'] = $p['KodeDokter'];
                     $data[$n]['senin'] = $p['Senin'] == NULL ? "Libur" : date_format(date_create($p['Senin']), "H:s");
                     $data[$n]['senintutup'] = $p['SeninTutup'] == NULL ? "Libur" : date_format(date_create($p['SeninTutup']), "H:s");
                     $data[$n]['selasa'] = $p['Selasa'] == NULL ? "Libur" : date_format(date_create($p['Selasa']), "H:s");
@@ -72,6 +73,7 @@ class Jadwalpoli extends RestController
                     $data[$n]['namaklinik'] = $p['NamaBagian'];
                     $data[$n]['jnswkt'] = $p['JenisWaktu'];
                     $data[$n]['dokter'] = $p['NamaDokter'];
+                    $data[$n]['kodedokter'] = $p['KodeDokter'];
                     $data[$n]['senin'] = $p['Senin'] == NULL ? "Libur" : date_format(date_create($p['Senin']), "H:s");
                     $data[$n]['senintutup'] = $p['SeninTutup'] == NULL ? "Libur" : date_format(date_create($p['SeninTutup']), "H:s");
                     $data[$n]['selasa'] = $p['Selasa'] == NULL ? "Libur" : date_format(date_create($p['Selasa']), "H:s");
