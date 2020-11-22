@@ -24,6 +24,8 @@ class Antrian extends RestController
         $poli = $this->get('poli');
         $tgl = $this->get('tgl');
 
+        $np = str_pad($nopas + 1, 8, "0", STR_PAD_LEFT);
+
         $this->load->model('mantrian');
         if ($lokasi === "pendaftaran") {
             $i = $this->mantrian->pendaftaran();
