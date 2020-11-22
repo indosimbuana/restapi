@@ -231,13 +231,15 @@ class Jadwalpoli extends RestController
 
     function index_delete()
     {
-        $poli = $this->delete('poli');
-        $waktu = $this->delete('waktu');
-        $dokter = $this->delete('dokter');
-        $this->db->where('KodeKlinik', $poli);
-        $this->db->where('JenisWaktu', $waktu);
-        $this->db->where('KodeDokter', $dokter);
-        $delete = $this->db->delete('RegJadwalKlinik');
+        $d = file_get_contents('php://input');
+        $data = json_decode($d, true);
+
+        $dt['KodeKlinik'] = $data['poli'];
+        $dt['JenisWaktu'] = $data['waktu'];
+        $dt['KodeDokter'] = $data['dokter'];
+
+        $this->load->model('mjadwalpoli');
+        $delete = $this->mjadwalpoli->hapusJadwalPoli($dt);
         if ($delete) {
             $this->response(array('status' => true), 200);
         } else {

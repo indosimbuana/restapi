@@ -24,8 +24,6 @@ class Antrian extends RestController
         $poli = $this->get('poli');
         $tgl = $this->get('tgl');
 
-        $np = str_pad($nopas + 1, 8, "0", STR_PAD_LEFT);
-
         $this->load->model('mantrian');
         if ($lokasi === "pendaftaran") {
             $i = $this->mantrian->pendaftaran();
@@ -42,31 +40,61 @@ class Antrian extends RestController
                 ], 404);
             }
         } else if ($lokasi === "poli") {
-            if ($poli === NULL) {
-                $this->response([
-                    'status' => false,
-                    'message' => 'No info were found'
-                ], 404);
+            if ($poli === NULL and $tgl === NULL) {
+                $p = $this->mantrian->daftarpoli();
+                if ($p) {
+                    $n = 0;
+                    foreach ($p as $dt) {
+                        if (trim($dt['Klinik']) != '') {
+                            $data[$n]['poli'] = $dt['Klinik'];
+                            $n++;
+                        }
+                    }
+                    $this->response([
+                        'status' => true,
+                        'message' => 'Data found',
+                        'data' => $data
+                    ], 200);
+                } else {
+                    $this->response([
+                        'status' => false,
+                        'message' => 'No bagian were found'
+                    ], 404);
+                }
             } else {
-                $i = $this->mantrian->poli($poli, $tgl);
-                $b = $this->mantrian->totalBelumMasuk($poli, $tgl);
-                $m = $this->mantrian->totalSudahMasuk($poli, $tgl);
-                $l = $this->mantrian->totalDilewati($poli, $tgl);
-                // if ($i) {
-                $this->response([
-                    'status' => true,
-                    'message' => 'Data found',
-                    'sekarang' => $i,
-                    'blmmasuk' => $b->Jumlah,
-                    'sdhmasuk' => $m->Jumlah,
-                    'dilewati' => $l->Jumlah
-                ], 200);
-                // } else {
-                //     $this->response([
-                //         'status' => false,
-                //         'message' => 'No info were found'
-                //     ], 404);
-                // }
+                if ($poli === NULL) {
+                    $this->response([
+                        'status' => false,
+                        'message' => 'No info were found'
+                    ], 404);
+                } else {
+                    $i = $this->mantrian->poli($poli, $tgl);
+                    $b = $this->mantrian->totalBelumMasuk($poli, $tgl);
+                    $m = $this->mantrian->totalSudahMasuk($poli, $tgl);
+                    $l = $this->mantrian->totalDilewati($poli, $tgl);
+                    // if ($i) {
+                    $data = array(
+                        'no' => $i->NO,
+                        'poli' => $i->Klinik,
+                        'dokter' => $i->DOKTER,
+                        'nopasien' => str_pad($i->No_Pasien + 1, 8, "0", STR_PAD_LEFT),
+                        'namapasien' => $i->Nama
+                    );
+                    $this->response([
+                        'status' => true,
+                        'message' => 'Data found',
+                        'sekarang' => $data,
+                        'blmmasuk' => $b->Jumlah,
+                        'sdhmasuk' => $m->Jumlah,
+                        'dilewati' => $l->Jumlah
+                    ], 200);
+                    // } else {
+                    //     $this->response([
+                    //         'status' => false,
+                    //         'message' => 'No info were found'
+                    //     ], 404);
+                    // }
+                }
             }
         } else {
             $this->response([

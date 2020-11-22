@@ -11,6 +11,13 @@ class Mantrian extends CI_Model
         return $sql->result_array();
     }
 
+    function daftarpoli()
+    {
+        $db2 = $this->load->database('antrian', TRUE);
+        $sql = $db2->query("SELECT Klinik FROM tbantrianpoli GROUP BY Klinik");
+        return $sql->result_array();
+    }
+
     function poli($poli, $tgl)
     {
         $db2 = $this->load->database('antrian', TRUE);
