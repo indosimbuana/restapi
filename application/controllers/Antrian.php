@@ -74,19 +74,19 @@ class Antrian extends RestController
                     $l = $this->mantrian->totalDilewati($poli, $tgl);
                     // if ($i) {
                     $data = array(
-                        'no' => $i->NO,
-                        'poli' => $i->Klinik,
-                        'dokter' => $i->DOKTER,
-                        'nopasien' => str_pad($i->No_Pasien + 1, 8, "0", STR_PAD_LEFT),
-                        'namapasien' => $i->Nama
+                        'no' => $i ? $i->NO : '',
+                        'poli' => $i ? $i->Klinik : '',
+                        'dokter' => $i ? $i->DOKTER : '',
+                        'nopasien' => $i ? str_pad($i->No_Pasien + 1, 8, "0", STR_PAD_LEFT) : '',
+                        'namapasien' => $i ? $i->Nama : ''
                     );
                     $this->response([
                         'status' => true,
                         'message' => 'Data found',
                         'sekarang' => $data,
-                        'blmmasuk' => $b->Jumlah,
-                        'sdhmasuk' => $m->Jumlah,
-                        'dilewati' => $l->Jumlah
+                        'blmmasuk' => $b ? $b->Jumlah : '',
+                        'sdhmasuk' => $m ? $m->Jumlah : '',
+                        'dilewati' => $l ? $l->Jumlah : ''
                     ], 200);
                     // } else {
                     //     $this->response([
