@@ -26,10 +26,34 @@ class Infott extends RestController
         if ($kls === null) {
             $i = $this->minfott->getInfoTT();
             if ($i) {
+                $data = array();
+                $n = 0;
+                foreach ($i as $ik) {
+                    $data[$n]['Kelas'] = $ik['Kelas'];
+                    $data[$n]['NamaKelas'] = $ik['NamaKelas'];
+                    $data[$n]['JumlahTT'] = $ik['JumlahTT'];
+                    $data[$n]['JumlahTTKosong'] = $ik['JumlahTTKosong'];
+
+                    $f = $this->minfott->fotoKelas($ik['Kelas']);
+                    $df = array();
+                    $nf = 0;
+                    foreach ($f as $ft) {
+                        $df[$nf]['idfoto'] = $ft['idfoto'];
+                        $df[$nf]['kelas'] = $ft['kelas'];
+                        $df[$nf]['label'] = $ft['label'];
+                        $df[$nf]['url'] = $ft['url'] ? base_url() . $ft['url'] : '';
+                        $df[$nf]['tglupload'] = $ft['tglupload'];
+                        $nf++;
+                    }
+
+                    $data[$n]['Foto'] = $df;
+
+                    $n++;
+                }
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',
-                    'data' => $i
+                    'data' => $data
                 ], 200);
             } else {
                 $this->response([

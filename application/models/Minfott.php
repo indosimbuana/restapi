@@ -20,4 +20,10 @@ class Minfott extends CI_Model
 		WHERE mk.Kelas = '$kls'
         GROUP BY mk.KodeRuang, mi.NamaBagian, mk.Kelas, mc.NamaKelas")->result_array();
     }
+
+    function fotoKelas($kls)
+    {
+        return $this->db->query("SELECT IdFoto AS idfoto, KodeKelas AS kelas, LabelFoto AS label, LokasiFoto AS url, TglUpload AS tglupload FROM FotoKelas
+        WHERE Aktif = 'Y' AND KodeKelas = '$kls' ORDER BY TglUpload DESC")->result_array();
+    }
 }

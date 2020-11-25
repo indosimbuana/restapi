@@ -467,6 +467,15 @@ Method PUT
 	"UserUpdate":"agung"
 }
 
+Rating
+
+{ 
+	"KodeBooking": "202011230004", 
+	"KodeTanya":"20201124101800", 
+	"NilaiRating":"5", 
+	"UserRating":"hapsari"
+}
+
 URL Delete Jadwal Poli : http://hostname/restapi/jadwalpoli?KodeKlinik=<kodeklinik>&JenisWaktu=<P atau S>&KodeDokter=<kodedokter>
 Method DELETE
 
