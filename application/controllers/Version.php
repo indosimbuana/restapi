@@ -27,7 +27,8 @@ class Version extends RestController
             $this->response([
                 'status' => true,
                 'message' => 'Data found',
-                'version' => $vr->AndroidVersion
+                'version' => $vr->AndroidVersion,
+                'url' => $vr->UrlPlayStore
             ], 200);
         } else {
             $this->response([
@@ -44,13 +45,14 @@ class Version extends RestController
 
         $dt = array();
         $dt['AndroidVersion'] = $data['version'] == '' ? NULL : $data['version'];
+        $dt['UrlPlayStore'] = $data['url'] == '' ? NULL : $data['url'];
 
         $this->load->model('mversion');
 
         if ($dt['AndroidVersion'] == NULL) {
             $this->response([
                 'status' => false,
-                'message' => 'Gagal update Version'
+                'message' => 'Gagal update Version dan URL'
             ], 400);
         } else {
             $cek = $this->mversion->getVersion();
@@ -58,18 +60,18 @@ class Version extends RestController
                 if ($this->mversion->updateVersion($dt)) {
                     $this->response([
                         'status' => true,
-                        'message' => 'Version berhasil diupdate'
+                        'message' => 'Version dan URL berhasil diupdate'
                     ], 200);
                 } else {
                     $this->response([
                         'status' => false,
-                        'message' => 'Gagal update Version'
+                        'message' => 'Gagal update Version dan URL'
                     ], 400);
                 }
             } else {
                 $this->response([
                     'status' => false,
-                    'message' => 'Gagal update Version, data tidak ditemukan'
+                    'message' => 'Gagal update Version dan URL, data tidak ditemukan'
                 ], 400);
             }
         }
