@@ -86,6 +86,7 @@ class Reganggota extends RestController
                         $pslama = $this->mreganggota->getPasienLama($data['nopasien']);
                         if ($pslama) {
                             $dt['namalengkap'] = $pslama->NamaPasien;
+                            $dt['namalengkap'] = $pslama->NamaPanggilan;
                             $dt['tgllahir'] = $pslama->TglLahir;
                             if ($this->mreganggota->simpanPasienLama($dt)) {
                                 $pl['idanggotakeluarga'] = $dt['idanggotakeluarga'];
@@ -119,6 +120,7 @@ class Reganggota extends RestController
                     ], 400);
                 } else {
                     $dt['namalengkap'] = $data['namalengkap'];
+                    $dt['namapanggilan'] = $data['namapanggilan'];
                     if ($this->mreganggota->simpanPasienBaru($dt)) {
                         $pb['idanggotakeluarga'] = $dt['idanggotakeluarga'];
                         $pb['namalengkap'] = $data['namalengkap'];
