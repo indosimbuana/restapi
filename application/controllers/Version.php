@@ -44,15 +44,24 @@ class Version extends RestController
         $data = json_decode($d, true);
 
         $dt = array();
-        $dt['AndroidVersion'] = $data['version'] == '' ? NULL : $data['version'];
-        $dt['UrlPlayStore'] = $data['url'] == '' ? NULL : $data['url'];
+
+        $ver = isset($data['version']) && $data['version'] ? $data['version'] : NULL;
+        $url = isset($data['url']) && $data['url'] ? $data['url'] : NULL;
+
+        if ($ver != NULL) {
+            $dt['AndroidVersion'] = $ver;
+        }
+
+        if ($url != NULL) {
+            $dt['UrlPlayStore'] = $url;
+        }
 
         $this->load->model('mversion');
 
-        if ($dt['AndroidVersion'] == NULL) {
+        if ((isset($dt['AndroidVersion']) && ($dt['AndroidVersion'] == NULL || $dt['AndroidVersion'] == '')) || (isset($dt['UrlPlayStore']) && ($dt['UrlPlayStore'] == NULL || $dt['UrlPlayStore'] == ''))) {
             $this->response([
                 'status' => false,
-                'message' => 'Gagal update Version dan URL'
+                'message' => 'Gagal update Version dan URL, parameter kosong'
             ], 400);
         } else {
             $cek = $this->mversion->getVersion();
@@ -65,7 +74,10 @@ class Version extends RestController
                 } else {
                     $this->response([
                         'status' => false,
-                        'message' => 'Gagal update Version dan URL'
+                        'message' => 'Gagal update Version dan URL',
+                        'version' => $ver,
+                        'url' => $url,
+                        'dt' => $dt
                     ], 400);
                 }
             } else {

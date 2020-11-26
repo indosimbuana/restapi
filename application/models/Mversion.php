@@ -11,9 +11,9 @@ class Mversion extends CI_Model
 
     function updateVersion($dt)
     {
-        return $this->db->query("UPDATE Syspar SET 
-        AndroidVersion = '" . $dt['AndroidVersion'] . "'
-        ,UrlPlayStore = '" . $dt['UrlPlayStore'] . "'
-        WHERE RegID = '1' ");
+        $this->db->where('RegID', '1');
+        $this->db->update('Syspar', $dt);
+
+        return $this->db->affected_rows() > 0;
     }
 }
