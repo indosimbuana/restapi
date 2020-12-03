@@ -16,7 +16,7 @@ class Token
             return $data;
         } else {
             try {
-                $key = "rahasia";
+                $key = "yIMnDdYHyHfdzEuo2chgGJwkuA5ZtU8Rg5HcSf83EmtLXuF7XuUNupWp8zmkhKIx";
 
                 $decoded = JWT::decode($token, $key, array('HS256'));
 
