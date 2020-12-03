@@ -24,21 +24,43 @@ class Rating extends RestController
 
         $this->load->model('mrating');
 
-        $cek = $this->mrating->cekPasien($akun);
-        if ($cek) {
-            $a = $this->mrating->getRating();
-            if ($a) {
-                $n = 0;
-                foreach ($a as $dt) {
-                    $data[$n]['kdtanya'] = $dt['KodeTanya'];
-                    $data[$n]['isitanya'] = trim($dt['IsiTanya']);
-                    $data[$n]['objek'] = trim($dt['ObjekTanya']);
-                    $n++;
+        if ($akun == '' || $akun == NULL) {
+            $this->response([
+                'status' => false,
+                'message' => 'Mohon isikan akun!'
+            ], 400);
+        } else {
+            $cek = $this->mrating->cekPasien($akun);
+            if ($cek) {
+                $dt = [];
+                $nc = 0;
+                foreach ($cek as $c) {
+                    $dt[$nc]['kodebooking'] = trim($c['KodeBooking']);
+                    $dt[$nc]['idanggotakeluarga'] = trim($c['idAnggotaKeluarga']);
                 }
+
+                $a = $this->mrating->getRating();
+
+                if ($a) {
+                    $n = 0;
+                    $data = [];
+                    foreach ($a as $d) {
+                        $data[$n]['kdtanya'] = $d['KodeTanya'];
+                        $data[$n]['isitanya'] = trim($d['IsiTanya']);
+                        $data[$n]['objek'] = trim($d['ObjekTanya']);
+                        $n++;
+                    }
+                } else {
+                    $data = [];
+                }
+
+                $dt[$nc]['rating'] = $data;
+                $nc++;
+
                 $this->response([
                     'status' => true,
-                    'message' => 'Data found',
-                    'data' => $data
+                    'message' => 'Data ditemukan',
+                    'data' => $dt
                 ], 200);
             } else {
                 $this->response([
@@ -46,11 +68,6 @@ class Rating extends RestController
                     'message' => 'No question were found'
                 ], 404);
             }
-        } else {
-            $this->response([
-                'status' => false,
-                'message' => 'No question were found'
-            ], 404);
         }
     }
 

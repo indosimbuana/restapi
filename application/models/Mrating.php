@@ -10,7 +10,7 @@ class Mrating extends CI_Model
         LEFT JOIN RegAnggotaKeluarga ak ON ak.idAnggotaKeluarga = ro.idAnggotaKeluarga
         LEFT JOIN RegPasien rp ON rp.Nobooking = ro.kodeBooking
         LEFT JOIN RegDokter rd ON rd.NoRegistrasi = rp.NoRegistrasi
-        WHERE ak.idAkun = '$akun' AND (rd.NoInvoice != 0 OR rd.NoInvoice != '')")->result_array();
+        WHERE ak.idAkun = '$akun' AND (rd.NoInvoice != '0' OR rd.NoInvoice != '')")->result_array();
     }
 
     function getRating()
