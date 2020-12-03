@@ -6,10 +6,11 @@ class Mrating extends CI_Model
 
     function cekPasien($akun)
     {
-        return $this->db->query("SELECT ro.KodeBooking, ro.idAnggotaKeluarga FROM RegOnline ro
+        return $this->db->query("SELECT ro.KodeBooking, ro.idAnggotaKeluarga, ak.NamaLengkap, mi.NamaBagian, rp.TglReg FROM RegOnline ro
         LEFT JOIN RegAnggotaKeluarga ak ON ak.idAnggotaKeluarga = ro.idAnggotaKeluarga
         LEFT JOIN RegPasien rp ON rp.Nobooking = ro.kodeBooking
         LEFT JOIN RegDokter rd ON rd.NoRegistrasi = rp.NoRegistrasi
+		LEFT JOIN MasterInstalasi mi ON mi.KodeBagian = ro.kodeBagian
         WHERE ak.idAkun = '$akun' AND (rd.NoInvoice != '0' OR rd.NoInvoice != '')")->result_array();
     }
 
