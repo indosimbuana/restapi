@@ -60,17 +60,20 @@ class RegAkun extends RestController
                         $body['judul'] = "Registrasi Akun";
                         $body['sapaan'] = "SELAMAT, akun registrasi online RSUD PANTI NUGRAHA anda berhasil dibuat:";
                         $body['isi'] = "Nama Akun: " . $dt['nama'] . ", Nomor Handphone: " . $dt['telp'] . ", Alamat Email: " . $dt['email'];
-                        if ($this->mail->kirim($dt['email'], $body['judul'], $body) == true) {
-                            $this->response([
-                                'status' => true,
-                                'message' => 'Registrasi akun berhasil'
-                            ], 201);
-                        } else {
-                            $this->response([
-                                'status' => false,
-                                'message' => 'Gagal kirim email'
-                            ], 500);
-                        }
+
+                        $this->mail->kirim($dt['email'], $body['judul'], $body);
+
+                        // if ($this->mail->kirim($dt['email'], $body['judul'], $body) == true) {
+                        //     $this->response([
+                        //         'status' => true,
+                        //         'message' => 'Registrasi akun berhasil'
+                        //     ], 201);
+                        // } else {
+                        //     $this->response([
+                        //         'status' => false,
+                        //         'message' => 'Gagal kirim email'
+                        //     ], 500);
+                        // }
                     } else {
                         $this->response([
                             'status' => false,
