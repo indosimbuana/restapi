@@ -106,7 +106,7 @@ class Reganggota extends RestController
                             }
                         } else {
                             $this->load->model('mcekpasienserverlama');
-                            $cekserverlama = $this->mcekpasienserverlama->getPasien('00050908');
+                            $cekserverlama = $this->mcekpasienserverlama->getPasien($data['nopasien']);
                             if ($cekserverlama) {
                                 $dt['namalengkap'] = $cekserverlama->NamaPasien;
                                 $dt['namapanggilan'] = $cekserverlama->NamaPanggilan;
@@ -129,9 +129,7 @@ class Reganggota extends RestController
                             } else {
                                 $this->response([
                                     'status' => false,
-                                    'message' => 'Gagal Simpan, data pasien lama tidak ditemukan',
-                                    'nopasien' => $data['nopasien'],
-                                    'error' => $cekserverlama
+                                    'message' => 'Gagal Simpan, data pasien lama tidak ditemukan'
                                 ], 400);
                             }
                         }
