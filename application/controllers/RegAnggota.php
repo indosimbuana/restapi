@@ -67,7 +67,6 @@ class Reganggota extends RestController
         }
 
         $this->load->model('mreganggota');
-        $this->load->model('mcekpasienserverlama');
 
         if ($this->mreganggota->getAkunByNama($data['idakun'])) {
             if (isset($data['nopasien'])) {
@@ -86,7 +85,6 @@ class Reganggota extends RestController
                     } else {
                         $pslama = $this->mreganggota->getPasienLama($data['nopasien']);
 
-                        $cekserverlama = $this->mcekpasienserverlama->getPasien($data['nopasien']);
                         if ($pslama) {
                             $dt['namalengkap'] = $pslama->NamaPasien;
                             $dt['namapanggilan'] = $pslama->NamaPanggilan;
@@ -107,6 +105,8 @@ class Reganggota extends RestController
                                 ], 400);
                             }
                         } else {
+                            $this->load->model('mcekpasienserverlama');
+                            $cekserverlama = $this->mcekpasienserverlama->getPasien($data['nopasien']);
                             if ($cekserverlama) {
                                 $dt['namalengkap'] = $pslama->NamaPasien;
                                 $dt['namapanggilan'] = $pslama->NamaPanggilan;
