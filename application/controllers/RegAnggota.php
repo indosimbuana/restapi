@@ -108,13 +108,13 @@ class Reganggota extends RestController
                             $this->load->model('mcekpasienserverlama');
                             $cekserverlama = $this->mcekpasienserverlama->getPasien($data['nopasien']);
                             if ($cekserverlama) {
-                                $dt['namalengkap'] = $pslama->NamaPasien;
-                                $dt['namapanggilan'] = $pslama->NamaPanggilan;
-                                $dt['tgllahir'] = $pslama->TglLahir;
+                                $dt['namalengkap'] = $cekserverlama->NamaPasien;
+                                $dt['namapanggilan'] = $cekserverlama->NamaPanggilan;
+                                $dt['tgllahir'] = $cekserverlama->TglLahir;
                                 if ($this->mreganggota->simpanPasienLama($dt)) {
                                     $pl['idanggotakeluarga'] = $dt['idanggotakeluarga'];
-                                    $pl['namalengkap'] = $pslama->NamaPasien;
-                                    $pl['namapanggilan'] = $pslama->NamaPanggilan;
+                                    $pl['namalengkap'] = $cekserverlama->NamaPasien;
+                                    $pl['namapanggilan'] = $cekserverlama->NamaPanggilan;
                                     $this->response([
                                         'status' => true,
                                         'message' => 'Berhasil Simpan Pasien Lama',
