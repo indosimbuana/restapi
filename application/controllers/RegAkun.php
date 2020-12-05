@@ -64,10 +64,10 @@ class RegAkun extends RestController
                         $this->mail->kirim($dt['email'], $body['judul'], $body);
 
                         // if ($this->mail->kirim($dt['email'], $body['judul'], $body) == true) {
-                        //     $this->response([
-                        //         'status' => true,
-                        //         'message' => 'Registrasi akun berhasil'
-                        //     ], 201);
+                        $this->response([
+                            'status' => true,
+                            'message' => 'Registrasi akun berhasil'
+                        ], 201);
                         // } else {
                         //     $this->response([
                         //         'status' => false,
