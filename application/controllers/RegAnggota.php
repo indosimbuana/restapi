@@ -67,6 +67,7 @@ class Reganggota extends RestController
         }
 
         $this->load->model('mreganggota');
+        $this->load->model('mcekpasienserverlama');
 
         if ($this->mreganggota->getAkunByNama($data['idakun'])) {
             if (isset($data['nopasien'])) {
@@ -84,6 +85,8 @@ class Reganggota extends RestController
                         ], 400);
                     } else {
                         $pslama = $this->mreganggota->getPasienLama($data['nopasien']);
+
+                        $cekserverlama = $this->mcekpasienserverlama->cekPasien($dt);
                         if ($pslama) {
                             $dt['namalengkap'] = $pslama->NamaPasien;
                             $dt['namapanggilan'] = $pslama->NamaPanggilan;
@@ -104,10 +107,31 @@ class Reganggota extends RestController
                                 ], 400);
                             }
                         } else {
-                            $this->response([
-                                'status' => false,
-                                'message' => 'Gagal Simpan, data pasien lama tidak ditemukan'
-                            ], 400);
+                            if ($cekserverlama) {
+                                $dt['namalengkap'] = $pslama->NamaPasien;
+                                $dt['namapanggilan'] = $pslama->NamaPanggilan;
+                                $dt['tgllahir'] = $pslama->TglLahir;
+                                if ($this->mreganggota->simpanPasienLama($dt)) {
+                                    $pl['idanggotakeluarga'] = $dt['idanggotakeluarga'];
+                                    $pl['namalengkap'] = $pslama->NamaPasien;
+                                    $pl['namapanggilan'] = $pslama->NamaPanggilan;
+                                    $this->response([
+                                        'status' => true,
+                                        'message' => 'Berhasil Simpan Pasien Lama',
+                                        'data' => $pl
+                                    ], 200);
+                                } else {
+                                    $this->response([
+                                        'status' => false,
+                                        'message' => 'Gagal Simpan Pasien Lama'
+                                    ], 400);
+                                }
+                            } else {
+                                $this->response([
+                                    'status' => false,
+                                    'message' => 'Gagal Simpan, data pasien lama tidak ditemukan'
+                                ], 400);
+                            }
                         }
                     }
                 }
