@@ -86,7 +86,7 @@ class Reganggota extends RestController
                     } else {
                         $pslama = $this->mreganggota->getPasienLama($data['nopasien']);
 
-                        $cekserverlama = $this->mcekpasienserverlama->cekPasien($dt);
+                        $cekserverlama = $this->mcekpasienserverlama->getPasien($data['nopasien']);
                         if ($pslama) {
                             $dt['namalengkap'] = $pslama->NamaPasien;
                             $dt['namapanggilan'] = $pslama->NamaPanggilan;
