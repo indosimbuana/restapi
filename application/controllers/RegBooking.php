@@ -151,6 +151,26 @@ class RegBooking extends RestController
                 $databooking['norujukan'] = trim($dt['norujukan']);
                 $databooking['dokter'] = trim($dt['namadokter']);
                 $databooking['tgldaftar'] = date("d-m-Y");
+
+                $this->load->model('mreganggota');
+                $ag = $this->mreganggota->getAnggotaKeluarga($data['idanggotakeluarga']);
+
+                if ($ag) {
+                    $this->load->library('mail');
+                    $body['judul'] = "Informasi Pendaftaran Rawat Jalan";
+                    $body['sapaan'] = "Terimakasih telah melakukan pendaftaran online Pemeriksaan Rawat Jalan RSUD Panti Nugroho. Tunjukan Bukti Pendaftaran berikut ke petugas loket pendaftaran RSUD Panti Nugroho:";
+                    $body['isi'] = "Kode Booking: " . $dt['kodebooking'] . ", Nomor Antrian Pendaftaran: " . $dt['noantripendaftaran'] . ", No Antri Poli: " . $dt['noantripoli'] . ", perkiraan jam dilayani " . date_format(date_create($dt['jamdilayani']), "H:i");
+
+                    if ($ag->Email == '' || $ag->Email == NULL) {
+                        $this->load->model('mregakun');
+                        $ak = $this->mregakun->getAkunByNama($ag->idAkun);
+                        $this->mail->kirim($ak->Email, $body['judul'], $body);
+                    } else {
+                        $this->mail->kirim($ag->Email, $body['judul'], $body);
+                    }
+                }
+
+
                 $this->response([
                     'status' => true,
                     'message' => 'Berhasil Simpan Booking',

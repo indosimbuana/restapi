@@ -14,6 +14,11 @@ class Mreganggota extends CI_Model
         return $this->db->query("SELECT * FROM MasterPasien WHERE Nopasien = '$id'")->row();
     }
 
+    function getAnggotaKeluarga($id)
+    {
+        return $this->db->query("SELECT * FROM RegAnggotaKeluarga WHERE idAnggotaKeluarga = '$id'")->row();
+    }
+
     function getAnggotaPasienLama($akun, $nopasien)
     {
         return $this->db->query("SELECT * FROM RegAnggotaKeluarga WHERE idAkun = '$akun' AND noPasien = '$nopasien'")->row();
