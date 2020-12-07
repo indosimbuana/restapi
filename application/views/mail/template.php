@@ -17,7 +17,7 @@
     <br>
     <p>Terimakasih</p>
     <br>
-    <p>RSUD PANTI NUGRAHA PURBALINGGA</p>
+    <p>RSUD PANTI NUGROHO PURBALINGGA</p>
 </body>
 
 </html>

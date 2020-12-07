@@ -58,7 +58,7 @@ class RegAkun extends RestController
                     if ($this->mregakun->regAkun($dt)) {
                         $this->load->library('mail');
                         $body['judul'] = "Registrasi Akun";
-                        $body['sapaan'] = "SELAMAT, akun registrasi online RSUD PANTI NUGRAHA anda berhasil dibuat:";
+                        $body['sapaan'] = "SELAMAT, akun registrasi online RSUD PANTI NUGROHO anda berhasil dibuat:";
                         $body['isi'] = "Nama Akun: " . $dt['nama'] . ", Nomor Handphone: " . $dt['telp'] . ", Alamat Email: " . $dt['email'];
 
                         $this->mail->kirim($dt['email'], $body['judul'], $body);
