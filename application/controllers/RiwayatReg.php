@@ -39,7 +39,7 @@ class Riwayatreg extends RestController
                         $data[$n]['idanggotakeluarga'] = trim($dt['idAnggotaKeluarga']);
                         $data[$n]['poli'] = trim($dt['namaBagian']);
                         $data[$n]['waktu'] = trim($dt['waktuPemeriksaan']);
-                        $data[$n]['tglperiksa'] = date_format(date_create($dt['tglPemeriksaan']), "d-m-yy");
+                        $data[$n]['tglperiksa'] = date_format(date_create($dt['tglPemeriksaan']), "d-m-Y");
                         $n++;
                     }
                     $this->response([
@@ -102,12 +102,12 @@ class Riwayatreg extends RestController
                 $data['waktu'] = trim($da->waktuPemeriksaan);
                 $data['jampoli'] = isset($jp) ? $jp : '';
                 $data['jamtutuppoli'] = isset($jptutup) ? $jptutup : '';
-                $data['tglperiksa'] = date_format(date_create($da->tglPemeriksaan), "d-m-yy");
+                $data['tglperiksa'] = date_format(date_create($da->tglPemeriksaan), "d-m-Y");
                 $data['penjamin'] = trim($da->namaPenjamin);
                 $data['nopenjamin'] = trim($da->noPenjamin);
                 $data['norujukan'] = trim($da->noRujukan);
                 $data['dokter'] = trim($da->namaDokter);
-                $data['tgldaftar'] = date_format(date_create($da->dateEntry), "d-m-yy");
+                $data['tgldaftar'] = date_format(date_create($da->dateEntry), "d-m-Y");
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',

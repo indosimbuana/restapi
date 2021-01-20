@@ -23,7 +23,7 @@ class RegBooking extends RestController
         $d = file_get_contents('php://input');
         $data = json_decode($d, true);
 
-        $date = date('yymd');
+        $date = date('Ymd');
 
         $this->load->model('mregbooking');
 
@@ -145,7 +145,7 @@ class RegBooking extends RestController
                 $databooking['waktu'] = $dt['waktu'];
                 $databooking['jampoli'] = isset($jp) ? $jp : '';
                 $databooking['jamtutuppoli'] = isset($jptutup) ? $jptutup : '';
-                $databooking['tglperiksa'] =  date_format(date_create($data['tanggal']), "d-m-yy");
+                $databooking['tglperiksa'] =  date_format(date_create($data['tanggal']), "d-m-Y");
                 $databooking['penjamin'] = trim($dt['namapenjamin']);
                 $databooking['nopenjamin'] = trim($dt['nopenjamin']);
                 $databooking['norujukan'] = trim($dt['norujukan']);

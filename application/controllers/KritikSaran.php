@@ -228,7 +228,7 @@ class Kritiksaran extends RestController
         $d = file_get_contents('php://input');
         $data = json_decode($d, true);
 
-        $date = date('yymd');
+        $date = date('Ymd');
 
         $dt = array();
         $dt['idKritSar'] = $date . rand(1000, 10000);

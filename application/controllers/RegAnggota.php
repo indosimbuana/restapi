@@ -23,7 +23,7 @@ class Reganggota extends RestController
         $d = file_get_contents('php://input');
         $data = json_decode($d, true);
 
-        $date = date('yymd');
+        $date = date('Ymd');
 
         $dt = array();
         $dt['idanggotakeluarga'] = $date . rand(1000, 10000);
