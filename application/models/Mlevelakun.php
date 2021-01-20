@@ -6,7 +6,7 @@ class Mlevelakun extends CI_Model
 
     function getLevel()
     {
-        return $this->db->query("SELECT * FROM RegLevelAkun")->result_array();
+        return $this->db->query("SELECT * FROM RegLevelAkun WHERE IDLevel <> '1'")->result_array();
     }
 
     function getLevelById($id)
