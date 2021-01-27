@@ -258,7 +258,7 @@ class JknMobileAntrian extends RestController
                         $time = strtotime($jam);
                         $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
 
-                        if ($getkodepoli->RuangId == "6101") {
+                        if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6101") {
                             $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                             $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                             $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
