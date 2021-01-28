@@ -27,12 +27,12 @@ class Mmobilejkn extends CI_Model
         return $this->db->query("SELECT * FROM MapingPoliBPJS WHERE KodeBPJS = '$kode'")->row();
     }
 
-    function getJamPoli($bag, $wkt)
+    function getJamPoli($bag, $wkt, $hari)
     {
         return $this->db->query("SELECT rj.*, md.NamaDokter, mi.NamaBagian FROM RegJadwalKlinik rj
         LEFT JOIN MasterDokter md ON md.KodeDokter = rj.KodeDokter
         LEFT JOIN MasterInstalasi mi ON mi.KodeBagian = rj.KodeKlinik
-        WHERE rj.KodeKlinik = '$bag' AND rj.JenisWaktu = '$wkt'")->row();
+        WHERE rj.KodeKlinik = '$bag' AND rj.JenisWaktu = '$wkt' AND ($hari != '00:00:00.00000' OR $hari IS NOT NULL)")->row();
     }
 
     function getJamPoliKebidanan($wkt, $hari)

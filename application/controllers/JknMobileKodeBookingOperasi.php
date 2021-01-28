@@ -28,38 +28,56 @@ class JknMobileKodeBookingOperasi extends RestController
         $this->load->model('mmobilejkn');
 
         $dt = array();
-        $dt['nopeserta'] = $data['nopeserta'];
+        $dt['nopeserta'] = isset($data['nopeserta']) && $data['nopeserta'] ? $data['nopeserta'] : '';
 
-        $dbooking = array();
-        $b = $this->mmobilejkn->getJadwalOperasi($dt['nopeserta']);
-        if ($b) {
-            $n = 0;
-            foreach ($b as $j) {
-                $dbooking[$n]['kodebooking'] = $j['BookingID'];
-                $dbooking[$n]['tanggaloperasi'] = $j['TglOperasi'];
-                $dbooking[$n]['jenistindakan'] = $j['NAMAPMR'];
-                $dbooking[$n]['kodepoli'] = $j['KodeBPJS'];
-                $dbooking[$n]['namapoli'] = $j['NamaBagian'];
-                $dbooking[$n]['terlaksana'] = (int)$j['Terlaksana'];
-                $n++;
-            }
-
-            $this->response([
-                'metadata' => [
-                    'code' => 200,
-                    'message' => 'OK'
-                ],
-                'response' => [
-                    'list' => $dbooking
-                ]
-            ], 200);
-        } else {
+        if ($dt['nopeserta'] == NULL || $dt['nopeserta'] == '') {
             $this->response([
                 'metadata' => [
                     'code' => 203,
-                    'message' => 'Tidak ada jadwal operasi'
+                    'message' => 'Invalid nomor peserta'
                 ]
             ], 203);
+        } else {
+            if (strlen($dt['nopeserta']) != 13) {
+                $this->response([
+                    'metadata' => [
+                        'code' => 203,
+                        'message' => 'Invalid nomor peserta'
+                    ]
+                ], 203);
+            } else {
+                $dbooking = array();
+                $b = $this->mmobilejkn->getJadwalOperasi($dt['nopeserta']);
+                if ($b) {
+                    $n = 0;
+                    foreach ($b as $j) {
+                        $dbooking[$n]['kodebooking'] = $j['BookingID'];
+                        $dbooking[$n]['tanggaloperasi'] = $j['TglOperasi'];
+                        $dbooking[$n]['jenistindakan'] = $j['NAMAPMR'];
+                        $dbooking[$n]['kodepoli'] = $j['KodeBPJS'];
+                        $dbooking[$n]['namapoli'] = $j['NamaBagian'];
+                        $dbooking[$n]['terlaksana'] = (int)$j['Terlaksana'];
+                        $n++;
+                    }
+
+                    $this->response([
+                        'metadata' => [
+                            'code' => 200,
+                            'message' => 'OK'
+                        ],
+                        'response' => [
+                            'list' => $dbooking
+                        ]
+                    ], 200);
+                } else {
+                    $this->response([
+                        'metadata' => [
+                            'code' => 203,
+                            'message' => 'Tidak ada jadwal operasi'
+                        ]
+                    ], 203);
+                }
+            }
         }
     }
 }
