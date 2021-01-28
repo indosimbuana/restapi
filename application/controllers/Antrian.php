@@ -21,7 +21,7 @@ class Antrian extends RestController
     public function index_get()
     {
         $lokasi = $this->get('lokasi');
-        $poli = $this->get('poli');
+        $poli = str_replace('%20', ' ', $this->get('poli'));
         $tgl = $this->get('tgl');
 
         $this->load->model('mantrian');
