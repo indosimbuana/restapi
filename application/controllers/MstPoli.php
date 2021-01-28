@@ -30,6 +30,7 @@ class Mstpoli extends RestController
                 foreach ($a as $dt) {
                     $data[$n]['kdpoli'] = $dt['KodeBagian'];
                     $data[$n]['nmpoli'] = trim($dt['NamaBagian']);
+                    $data[$n]['kdantrian'] = $dt['KodeAntrian'];
                     $n++;
                 }
                 $this->response([
@@ -48,6 +49,7 @@ class Mstpoli extends RestController
             if ($da) {
                 $data['kdpoli'] = $da->KodeBagian;
                 $data['nmpoli'] = trim($da->NamaBagian);
+                $data['kdantrian'] = $da->KodeAntrian;
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',
