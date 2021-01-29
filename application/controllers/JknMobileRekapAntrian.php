@@ -44,7 +44,8 @@ class JknMobileRekapAntrian extends RestController
                 ]
             ], 203);
         } else {
-            if ($dt['polieksekutif'] === NULL || $dt['polieksekutif'] === '' && ($dt['polieksekutif'] != 0 || $dt['polieksekutif'] != 1)) {
+            $arraypol = array(0, 1);
+            if ($dt['polieksekutif'] === NULL || $dt['polieksekutif'] === '' || !in_array($dt['polieksekutif'], $arraypol)) {
                 $this->response([
                     'metadata' => [
                         'code' => 203,
@@ -52,97 +53,77 @@ class JknMobileRekapAntrian extends RestController
                     ]
                 ], 203);
             } else {
-                $t = new DateTime($dt['tanggalperiksa']);
-
-                switch ($t->format('D')) {
-                    case "Sun":
-                        $hari = "Minggu";
-                        break;
-                    case "Mon":
-                        $hari = "Senin";
-                        break;
-                    case "Tue":
-                        $hari = "Selasa";
-                        break;
-                    case "Wed":
-                        $hari = "Rabu";
-                        break;
-                    case "Thu":
-                        $hari = "Kamis";
-                        break;
-                    case "Fri":
-                        $hari = "Jumat";
-                        break;
-                    case "Sat":
-                        $hari = "Sabtu";
-                        break;
-                    default:
-                        $hari = "";
-                }
-
-                if ($hari === 'Minggu' || $hari === '') {
+                if ($dt['polieksekutif'] === 1) {
                     $this->response([
-                        'code' => 203,
-                        'message' => 'Informasi poli tidak tersedia'
+                        'metadata' => [
+                            'code' => 203,
+                            'message' => 'Belum tersedia poli eksekutif'
+                        ]
                     ], 203);
                 } else {
-                    if ($dt['kodepoli'] === NULL || $dt['kodepoli'] === '') {
+                    if ($dt['kodepoli'] === NULL || $dt['kodepoli'] === '' || strlen($dt['kodepoli']) > 3) {
                         $this->response([
-                            'code' => 203,
-                            'message' => 'Silahkan pilih poli dahulu'
+                            'metadata' => [
+                                'code' => 203,
+                                'message' => 'Invalid Kode Poli'
+                            ]
                         ], 203);
                     } else {
+                        $t = new DateTime($dt['tanggalperiksa']);
 
-                        $getkodepoli = $this->mmobilejkn->getKodePoli($dt['kodepoli']);
+                        switch ($t->format('D')) {
+                            case "Sun":
+                                $hari = "Minggu";
+                                break;
+                            case "Mon":
+                                $hari = "Senin";
+                                break;
+                            case "Tue":
+                                $hari = "Selasa";
+                                break;
+                            case "Wed":
+                                $hari = "Rabu";
+                                break;
+                            case "Thu":
+                                $hari = "Kamis";
+                                break;
+                            case "Fri":
+                                $hari = "Jumat";
+                                break;
+                            case "Sat":
+                                $hari = "Sabtu";
+                                break;
+                            default:
+                                $hari = "";
+                        }
 
-                        if ($getkodepoli) {
-
-                            if ($getkodepoli->RuangId == '6101') {
-                                $cekjampolipagi = $this->mmobilejkn->getJamPoliKebidanan('P', $hari);
+                        if ($hari === 'Minggu' || $hari === '') {
+                            $this->response([
+                                'code' => 203,
+                                'message' => 'Informasi poli tidak tersedia'
+                            ], 203);
+                        } else {
+                            if ($dt['kodepoli'] === NULL || $dt['kodepoli'] === '') {
+                                $this->response([
+                                    'code' => 203,
+                                    'message' => 'Silahkan pilih poli dahulu'
+                                ], 203);
                             } else {
-                                $cekjampolipagi = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'P', $hari);
-                            }
 
-                            if ($cekjampolipagi) {
-                                if ($cekjampolipagi->$hari != NULL || $cekjampolipagi->$hari !=  "00:00:00.00000") {
+                                $getkodepoli = $this->mmobilejkn->getKodePoli($dt['kodepoli']);
 
-                                    $poliantrian = $this->mpoli->getPoliById($cekjampolipagi->KodeKlinik);
+                                if ($getkodepoli) {
 
-                                    if ($poliantrian) {
-                                        $i = $this->mantrian->poli($poliantrian->KodeAntrian, $dt['tanggalperiksa']);
-                                        $b = $this->mantrian->totalBelumMasuk($poliantrian->KodeAntrian, $dt['tanggalperiksa']);
-                                        $m = $this->mantrian->totalSudahMasuk($poliantrian->KodeAntrian, $dt['tanggalperiksa']);
-                                        $l = $this->mantrian->totalDilewati($poliantrian->KodeAntrian, $dt['tanggalperiksa']);
-
-                                        $this->response([
-                                            'metadata' => [
-                                                'code' => 200,
-                                                'message' => 'OK'
-                                            ],
-                                            'response' => [
-                                                'namapoli' => $poliantrian->KodeAntrian,
-                                                'totalantrean' => $b ? $b->Jumlah + $m->Jumlah + $l->Jumlah : '',
-                                                'jumlahterlayani' => $m ? (int)$m->Jumlah : '',
-                                                'lastupdate' => strtotime(date("Y-m-d H:i:s")) * 1000
-                                            ]
-                                        ], 200);
-                                    } else {
-                                        $this->response([
-                                            'code' => 203,
-                                            'message' => 'Informasi poli tidak tersedia'
-                                        ], 203);
-                                    }
-                                } else {
                                     if ($getkodepoli->RuangId == '6101') {
-                                        $cekjampolisore =  $this->mmobilejkn->getJamPoliKebidanan('S', $hari);
+                                        $cekjampolipagi = $this->mmobilejkn->getJamPoliKebidanan('P', $hari);
                                     } else {
-                                        $cekjampolisore = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'S', $hari);
+                                        $cekjampolipagi = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'P', $hari);
                                     }
 
-                                    if ($cekjampolisore) {
-                                        if ($cekjampolisore->$hari != NULL || $cekjampolisore->$hari !=  "00:00:00.00000") {
+                                    if ($cekjampolipagi) {
+                                        if ($cekjampolipagi->$hari != NULL || $cekjampolipagi->$hari !=  "00:00:00.00000") {
 
-                                            $poliantrian = $this->mpoli->getPoliById($cekjampolisore->KodeKlinik);
+                                            $poliantrian = $this->mpoli->getPoliById($cekjampolipagi->KodeKlinik);
 
                                             if ($poliantrian) {
                                                 $i = $this->mantrian->poli($poliantrian->KodeAntrian, $dt['tanggalperiksa']);
@@ -169,10 +150,53 @@ class JknMobileRekapAntrian extends RestController
                                                 ], 203);
                                             }
                                         } else {
-                                            $this->response([
-                                                'code' => 203,
-                                                'message' => 'Informasi poli tidak tersedia'
-                                            ], 203);
+                                            if ($getkodepoli->RuangId == '6101') {
+                                                $cekjampolisore =  $this->mmobilejkn->getJamPoliKebidanan('S', $hari);
+                                            } else {
+                                                $cekjampolisore = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'S', $hari);
+                                            }
+
+                                            if ($cekjampolisore) {
+                                                if ($cekjampolisore->$hari != NULL || $cekjampolisore->$hari !=  "00:00:00.00000") {
+
+                                                    $poliantrian = $this->mpoli->getPoliById($cekjampolisore->KodeKlinik);
+
+                                                    if ($poliantrian) {
+                                                        $i = $this->mantrian->poli($poliantrian->KodeAntrian, $dt['tanggalperiksa']);
+                                                        $b = $this->mantrian->totalBelumMasuk($poliantrian->KodeAntrian, $dt['tanggalperiksa']);
+                                                        $m = $this->mantrian->totalSudahMasuk($poliantrian->KodeAntrian, $dt['tanggalperiksa']);
+                                                        $l = $this->mantrian->totalDilewati($poliantrian->KodeAntrian, $dt['tanggalperiksa']);
+
+                                                        $this->response([
+                                                            'metadata' => [
+                                                                'code' => 200,
+                                                                'message' => 'OK'
+                                                            ],
+                                                            'response' => [
+                                                                'namapoli' => $poliantrian->KodeAntrian,
+                                                                'totalantrean' => $b ? $b->Jumlah + $m->Jumlah + $l->Jumlah : '',
+                                                                'jumlahterlayani' => $m ? (int)$m->Jumlah : '',
+                                                                'lastupdate' => strtotime(date("Y-m-d H:i:s")) * 1000
+                                                            ]
+                                                        ], 200);
+                                                    } else {
+                                                        $this->response([
+                                                            'code' => 203,
+                                                            'message' => 'Informasi poli tidak tersedia'
+                                                        ], 203);
+                                                    }
+                                                } else {
+                                                    $this->response([
+                                                        'code' => 203,
+                                                        'message' => 'Informasi poli tidak tersedia'
+                                                    ], 203);
+                                                }
+                                            } else {
+                                                $this->response([
+                                                    'code' => 203,
+                                                    'message' => 'Informasi poli tidak tersedia'
+                                                ], 203);
+                                            }
                                         }
                                     } else {
                                         $this->response([
@@ -181,11 +205,6 @@ class JknMobileRekapAntrian extends RestController
                                         ], 203);
                                     }
                                 }
-                            } else {
-                                $this->response([
-                                    'code' => 203,
-                                    'message' => 'Informasi poli tidak tersedia'
-                                ], 203);
                             }
                         }
                     }
