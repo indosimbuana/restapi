@@ -133,83 +133,315 @@ class JknMobileAntrian extends RestController
                                                 ], 203);
                                             } else {
                                                 // Cek No Rujukan di Vclaim
-                                                $aksesws = $this->vclaimapi->aksesws();
+                                                // $aksesws = $this->vclaimapi->aksesws();
 
-                                                $nomor = $dt['nomorreferensi'];
+                                                // $nomor = $dt['nomorreferensi'];
 
-                                                $url = $aksesws['burl'] . $aksesws['service'] . 'Rujukan/' . $nomor;
+                                                // $url = $aksesws['burl'] . $aksesws['service'] . 'Rujukan/' . $nomor;
 
-                                                $ch = curl_init($url);
-                                                curl_setopt($ch, CURLOPT_TIMEOUT, 50);
-                                                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 50);
-                                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                                                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                                    "Content-Type: application/json; charset=utf-8",
-                                                    "X-cons-id: " . $aksesws['X-cons-id'],
-                                                    "X-timestamp: " . $aksesws['X-timestamp'],
-                                                    "X-signature: " . $aksesws['X-signature']
-                                                ));
-                                                $de = curl_exec($ch);
-                                                $d = json_decode($de, true);
-                                                curl_close($ch);
+                                                // $ch = curl_init($url);
+                                                // curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+                                                // curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 50);
+                                                // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                                // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                                                //     "Content-Type: application/json; charset=utf-8",
+                                                //     "X-cons-id: " . $aksesws['X-cons-id'],
+                                                //     "X-timestamp: " . $aksesws['X-timestamp'],
+                                                //     "X-signature: " . $aksesws['X-signature']
+                                                // ));
+                                                // $de = curl_exec($ch);
+                                                // $d = json_decode($de, true);
+                                                // curl_close($ch);
 
-                                                if ($d['metaData']['code'] == '200') {
+                                                // if ($d['metaData']['code'] == '200') {
 
-                                                    $tglkunjungan = $d['response']['rujukan']['tglKunjungan'];
-                                                    $selisih = round((time() - strtotime($tglkunjungan)) / (60 * 60 * 24));
+                                                //     $tglkunjungan = $d['response']['rujukan']['tglKunjungan'];
+                                                //     $selisih = round((time() - strtotime($tglkunjungan)) / (60 * 60 * 24));
 
-                                                    if ($selisih >= 90) {
-                                                        $this->response([
-                                                            'metadata' => [
-                                                                'code' => 203,
-                                                                'message' => 'Invalid rujukan, melebihi 90 hari, yaitu ' . $selisih . ' hari. Tgl Rujukan: ' . $tglkunjungan
-                                                            ]
-                                                        ], 203);
+                                                //     if ($selisih >= 90) {
+                                                //         $this->response([
+                                                //             'metadata' => [
+                                                //                 'code' => 203,
+                                                //                 'message' => 'Invalid rujukan, melebihi 90 hari, yaitu ' . $selisih . ' hari. Tgl Rujukan: ' . $tglkunjungan
+                                                //             ]
+                                                //         ], 203);
+                                                //     } else {
+                                                $t = new DateTime($dt['tanggalperiksa']);
+
+                                                switch ($t->format('D')) {
+                                                    case "Sun":
+                                                        $hari = "Minggu";
+                                                        break;
+                                                    case "Mon":
+                                                        $hari = "Senin";
+                                                        break;
+                                                    case "Tue":
+                                                        $hari = "Selasa";
+                                                        break;
+                                                    case "Wed":
+                                                        $hari = "Rabu";
+                                                        break;
+                                                    case "Thu":
+                                                        $hari = "Kamis";
+                                                        break;
+                                                    case "Fri":
+                                                        $hari = "Jumat";
+                                                        break;
+                                                    case "Sat":
+                                                        $hari = "Sabtu";
+                                                        break;
+                                                    default:
+                                                        $hari = "";
+                                                }
+
+                                                $getkodepoli = $this->mmobilejkn->getKodePoli($dt['kodepoli']);
+
+                                                $cekanggotakeluarga = $this->mmobilejkn->cekPasienJkn($dt['nik']);
+
+                                                if ($getkodepoli) {
+
+                                                    if ($getkodepoli->RuangId == '6101') {
+                                                        $cekjampolipagi = $this->mmobilejkn->getJamPoliKebidanan('P', $hari);
                                                     } else {
-                                                        $t = new DateTime($dt['tanggalperiksa']);
+                                                        $cekjampolipagi = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'P');
+                                                    }
 
-                                                        switch ($t->format('D')) {
-                                                            case "Sun":
-                                                                $hari = "Minggu";
-                                                                break;
-                                                            case "Mon":
-                                                                $hari = "Senin";
-                                                                break;
-                                                            case "Tue":
-                                                                $hari = "Selasa";
-                                                                break;
-                                                            case "Wed":
-                                                                $hari = "Rabu";
-                                                                break;
-                                                            case "Thu":
-                                                                $hari = "Kamis";
-                                                                break;
-                                                            case "Fri":
-                                                                $hari = "Jumat";
-                                                                break;
-                                                            case "Sat":
-                                                                $hari = "Sabtu";
-                                                                break;
-                                                            default:
-                                                                $hari = "";
-                                                        }
+                                                    if ($cekjampolipagi) {
+                                                        if ($cekjampolipagi->$hari != NULL || $cekjampolipagi->$hari !=  "00:00:00.00000") {
 
-                                                        $getkodepoli = $this->mmobilejkn->getKodePoli($dt['kodepoli']);
+                                                            $cekreg = $this->mmobilejkn->cekRegPasienJkn($dt['nik'], $dt['tanggalperiksa'], $cekjampolipagi->KodeKlinik);
 
-                                                        $cekanggotakeluarga = $this->mmobilejkn->cekPasienJkn($dt['nik']);
-
-                                                        if ($getkodepoli) {
-
-                                                            if ($getkodepoli->RuangId == '6101') {
-                                                                $cekjampolipagi = $this->mmobilejkn->getJamPoliKebidanan('P', $hari);
+                                                            if ($cekreg) {
+                                                                $this->response([
+                                                                    'metadata' => [
+                                                                        'code' => 203,
+                                                                        'message' => 'Pasien telah terdaftar di poli ini dgn hari yang sama'
+                                                                    ]
+                                                                ], 203);
                                                             } else {
-                                                                $cekjampolipagi = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'P');
+                                                                $cekpsserverbaru = $this->mmobilejkn->getPasienServerBaru($dt['nomorkartu'], $dt['nik']);
+
+                                                                if ($cekpsserverbaru) {
+                                                                    // Data Pasien
+                                                                    if ($cekanggotakeluarga) {
+                                                                        $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
+                                                                    } else {
+                                                                        // Reg Anggota Keluarga
+                                                                        $dtpas['nopasien'] = trim($cekpsserverbaru->Nopasien);
+                                                                        $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
+                                                                        $dtpas['idakun'] = 'JKN';
+                                                                        $dtpas['hubungan'] = 'Orang Lain';
+                                                                        $dtpas['namalengkap'] = trim($cekpsserverbaru->NamaPasien);
+                                                                        $dtpas['namapanggilan'] = trim($cekpsserverbaru->NamaPasien);
+                                                                        $dtpas['ktp'] = trim($cekpsserverbaru->NoKTP);
+                                                                        $dtpas['jeniskelamin'] = trim($cekpsserverbaru->JenisKelamin);
+                                                                        $dtpas['tempatlahir'] = '';
+                                                                        $dtpas['tgllahir'] = trim($cekpsserverbaru->TglLahir);
+                                                                        $dtpas['alamat'] = trim($cekpsserverbaru->AlamatPasien);
+                                                                        $dtpas['rt'] = '';
+                                                                        $dtpas['rw'] = '';
+                                                                        $dtpas['provinsi'] = '';
+                                                                        $dtpas['kabupaten'] = '';
+                                                                        $dtpas['kecamatan'] = '';
+                                                                        $dtpas['kodepos'] = '';
+                                                                        $dtpas['agama'] = '';
+                                                                        $dtpas['goloangandarah'] = '';
+                                                                        $dtpas['pendidikan'] = '';
+                                                                        $dtpas['statuskawin'] = '';
+                                                                        $dtpas['pekerjaan'] = '';
+                                                                        $dtpas['wni'] = '';
+                                                                        $dtpas['negara'] = '';
+                                                                        $dtpas['suku'] = '';
+                                                                        $dtpas['bahasa'] = '';
+                                                                        $dtpas['alergi'] = '';
+                                                                        $dtpas['alamatkantor'] = '';
+                                                                        $dtpas['telpkantor'] = '';
+                                                                        $dtpas['namakeluarga'] = '';
+                                                                        $dtpas['namaayah'] = '';
+                                                                        $dtpas['namaibu'] = '';
+                                                                        $dtpas['namasuamiistri'] = '';
+                                                                        $dtpas['notelpon'] = trim($cekpsserverbaru->TlpPasien);
+                                                                        $dtpas['email'] = '';
+
+                                                                        $this->mmobilejkn->simpanPasienLama($dtpas);
+                                                                    }
+                                                                } else {
+                                                                    $cekpsserverlama = $this->mmobilejkn->getPasienServerLama($dt['nomorkartu'], $dt['nik']);
+
+                                                                    if ($cekpsserverlama) {
+                                                                        // Data Pasien
+                                                                        if ($cekanggotakeluarga) {
+                                                                            $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
+                                                                        } else {
+                                                                            // Reg Anggota Keluarga
+                                                                            $dtpas['nopasien'] = trim($cekpsserverlama->Nopasien);
+                                                                            $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
+                                                                            $dtpas['idakun'] = 'JKN';
+                                                                            $dtpas['hubungan'] = 'Orang Lain';
+                                                                            $dtpas['namalengkap'] = trim($cekpsserverlama->NamaPasien);
+                                                                            $dtpas['namapanggilan'] = trim($cekpsserverlama->NamaPasien);
+                                                                            $dtpas['ktp'] = trim($cekpsserverlama->NoKTP);
+                                                                            $dtpas['jeniskelamin'] = trim($cekpsserverlama->JenisKelamin);
+                                                                            $dtpas['tempatlahir'] = '';
+                                                                            $dtpas['tgllahir'] = trim($cekpsserverlama->TglLahir);
+                                                                            $dtpas['alamat'] = trim($cekpsserverlama->AlamatPasien);
+                                                                            $dtpas['rt'] = '';
+                                                                            $dtpas['rw'] = '';
+                                                                            $dtpas['provinsi'] = '';
+                                                                            $dtpas['kabupaten'] = '';
+                                                                            $dtpas['kecamatan'] = '';
+                                                                            $dtpas['kodepos'] = '';
+                                                                            $dtpas['agama'] = '';
+                                                                            $dtpas['goloangandarah'] = '';
+                                                                            $dtpas['pendidikan'] = '';
+                                                                            $dtpas['statuskawin'] = '';
+                                                                            $dtpas['pekerjaan'] = '';
+                                                                            $dtpas['wni'] = '';
+                                                                            $dtpas['negara'] = '';
+                                                                            $dtpas['suku'] = '';
+                                                                            $dtpas['bahasa'] = '';
+                                                                            $dtpas['alergi'] = '';
+                                                                            $dtpas['alamatkantor'] = '';
+                                                                            $dtpas['telpkantor'] = '';
+                                                                            $dtpas['namakeluarga'] = '';
+                                                                            $dtpas['namaayah'] = '';
+                                                                            $dtpas['namaibu'] = '';
+                                                                            $dtpas['namasuamiistri'] = '';
+                                                                            $dtpas['notelpon'] = trim($cekpsserverlama->TlpPasien);
+                                                                            $dtpas['email'] = '';
+
+                                                                            $this->mmobilejkn->simpanPasienLama($dtpas);
+                                                                        }
+                                                                    } else {
+                                                                        // Data Pasien
+                                                                        if ($cekanggotakeluarga) {
+                                                                            $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
+                                                                        } else {
+                                                                            // Reg Anggota Keluarga
+                                                                            $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
+                                                                            $dtpas['idakun'] = 'JKN';
+                                                                            $dtpas['hubungan'] = 'Orang Lain';
+                                                                            $dtpas['namalengkap'] = '';
+                                                                            $dtpas['namapanggilan'] = '';
+                                                                            $dtpas['ktp'] = $dt['nik'];
+                                                                            $dtpas['jeniskelamin'] = '';
+                                                                            $dtpas['tempatlahir'] = '';
+                                                                            $dtpas['tgllahir'] = '';
+                                                                            $dtpas['alamat'] = '';
+                                                                            $dtpas['rt'] = '';
+                                                                            $dtpas['rw'] = '';
+                                                                            $dtpas['provinsi'] = '';
+                                                                            $dtpas['kabupaten'] = '';
+                                                                            $dtpas['kecamatan'] = '';
+                                                                            $dtpas['kodepos'] = '';
+                                                                            $dtpas['agama'] = '';
+                                                                            $dtpas['goloangandarah'] = '';
+                                                                            $dtpas['pendidikan'] = '';
+                                                                            $dtpas['statuskawin'] = '';
+                                                                            $dtpas['pekerjaan'] = '';
+                                                                            $dtpas['wni'] = '';
+                                                                            $dtpas['negara'] = '';
+                                                                            $dtpas['suku'] = '';
+                                                                            $dtpas['bahasa'] = '';
+                                                                            $dtpas['alergi'] = '';
+                                                                            $dtpas['alamatkantor'] = '';
+                                                                            $dtpas['telpkantor'] = '';
+                                                                            $dtpas['namakeluarga'] = '';
+                                                                            $dtpas['namaayah'] = '';
+                                                                            $dtpas['namaibu'] = '';
+                                                                            $dtpas['namasuamiistri'] = '';
+                                                                            $dtpas['notelpon'] = '';
+                                                                            $dtpas['email'] = '';
+
+                                                                            $this->mmobilejkn->simpanPasienBaru($dtpas);
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                // Data Registrasi
+                                                                $dtreg['idanggotakeluarga'] = $dtpas['idanggotakeluarga'];
+
+                                                                $dtreg['bagian'] = $cekjampolipagi->KodeKlinik;
+                                                                $dtreg['namabagian'] = $cekjampolipagi->NamaBagian;
+
+                                                                $dtreg['penjamin'] = '';
+                                                                $dtreg['namapenjamin'] = '';
+
+                                                                $dtreg['nopenjamin'] = $dt['nomorkartu'];
+                                                                $dtreg['norujukan'] = $dt['nomorreferensi'];
+
+                                                                $dtreg['dokter'] = $cekjampolipagi->KodeDokter;
+                                                                $dtreg['namadokter'] = $cekjampolipagi->NamaDokter;
+
+                                                                $dtreg['waktu'] = 'P';
+
+                                                                $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $dt['tanggalperiksa']));
+                                                                $dtreg['kodebooking'] = str_replace("-", "", $dt['tanggalperiksa']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
+                                                                $jam = "07:00";
+                                                                $time = strtotime($jam);
+                                                                $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
+
+                                                                if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6101") {
+                                                                    $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                                    $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                                    $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                    $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
+
+                                                                    $jml = $hitungpendaftaran;
+                                                                    $pelayanan = 3;
+                                                                    $wkt = $jml * $pelayanan;
+                                                                    $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                                                                    $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
+                                                                    $dtreg['datetime'] = $datetime;
+                                                                } else {
+                                                                    $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']));
+                                                                    $hitungpoli = $this->mregbooking->hitungPoli($getkodepoli->RuangId, str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                                    $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                    $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
+
+                                                                    $jml = $hitungpendaftaran;
+                                                                    $pelayanan = 3;
+                                                                    $wkt = $jml * $pelayanan;
+                                                                    $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                                                                    $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
+                                                                    $dtreg['datetime'] = $datetime;
+                                                                }
+
+                                                                if ($this->mregbooking->simpanBooking($dtreg)) {
+                                                                    $this->response([
+                                                                        'metadata' => [
+                                                                            'code' => 200,
+                                                                            'message' => 'OK'
+                                                                        ],
+                                                                        'response' => [
+                                                                            'nomorantrean' => trim($dtreg['noantripendaftaran']),
+                                                                            'kodebooking' => trim($dtreg['kodebooking']),
+                                                                            'jenisantrean' => 1,
+                                                                            'estimasidilayani' => strtotime($dtreg['jamdilayani']) * 1000,
+                                                                            'namapoli' => trim($dtreg['namabagian']),
+                                                                            'namadokter' => trim($dtreg['namadokter'])
+                                                                        ]
+                                                                    ], 200);
+                                                                } else {
+                                                                    $this->response([
+                                                                        'metadata' => [
+                                                                            'code' => 203,
+                                                                            'message' => 'Gagal booking, silahkan periksa data dan coba lagi'
+                                                                        ]
+                                                                    ], 203);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            if ($getkodepoli->RuangId == '6101') {
+                                                                $cekjampolisore =  $this->mmobilejkn->getJamPoliKebidanan('S', $hari);
+                                                            } else {
+                                                                $cekjampolisore = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'S');
                                                             }
 
-                                                            if ($cekjampolipagi) {
-                                                                if ($cekjampolipagi->$hari != NULL || $cekjampolipagi->$hari !=  "00:00:00.00000") {
+                                                            if ($cekjampolisore) {
+                                                                if ($cekjampolisore->$hari != NULL || $cekjampolisore->$hari !=  "00:00:00.00000") {
 
-                                                                    $cekreg = $this->mmobilejkn->cekRegPasienJkn($dt['nik'], $dt['tanggalperiksa'], $cekjampolipagi->KodeKlinik);
+                                                                    $cekreg = $this->mmobilejkn->cekRegPasienJkn($dt['nik'], $dt['tanggalperiksa'], $cekjampolisore->KodeKlinik);
 
                                                                     if ($cekreg) {
                                                                         $this->response([
@@ -361,8 +593,8 @@ class JknMobileAntrian extends RestController
                                                                         // Data Registrasi
                                                                         $dtreg['idanggotakeluarga'] = $dtpas['idanggotakeluarga'];
 
-                                                                        $dtreg['bagian'] = $cekjampolipagi->KodeKlinik;
-                                                                        $dtreg['namabagian'] = $cekjampolipagi->NamaBagian;
+                                                                        $dtreg['bagian'] = $cekjampolisore->KodeKlinik;
+                                                                        $dtreg['namabagian'] = $cekjampolisore->NamaBagian;
 
                                                                         $dtreg['penjamin'] = '';
                                                                         $dtreg['namapenjamin'] = '';
@@ -370,8 +602,8 @@ class JknMobileAntrian extends RestController
                                                                         $dtreg['nopenjamin'] = $dt['nomorkartu'];
                                                                         $dtreg['norujukan'] = $dt['nomorreferensi'];
 
-                                                                        $dtreg['dokter'] = $cekjampolipagi->KodeDokter;
-                                                                        $dtreg['namadokter'] = $cekjampolipagi->NamaDokter;
+                                                                        $dtreg['dokter'] = $cekjampolisore->KodeDokter;
+                                                                        $dtreg['namadokter'] = $cekjampolisore->NamaDokter;
 
                                                                         $dtreg['waktu'] = 'P';
 
@@ -381,7 +613,7 @@ class JknMobileAntrian extends RestController
                                                                         $time = strtotime($jam);
                                                                         $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
 
-                                                                        if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6101") {
+                                                                        if ($getkodepoli->RuangId == "6101") {
                                                                             $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                                                                             $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                                                                             $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
@@ -432,816 +664,6 @@ class JknMobileAntrian extends RestController
                                                                         }
                                                                     }
                                                                 } else {
-                                                                    if ($getkodepoli->RuangId == '6101') {
-                                                                        $cekjampolisore =  $this->mmobilejkn->getJamPoliKebidanan('S', $hari);
-                                                                    } else {
-                                                                        $cekjampolisore = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'S');
-                                                                    }
-
-                                                                    if ($cekjampolisore) {
-                                                                        if ($cekjampolisore->$hari != NULL || $cekjampolisore->$hari !=  "00:00:00.00000") {
-
-                                                                            $cekreg = $this->mmobilejkn->cekRegPasienJkn($dt['nik'], $dt['tanggalperiksa'], $cekjampolisore->KodeKlinik);
-
-                                                                            if ($cekreg) {
-                                                                                $this->response([
-                                                                                    'metadata' => [
-                                                                                        'code' => 203,
-                                                                                        'message' => 'Pasien telah terdaftar di poli ini dgn hari yang sama'
-                                                                                    ]
-                                                                                ], 203);
-                                                                            } else {
-                                                                                $cekpsserverbaru = $this->mmobilejkn->getPasienServerBaru($dt['nomorkartu'], $dt['nik']);
-
-                                                                                if ($cekpsserverbaru) {
-                                                                                    // Data Pasien
-                                                                                    if ($cekanggotakeluarga) {
-                                                                                        $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
-                                                                                    } else {
-                                                                                        // Reg Anggota Keluarga
-                                                                                        $dtpas['nopasien'] = trim($cekpsserverbaru->Nopasien);
-                                                                                        $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
-                                                                                        $dtpas['idakun'] = 'JKN';
-                                                                                        $dtpas['hubungan'] = 'Orang Lain';
-                                                                                        $dtpas['namalengkap'] = trim($cekpsserverbaru->NamaPasien);
-                                                                                        $dtpas['namapanggilan'] = trim($cekpsserverbaru->NamaPasien);
-                                                                                        $dtpas['ktp'] = trim($cekpsserverbaru->NoKTP);
-                                                                                        $dtpas['jeniskelamin'] = trim($cekpsserverbaru->JenisKelamin);
-                                                                                        $dtpas['tempatlahir'] = '';
-                                                                                        $dtpas['tgllahir'] = trim($cekpsserverbaru->TglLahir);
-                                                                                        $dtpas['alamat'] = trim($cekpsserverbaru->AlamatPasien);
-                                                                                        $dtpas['rt'] = '';
-                                                                                        $dtpas['rw'] = '';
-                                                                                        $dtpas['provinsi'] = '';
-                                                                                        $dtpas['kabupaten'] = '';
-                                                                                        $dtpas['kecamatan'] = '';
-                                                                                        $dtpas['kodepos'] = '';
-                                                                                        $dtpas['agama'] = '';
-                                                                                        $dtpas['goloangandarah'] = '';
-                                                                                        $dtpas['pendidikan'] = '';
-                                                                                        $dtpas['statuskawin'] = '';
-                                                                                        $dtpas['pekerjaan'] = '';
-                                                                                        $dtpas['wni'] = '';
-                                                                                        $dtpas['negara'] = '';
-                                                                                        $dtpas['suku'] = '';
-                                                                                        $dtpas['bahasa'] = '';
-                                                                                        $dtpas['alergi'] = '';
-                                                                                        $dtpas['alamatkantor'] = '';
-                                                                                        $dtpas['telpkantor'] = '';
-                                                                                        $dtpas['namakeluarga'] = '';
-                                                                                        $dtpas['namaayah'] = '';
-                                                                                        $dtpas['namaibu'] = '';
-                                                                                        $dtpas['namasuamiistri'] = '';
-                                                                                        $dtpas['notelpon'] = trim($cekpsserverbaru->TlpPasien);
-                                                                                        $dtpas['email'] = '';
-
-                                                                                        $this->mmobilejkn->simpanPasienLama($dtpas);
-                                                                                    }
-                                                                                } else {
-                                                                                    $cekpsserverlama = $this->mmobilejkn->getPasienServerLama($dt['nomorkartu'], $dt['nik']);
-
-                                                                                    if ($cekpsserverlama) {
-                                                                                        // Data Pasien
-                                                                                        if ($cekanggotakeluarga) {
-                                                                                            $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
-                                                                                        } else {
-                                                                                            // Reg Anggota Keluarga
-                                                                                            $dtpas['nopasien'] = trim($cekpsserverlama->Nopasien);
-                                                                                            $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
-                                                                                            $dtpas['idakun'] = 'JKN';
-                                                                                            $dtpas['hubungan'] = 'Orang Lain';
-                                                                                            $dtpas['namalengkap'] = trim($cekpsserverlama->NamaPasien);
-                                                                                            $dtpas['namapanggilan'] = trim($cekpsserverlama->NamaPasien);
-                                                                                            $dtpas['ktp'] = trim($cekpsserverlama->NoKTP);
-                                                                                            $dtpas['jeniskelamin'] = trim($cekpsserverlama->JenisKelamin);
-                                                                                            $dtpas['tempatlahir'] = '';
-                                                                                            $dtpas['tgllahir'] = trim($cekpsserverlama->TglLahir);
-                                                                                            $dtpas['alamat'] = trim($cekpsserverlama->AlamatPasien);
-                                                                                            $dtpas['rt'] = '';
-                                                                                            $dtpas['rw'] = '';
-                                                                                            $dtpas['provinsi'] = '';
-                                                                                            $dtpas['kabupaten'] = '';
-                                                                                            $dtpas['kecamatan'] = '';
-                                                                                            $dtpas['kodepos'] = '';
-                                                                                            $dtpas['agama'] = '';
-                                                                                            $dtpas['goloangandarah'] = '';
-                                                                                            $dtpas['pendidikan'] = '';
-                                                                                            $dtpas['statuskawin'] = '';
-                                                                                            $dtpas['pekerjaan'] = '';
-                                                                                            $dtpas['wni'] = '';
-                                                                                            $dtpas['negara'] = '';
-                                                                                            $dtpas['suku'] = '';
-                                                                                            $dtpas['bahasa'] = '';
-                                                                                            $dtpas['alergi'] = '';
-                                                                                            $dtpas['alamatkantor'] = '';
-                                                                                            $dtpas['telpkantor'] = '';
-                                                                                            $dtpas['namakeluarga'] = '';
-                                                                                            $dtpas['namaayah'] = '';
-                                                                                            $dtpas['namaibu'] = '';
-                                                                                            $dtpas['namasuamiistri'] = '';
-                                                                                            $dtpas['notelpon'] = trim($cekpsserverlama->TlpPasien);
-                                                                                            $dtpas['email'] = '';
-
-                                                                                            $this->mmobilejkn->simpanPasienLama($dtpas);
-                                                                                        }
-                                                                                    } else {
-                                                                                        // Data Pasien
-                                                                                        if ($cekanggotakeluarga) {
-                                                                                            $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
-                                                                                        } else {
-                                                                                            // Reg Anggota Keluarga
-                                                                                            $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
-                                                                                            $dtpas['idakun'] = 'JKN';
-                                                                                            $dtpas['hubungan'] = 'Orang Lain';
-                                                                                            $dtpas['namalengkap'] = '';
-                                                                                            $dtpas['namapanggilan'] = '';
-                                                                                            $dtpas['ktp'] = $dt['nik'];
-                                                                                            $dtpas['jeniskelamin'] = '';
-                                                                                            $dtpas['tempatlahir'] = '';
-                                                                                            $dtpas['tgllahir'] = '';
-                                                                                            $dtpas['alamat'] = '';
-                                                                                            $dtpas['rt'] = '';
-                                                                                            $dtpas['rw'] = '';
-                                                                                            $dtpas['provinsi'] = '';
-                                                                                            $dtpas['kabupaten'] = '';
-                                                                                            $dtpas['kecamatan'] = '';
-                                                                                            $dtpas['kodepos'] = '';
-                                                                                            $dtpas['agama'] = '';
-                                                                                            $dtpas['goloangandarah'] = '';
-                                                                                            $dtpas['pendidikan'] = '';
-                                                                                            $dtpas['statuskawin'] = '';
-                                                                                            $dtpas['pekerjaan'] = '';
-                                                                                            $dtpas['wni'] = '';
-                                                                                            $dtpas['negara'] = '';
-                                                                                            $dtpas['suku'] = '';
-                                                                                            $dtpas['bahasa'] = '';
-                                                                                            $dtpas['alergi'] = '';
-                                                                                            $dtpas['alamatkantor'] = '';
-                                                                                            $dtpas['telpkantor'] = '';
-                                                                                            $dtpas['namakeluarga'] = '';
-                                                                                            $dtpas['namaayah'] = '';
-                                                                                            $dtpas['namaibu'] = '';
-                                                                                            $dtpas['namasuamiistri'] = '';
-                                                                                            $dtpas['notelpon'] = '';
-                                                                                            $dtpas['email'] = '';
-
-                                                                                            $this->mmobilejkn->simpanPasienBaru($dtpas);
-                                                                                        }
-                                                                                    }
-                                                                                }
-
-                                                                                // Data Registrasi
-                                                                                $dtreg['idanggotakeluarga'] = $dtpas['idanggotakeluarga'];
-
-                                                                                $dtreg['bagian'] = $cekjampolisore->KodeKlinik;
-                                                                                $dtreg['namabagian'] = $cekjampolisore->NamaBagian;
-
-                                                                                $dtreg['penjamin'] = '';
-                                                                                $dtreg['namapenjamin'] = '';
-
-                                                                                $dtreg['nopenjamin'] = $dt['nomorkartu'];
-                                                                                $dtreg['norujukan'] = $dt['nomorreferensi'];
-
-                                                                                $dtreg['dokter'] = $cekjampolisore->KodeDokter;
-                                                                                $dtreg['namadokter'] = $cekjampolisore->NamaDokter;
-
-                                                                                $dtreg['waktu'] = 'P';
-
-                                                                                $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $dt['tanggalperiksa']));
-                                                                                $dtreg['kodebooking'] = str_replace("-", "", $dt['tanggalperiksa']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
-                                                                                $jam = "07:00";
-                                                                                $time = strtotime($jam);
-                                                                                $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
-
-                                                                                if ($getkodepoli->RuangId == "6101") {
-                                                                                    $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                    $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                    $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
-                                                                                    $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
-
-                                                                                    $jml = $hitungpendaftaran;
-                                                                                    $pelayanan = 3;
-                                                                                    $wkt = $jml * $pelayanan;
-                                                                                    $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
-                                                                                    $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
-                                                                                    $dtreg['datetime'] = $datetime;
-                                                                                } else {
-                                                                                    $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']));
-                                                                                    $hitungpoli = $this->mregbooking->hitungPoli($getkodepoli->RuangId, str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                    $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
-                                                                                    $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
-
-                                                                                    $jml = $hitungpendaftaran;
-                                                                                    $pelayanan = 3;
-                                                                                    $wkt = $jml * $pelayanan;
-                                                                                    $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
-                                                                                    $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
-                                                                                    $dtreg['datetime'] = $datetime;
-                                                                                }
-
-                                                                                if ($this->mregbooking->simpanBooking($dtreg)) {
-                                                                                    $this->response([
-                                                                                        'metadata' => [
-                                                                                            'code' => 200,
-                                                                                            'message' => 'OK'
-                                                                                        ],
-                                                                                        'response' => [
-                                                                                            'nomorantrean' => trim($dtreg['noantripendaftaran']),
-                                                                                            'kodebooking' => trim($dtreg['kodebooking']),
-                                                                                            'jenisantrean' => 1,
-                                                                                            'estimasidilayani' => strtotime($dtreg['jamdilayani']) * 1000,
-                                                                                            'namapoli' => trim($dtreg['namabagian']),
-                                                                                            'namadokter' => trim($dtreg['namadokter'])
-                                                                                        ]
-                                                                                    ], 200);
-                                                                                } else {
-                                                                                    $this->response([
-                                                                                        'metadata' => [
-                                                                                            'code' => 203,
-                                                                                            'message' => 'Gagal booking, silahkan periksa data dan coba lagi'
-                                                                                        ]
-                                                                                    ], 203);
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            $this->response([
-                                                                                'metadata' => [
-                                                                                    'code' => 203,
-                                                                                    'message' => 'Poli Libur'
-                                                                                ]
-                                                                            ], 203);
-                                                                        }
-                                                                    } else {
-                                                                        $this->response([
-                                                                            'metadata' => [
-                                                                                'code' => 203,
-                                                                                'message' => 'Poli Libur'
-                                                                            ]
-                                                                        ], 203);
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                $this->response([
-                                                                    'metadata' => [
-                                                                        'code' => 203,
-                                                                        'message' => 'Poli Libur'
-                                                                    ]
-                                                                ], 203);
-                                                            }
-                                                        } else {
-                                                            $this->response([
-                                                                'metadata' => [
-                                                                    'code' => 203,
-                                                                    'message' => 'Kode Poli Tidak Terdaftar'
-                                                                ]
-                                                            ], 203);
-                                                        }
-                                                    }
-                                                } else {
-                                                    $url2 = $aksesws['burl'] . $aksesws['service'] . 'Rujukan/RS/' . $nomor;
-
-                                                    $ch2 = curl_init($url2);
-                                                    curl_setopt($ch2, CURLOPT_TIMEOUT, 50);
-                                                    curl_setopt($ch2, CURLOPT_CONNECTTIMEOUT, 50);
-                                                    curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-                                                    curl_setopt($ch2, CURLOPT_HTTPHEADER, array(
-                                                        "Content-Type: application/json; charset=utf-8",
-                                                        "X-cons-id: " . $aksesws['X-cons-id'],
-                                                        "X-timestamp: " . $aksesws['X-timestamp'],
-                                                        "X-signature: " . $aksesws['X-signature']
-                                                    ));
-                                                    $de2 = curl_exec($ch2);
-                                                    $d2 = json_decode($de2, true);
-                                                    curl_close($ch2);
-
-                                                    if ($d2['metaData']['code'] == '200') {
-
-                                                        $tglkunjungan = $d2['response']['rujukan']['tglKunjungan'];
-                                                        $selisih = round((time() - strtotime($tglkunjungan)) / (60 * 60 * 24));
-
-                                                        if ($selisih >= 90) {
-                                                            $this->response([
-                                                                'metadata' => [
-                                                                    'code' => 203,
-                                                                    'message' => 'Invalid rujukan, melebihi 90 hari, ' . $selisih . ' hari. Tgl Rujukan: ' . $tglkunjungan
-                                                                ]
-                                                            ], 203);
-                                                        } else {
-                                                            $t = new DateTime($dt['tanggalperiksa']);
-
-                                                            switch ($t->format('D')) {
-                                                                case "Sun":
-                                                                    $hari = "Minggu";
-                                                                    break;
-                                                                case "Mon":
-                                                                    $hari = "Senin";
-                                                                    break;
-                                                                case "Tue":
-                                                                    $hari = "Selasa";
-                                                                    break;
-                                                                case "Wed":
-                                                                    $hari = "Rabu";
-                                                                    break;
-                                                                case "Thu":
-                                                                    $hari = "Kamis";
-                                                                    break;
-                                                                case "Fri":
-                                                                    $hari = "Jumat";
-                                                                    break;
-                                                                case "Sat":
-                                                                    $hari = "Sabtu";
-                                                                    break;
-                                                                default:
-                                                                    $hari = "";
-                                                            }
-
-                                                            $getkodepoli = $this->mmobilejkn->getKodePoli($dt['kodepoli']);
-
-                                                            $cekanggotakeluarga = $this->mmobilejkn->cekPasienJkn($dt['nik']);
-
-                                                            if ($getkodepoli) {
-
-                                                                if ($getkodepoli->RuangId == '6101') {
-                                                                    $cekjampolipagi = $this->mmobilejkn->getJamPoliKebidanan('P', $hari);
-                                                                } else {
-                                                                    $cekjampolipagi = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'P', $hari);
-                                                                }
-
-                                                                if ($cekjampolipagi) {
-                                                                    if ($cekjampolipagi->$hari != NULL || $cekjampolipagi->$hari !=  "00:00:00.00000") {
-
-                                                                        $cekreg = $this->mmobilejkn->cekRegPasienJkn($dt['nik'], $dt['tanggalperiksa'], $cekjampolipagi->KodeKlinik);
-
-                                                                        if ($cekreg) {
-                                                                            $this->response([
-                                                                                'metadata' => [
-                                                                                    'code' => 203,
-                                                                                    'message' => 'Pasien telah terdaftar di poli ini dgn hari yang sama'
-                                                                                ]
-                                                                            ], 203);
-                                                                        } else {
-                                                                            $cekpsserverbaru = $this->mmobilejkn->getPasienServerBaru($dt['nomorkartu'], $dt['nik']);
-
-                                                                            if ($cekpsserverbaru) {
-                                                                                // Data Pasien
-                                                                                if ($cekanggotakeluarga) {
-                                                                                    $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
-                                                                                } else {
-                                                                                    // Reg Anggota Keluarga
-                                                                                    $dtpas['nopasien'] = trim($cekpsserverbaru->Nopasien);
-                                                                                    $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
-                                                                                    $dtpas['idakun'] = 'JKN';
-                                                                                    $dtpas['hubungan'] = 'Orang Lain';
-                                                                                    $dtpas['namalengkap'] = trim($cekpsserverbaru->NamaPasien);
-                                                                                    $dtpas['namapanggilan'] = trim($cekpsserverbaru->NamaPasien);
-                                                                                    $dtpas['ktp'] = trim($cekpsserverbaru->NoKTP);
-                                                                                    $dtpas['jeniskelamin'] = trim($cekpsserverbaru->JenisKelamin);
-                                                                                    $dtpas['tempatlahir'] = '';
-                                                                                    $dtpas['tgllahir'] = trim($cekpsserverbaru->TglLahir);
-                                                                                    $dtpas['alamat'] = trim($cekpsserverbaru->AlamatPasien);
-                                                                                    $dtpas['rt'] = '';
-                                                                                    $dtpas['rw'] = '';
-                                                                                    $dtpas['provinsi'] = '';
-                                                                                    $dtpas['kabupaten'] = '';
-                                                                                    $dtpas['kecamatan'] = '';
-                                                                                    $dtpas['kodepos'] = '';
-                                                                                    $dtpas['agama'] = '';
-                                                                                    $dtpas['goloangandarah'] = '';
-                                                                                    $dtpas['pendidikan'] = '';
-                                                                                    $dtpas['statuskawin'] = '';
-                                                                                    $dtpas['pekerjaan'] = '';
-                                                                                    $dtpas['wni'] = '';
-                                                                                    $dtpas['negara'] = '';
-                                                                                    $dtpas['suku'] = '';
-                                                                                    $dtpas['bahasa'] = '';
-                                                                                    $dtpas['alergi'] = '';
-                                                                                    $dtpas['alamatkantor'] = '';
-                                                                                    $dtpas['telpkantor'] = '';
-                                                                                    $dtpas['namakeluarga'] = '';
-                                                                                    $dtpas['namaayah'] = '';
-                                                                                    $dtpas['namaibu'] = '';
-                                                                                    $dtpas['namasuamiistri'] = '';
-                                                                                    $dtpas['notelpon'] = trim($cekpsserverbaru->TlpPasien);
-                                                                                    $dtpas['email'] = '';
-
-                                                                                    $this->mmobilejkn->simpanPasienLama($dtpas);
-                                                                                }
-                                                                            } else {
-                                                                                $cekpsserverlama = $this->mmobilejkn->getPasienServerLama($dt['nomorkartu'], $dt['nik']);
-
-                                                                                if ($cekpsserverlama) {
-                                                                                    // Data Pasien
-                                                                                    if ($cekanggotakeluarga) {
-                                                                                        $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
-                                                                                    } else {
-                                                                                        // Reg Anggota Keluarga
-                                                                                        $dtpas['nopasien'] = trim($cekpsserverlama->Nopasien);
-                                                                                        $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
-                                                                                        $dtpas['idakun'] = 'JKN';
-                                                                                        $dtpas['hubungan'] = 'Orang Lain';
-                                                                                        $dtpas['namalengkap'] = trim($cekpsserverlama->NamaPasien);
-                                                                                        $dtpas['namapanggilan'] = trim($cekpsserverlama->NamaPasien);
-                                                                                        $dtpas['ktp'] = trim($cekpsserverlama->NoKTP);
-                                                                                        $dtpas['jeniskelamin'] = trim($cekpsserverlama->JenisKelamin);
-                                                                                        $dtpas['tempatlahir'] = '';
-                                                                                        $dtpas['tgllahir'] = trim($cekpsserverlama->TglLahir);
-                                                                                        $dtpas['alamat'] = trim($cekpsserverlama->AlamatPasien);
-                                                                                        $dtpas['rt'] = '';
-                                                                                        $dtpas['rw'] = '';
-                                                                                        $dtpas['provinsi'] = '';
-                                                                                        $dtpas['kabupaten'] = '';
-                                                                                        $dtpas['kecamatan'] = '';
-                                                                                        $dtpas['kodepos'] = '';
-                                                                                        $dtpas['agama'] = '';
-                                                                                        $dtpas['goloangandarah'] = '';
-                                                                                        $dtpas['pendidikan'] = '';
-                                                                                        $dtpas['statuskawin'] = '';
-                                                                                        $dtpas['pekerjaan'] = '';
-                                                                                        $dtpas['wni'] = '';
-                                                                                        $dtpas['negara'] = '';
-                                                                                        $dtpas['suku'] = '';
-                                                                                        $dtpas['bahasa'] = '';
-                                                                                        $dtpas['alergi'] = '';
-                                                                                        $dtpas['alamatkantor'] = '';
-                                                                                        $dtpas['telpkantor'] = '';
-                                                                                        $dtpas['namakeluarga'] = '';
-                                                                                        $dtpas['namaayah'] = '';
-                                                                                        $dtpas['namaibu'] = '';
-                                                                                        $dtpas['namasuamiistri'] = '';
-                                                                                        $dtpas['notelpon'] = trim($cekpsserverlama->TlpPasien);
-                                                                                        $dtpas['email'] = '';
-
-                                                                                        $this->mmobilejkn->simpanPasienLama($dtpas);
-                                                                                    }
-                                                                                } else {
-                                                                                    // Data Pasien
-                                                                                    if ($cekanggotakeluarga) {
-                                                                                        $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
-                                                                                    } else {
-                                                                                        // Reg Anggota Keluarga
-                                                                                        $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
-                                                                                        $dtpas['idakun'] = 'JKN';
-                                                                                        $dtpas['hubungan'] = 'Orang Lain';
-                                                                                        $dtpas['namalengkap'] = '';
-                                                                                        $dtpas['namapanggilan'] = '';
-                                                                                        $dtpas['ktp'] = $dt['nik'];
-                                                                                        $dtpas['jeniskelamin'] = '';
-                                                                                        $dtpas['tempatlahir'] = '';
-                                                                                        $dtpas['tgllahir'] = '';
-                                                                                        $dtpas['alamat'] = '';
-                                                                                        $dtpas['rt'] = '';
-                                                                                        $dtpas['rw'] = '';
-                                                                                        $dtpas['provinsi'] = '';
-                                                                                        $dtpas['kabupaten'] = '';
-                                                                                        $dtpas['kecamatan'] = '';
-                                                                                        $dtpas['kodepos'] = '';
-                                                                                        $dtpas['agama'] = '';
-                                                                                        $dtpas['goloangandarah'] = '';
-                                                                                        $dtpas['pendidikan'] = '';
-                                                                                        $dtpas['statuskawin'] = '';
-                                                                                        $dtpas['pekerjaan'] = '';
-                                                                                        $dtpas['wni'] = '';
-                                                                                        $dtpas['negara'] = '';
-                                                                                        $dtpas['suku'] = '';
-                                                                                        $dtpas['bahasa'] = '';
-                                                                                        $dtpas['alergi'] = '';
-                                                                                        $dtpas['alamatkantor'] = '';
-                                                                                        $dtpas['telpkantor'] = '';
-                                                                                        $dtpas['namakeluarga'] = '';
-                                                                                        $dtpas['namaayah'] = '';
-                                                                                        $dtpas['namaibu'] = '';
-                                                                                        $dtpas['namasuamiistri'] = '';
-                                                                                        $dtpas['notelpon'] = '';
-                                                                                        $dtpas['email'] = '';
-
-                                                                                        $this->mmobilejkn->simpanPasienBaru($dtpas);
-                                                                                    }
-                                                                                }
-                                                                            }
-
-                                                                            // Data Registrasi
-                                                                            $dtreg['idanggotakeluarga'] = $dtpas['idanggotakeluarga'];
-
-                                                                            $dtreg['bagian'] = $cekjampolipagi->KodeKlinik;
-                                                                            $dtreg['namabagian'] = $cekjampolipagi->NamaBagian;
-
-                                                                            $dtreg['penjamin'] = '';
-                                                                            $dtreg['namapenjamin'] = '';
-
-                                                                            $dtreg['nopenjamin'] = $dt['nomorkartu'];
-                                                                            $dtreg['norujukan'] = $dt['nomorreferensi'];
-
-                                                                            $dtreg['dokter'] = $cekjampolipagi->KodeDokter;
-                                                                            $dtreg['namadokter'] = $cekjampolipagi->NamaDokter;
-
-                                                                            $dtreg['waktu'] = 'P';
-
-                                                                            $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $dt['tanggalperiksa']));
-                                                                            $dtreg['kodebooking'] = str_replace("-", "", $dt['tanggalperiksa']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
-                                                                            $jam = "07:00";
-                                                                            $time = strtotime($jam);
-                                                                            $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
-
-                                                                            if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6101") {
-                                                                                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
-                                                                                $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
-
-                                                                                $jml = $hitungpendaftaran;
-                                                                                $pelayanan = 3;
-                                                                                $wkt = $jml * $pelayanan;
-                                                                                $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
-                                                                                $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
-                                                                                $dtreg['datetime'] = $datetime;
-                                                                            } else {
-                                                                                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']));
-                                                                                $hitungpoli = $this->mregbooking->hitungPoli($getkodepoli->RuangId, str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
-                                                                                $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
-
-                                                                                $jml = $hitungpendaftaran;
-                                                                                $pelayanan = 3;
-                                                                                $wkt = $jml * $pelayanan;
-                                                                                $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
-                                                                                $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
-                                                                                $dtreg['datetime'] = $datetime;
-                                                                            }
-
-                                                                            if ($this->mregbooking->simpanBooking($dtreg)) {
-                                                                                $this->response([
-                                                                                    'metadata' => [
-                                                                                        'code' => 200,
-                                                                                        'message' => 'OK'
-                                                                                    ],
-                                                                                    'response' => [
-                                                                                        'nomorantrean' => trim($dtreg['noantripendaftaran']),
-                                                                                        'kodebooking' => trim($dtreg['kodebooking']),
-                                                                                        'jenisantrean' => 1,
-                                                                                        'estimasidilayani' => strtotime($dtreg['jamdilayani']) * 1000,
-                                                                                        'namapoli' => trim($dtreg['namabagian']),
-                                                                                        'namadokter' => trim($dtreg['namadokter'])
-                                                                                    ]
-                                                                                ], 200);
-                                                                            } else {
-                                                                                $this->response([
-                                                                                    'metadata' => [
-                                                                                        'code' => 203,
-                                                                                        'message' => 'Gagal booking, silahkan periksa data dan coba lagi'
-                                                                                    ]
-                                                                                ], 203);
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        if ($getkodepoli->RuangId == '6101') {
-                                                                            $cekjampolisore =  $this->mmobilejkn->getJamPoliKebidanan('S', $hari);
-                                                                        } else {
-                                                                            $cekjampolisore = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'S', $hari);
-                                                                        }
-
-                                                                        if ($cekjampolisore) {
-                                                                            if ($cekjampolisore->$hari != NULL || $cekjampolisore->$hari !=  "00:00:00.00000") {
-
-                                                                                $cekreg = $this->mmobilejkn->cekRegPasienJkn($dt['nik'], $dt['tanggalperiksa'], $cekjampolisore->KodeKlinik);
-
-                                                                                if ($cekreg) {
-                                                                                    $this->response([
-                                                                                        'metadata' => [
-                                                                                            'code' => 203,
-                                                                                            'message' => 'Pasien telah terdaftar di poli ini dgn hari yang sama'
-                                                                                        ]
-                                                                                    ], 203);
-                                                                                } else {
-                                                                                    $cekpsserverbaru = $this->mmobilejkn->getPasienServerBaru($dt['nomorkartu'], $dt['nik']);
-
-                                                                                    if ($cekpsserverbaru) {
-                                                                                        // Data Pasien
-                                                                                        if ($cekanggotakeluarga) {
-                                                                                            $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
-                                                                                        } else {
-                                                                                            // Reg Anggota Keluarga
-                                                                                            $dtpas['nopasien'] = trim($cekpsserverbaru->Nopasien);
-                                                                                            $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
-                                                                                            $dtpas['idakun'] = 'JKN';
-                                                                                            $dtpas['hubungan'] = 'Orang Lain';
-                                                                                            $dtpas['namalengkap'] = trim($cekpsserverbaru->NamaPasien);
-                                                                                            $dtpas['namapanggilan'] = trim($cekpsserverbaru->NamaPasien);
-                                                                                            $dtpas['ktp'] = trim($cekpsserverbaru->NoKTP);
-                                                                                            $dtpas['jeniskelamin'] = trim($cekpsserverbaru->JenisKelamin);
-                                                                                            $dtpas['tempatlahir'] = '';
-                                                                                            $dtpas['tgllahir'] = trim($cekpsserverbaru->TglLahir);
-                                                                                            $dtpas['alamat'] = trim($cekpsserverbaru->AlamatPasien);
-                                                                                            $dtpas['rt'] = '';
-                                                                                            $dtpas['rw'] = '';
-                                                                                            $dtpas['provinsi'] = '';
-                                                                                            $dtpas['kabupaten'] = '';
-                                                                                            $dtpas['kecamatan'] = '';
-                                                                                            $dtpas['kodepos'] = '';
-                                                                                            $dtpas['agama'] = '';
-                                                                                            $dtpas['goloangandarah'] = '';
-                                                                                            $dtpas['pendidikan'] = '';
-                                                                                            $dtpas['statuskawin'] = '';
-                                                                                            $dtpas['pekerjaan'] = '';
-                                                                                            $dtpas['wni'] = '';
-                                                                                            $dtpas['negara'] = '';
-                                                                                            $dtpas['suku'] = '';
-                                                                                            $dtpas['bahasa'] = '';
-                                                                                            $dtpas['alergi'] = '';
-                                                                                            $dtpas['alamatkantor'] = '';
-                                                                                            $dtpas['telpkantor'] = '';
-                                                                                            $dtpas['namakeluarga'] = '';
-                                                                                            $dtpas['namaayah'] = '';
-                                                                                            $dtpas['namaibu'] = '';
-                                                                                            $dtpas['namasuamiistri'] = '';
-                                                                                            $dtpas['notelpon'] = trim($cekpsserverbaru->TlpPasien);
-                                                                                            $dtpas['email'] = '';
-
-                                                                                            $this->mmobilejkn->simpanPasienLama($dtpas);
-                                                                                        }
-                                                                                    } else {
-                                                                                        $cekpsserverlama = $this->mmobilejkn->getPasienServerLama($dt['nomorkartu'], $dt['nik']);
-
-                                                                                        if ($cekpsserverlama) {
-                                                                                            // Data Pasien
-                                                                                            if ($cekanggotakeluarga) {
-                                                                                                $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
-                                                                                            } else {
-                                                                                                // Reg Anggota Keluarga
-                                                                                                $dtpas['nopasien'] = trim($cekpsserverlama->Nopasien);
-                                                                                                $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
-                                                                                                $dtpas['idakun'] = 'JKN';
-                                                                                                $dtpas['hubungan'] = 'Orang Lain';
-                                                                                                $dtpas['namalengkap'] = trim($cekpsserverlama->NamaPasien);
-                                                                                                $dtpas['namapanggilan'] = trim($cekpsserverlama->NamaPasien);
-                                                                                                $dtpas['ktp'] = trim($cekpsserverlama->NoKTP);
-                                                                                                $dtpas['jeniskelamin'] = trim($cekpsserverlama->JenisKelamin);
-                                                                                                $dtpas['tempatlahir'] = '';
-                                                                                                $dtpas['tgllahir'] = trim($cekpsserverlama->TglLahir);
-                                                                                                $dtpas['alamat'] = trim($cekpsserverlama->AlamatPasien);
-                                                                                                $dtpas['rt'] = '';
-                                                                                                $dtpas['rw'] = '';
-                                                                                                $dtpas['provinsi'] = '';
-                                                                                                $dtpas['kabupaten'] = '';
-                                                                                                $dtpas['kecamatan'] = '';
-                                                                                                $dtpas['kodepos'] = '';
-                                                                                                $dtpas['agama'] = '';
-                                                                                                $dtpas['goloangandarah'] = '';
-                                                                                                $dtpas['pendidikan'] = '';
-                                                                                                $dtpas['statuskawin'] = '';
-                                                                                                $dtpas['pekerjaan'] = '';
-                                                                                                $dtpas['wni'] = '';
-                                                                                                $dtpas['negara'] = '';
-                                                                                                $dtpas['suku'] = '';
-                                                                                                $dtpas['bahasa'] = '';
-                                                                                                $dtpas['alergi'] = '';
-                                                                                                $dtpas['alamatkantor'] = '';
-                                                                                                $dtpas['telpkantor'] = '';
-                                                                                                $dtpas['namakeluarga'] = '';
-                                                                                                $dtpas['namaayah'] = '';
-                                                                                                $dtpas['namaibu'] = '';
-                                                                                                $dtpas['namasuamiistri'] = '';
-                                                                                                $dtpas['notelpon'] = trim($cekpsserverlama->TlpPasien);
-                                                                                                $dtpas['email'] = '';
-
-                                                                                                $this->mmobilejkn->simpanPasienLama($dtpas);
-                                                                                            }
-                                                                                        } else {
-                                                                                            // Data Pasien
-                                                                                            if ($cekanggotakeluarga) {
-                                                                                                $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
-                                                                                            } else {
-                                                                                                // Reg Anggota Keluarga
-                                                                                                $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
-                                                                                                $dtpas['idakun'] = 'JKN';
-                                                                                                $dtpas['hubungan'] = 'Orang Lain';
-                                                                                                $dtpas['namalengkap'] = '';
-                                                                                                $dtpas['namapanggilan'] = '';
-                                                                                                $dtpas['ktp'] = $dt['nik'];
-                                                                                                $dtpas['jeniskelamin'] = '';
-                                                                                                $dtpas['tempatlahir'] = '';
-                                                                                                $dtpas['tgllahir'] = '';
-                                                                                                $dtpas['alamat'] = '';
-                                                                                                $dtpas['rt'] = '';
-                                                                                                $dtpas['rw'] = '';
-                                                                                                $dtpas['provinsi'] = '';
-                                                                                                $dtpas['kabupaten'] = '';
-                                                                                                $dtpas['kecamatan'] = '';
-                                                                                                $dtpas['kodepos'] = '';
-                                                                                                $dtpas['agama'] = '';
-                                                                                                $dtpas['goloangandarah'] = '';
-                                                                                                $dtpas['pendidikan'] = '';
-                                                                                                $dtpas['statuskawin'] = '';
-                                                                                                $dtpas['pekerjaan'] = '';
-                                                                                                $dtpas['wni'] = '';
-                                                                                                $dtpas['negara'] = '';
-                                                                                                $dtpas['suku'] = '';
-                                                                                                $dtpas['bahasa'] = '';
-                                                                                                $dtpas['alergi'] = '';
-                                                                                                $dtpas['alamatkantor'] = '';
-                                                                                                $dtpas['telpkantor'] = '';
-                                                                                                $dtpas['namakeluarga'] = '';
-                                                                                                $dtpas['namaayah'] = '';
-                                                                                                $dtpas['namaibu'] = '';
-                                                                                                $dtpas['namasuamiistri'] = '';
-                                                                                                $dtpas['notelpon'] = '';
-                                                                                                $dtpas['email'] = '';
-
-                                                                                                $this->mmobilejkn->simpanPasienBaru($dtpas);
-                                                                                            }
-                                                                                        }
-                                                                                    }
-
-                                                                                    // Data Registrasi
-                                                                                    $dtreg['idanggotakeluarga'] = $dtpas['idanggotakeluarga'];
-
-                                                                                    $dtreg['bagian'] = $cekjampolisore->KodeKlinik;
-                                                                                    $dtreg['namabagian'] = $cekjampolisore->NamaBagian;
-
-                                                                                    $dtreg['penjamin'] = '';
-                                                                                    $dtreg['namapenjamin'] = '';
-
-                                                                                    $dtreg['nopenjamin'] = $dt['nomorkartu'];
-                                                                                    $dtreg['norujukan'] = $dt['nomorreferensi'];
-
-                                                                                    $dtreg['dokter'] = $cekjampolisore->KodeDokter;
-                                                                                    $dtreg['namadokter'] = $cekjampolisore->NamaDokter;
-
-                                                                                    $dtreg['waktu'] = 'P';
-
-                                                                                    $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $dt['tanggalperiksa']));
-                                                                                    $dtreg['kodebooking'] = str_replace("-", "", $dt['tanggalperiksa']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
-                                                                                    $jam = "07:00";
-                                                                                    $time = strtotime($jam);
-                                                                                    $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
-
-                                                                                    if ($getkodepoli->RuangId == "6101") {
-                                                                                        $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                        $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                        $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
-                                                                                        $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
-
-                                                                                        $jml = $hitungpendaftaran;
-                                                                                        $pelayanan = 3;
-                                                                                        $wkt = $jml * $pelayanan;
-                                                                                        $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
-                                                                                        $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
-                                                                                        $dtreg['datetime'] = $datetime;
-                                                                                    } else {
-                                                                                        $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']));
-                                                                                        $hitungpoli = $this->mregbooking->hitungPoli($getkodepoli->RuangId, str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                        $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
-                                                                                        $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
-
-                                                                                        $jml = $hitungpendaftaran;
-                                                                                        $pelayanan = 3;
-                                                                                        $wkt = $jml * $pelayanan;
-                                                                                        $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
-                                                                                        $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
-                                                                                        $dtreg['datetime'] = $datetime;
-                                                                                    }
-
-                                                                                    if ($this->mregbooking->simpanBooking($dtreg)) {
-                                                                                        $this->response([
-                                                                                            'metadata' => [
-                                                                                                'code' => 200,
-                                                                                                'message' => 'OK'
-                                                                                            ],
-                                                                                            'response' => [
-                                                                                                'nomorantrean' => trim($dtreg['noantripendaftaran']),
-                                                                                                'kodebooking' => trim($dtreg['kodebooking']),
-                                                                                                'jenisantrean' => 1,
-                                                                                                'estimasidilayani' => strtotime($dtreg['jamdilayani']) * 1000,
-                                                                                                'namapoli' => trim($dtreg['namabagian']),
-                                                                                                'namadokter' => trim($dtreg['namadokter'])
-                                                                                            ]
-                                                                                        ], 200);
-                                                                                    } else {
-                                                                                        $this->response([
-                                                                                            'metadata' => [
-                                                                                                'code' => 203,
-                                                                                                'message' => 'Gagal booking, silahkan periksa data dan coba lagi'
-                                                                                            ]
-                                                                                        ], 203);
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                $this->response([
-                                                                                    'metadata' => [
-                                                                                        'code' => 203,
-                                                                                        'message' => 'Poli Libur'
-                                                                                    ]
-                                                                                ], 203);
-                                                                            }
-                                                                        } else {
-                                                                            $this->response([
-                                                                                'metadata' => [
-                                                                                    'code' => 203,
-                                                                                    'message' => 'Poli Libur'
-                                                                                ]
-                                                                            ], 203);
-                                                                        }
-                                                                    }
-                                                                } else {
                                                                     $this->response([
                                                                         'metadata' => [
                                                                             'code' => 203,
@@ -1253,7 +675,7 @@ class JknMobileAntrian extends RestController
                                                                 $this->response([
                                                                     'metadata' => [
                                                                         'code' => 203,
-                                                                        'message' => 'Kode Poli Tidak Terdaftar'
+                                                                        'message' => 'Poli Libur'
                                                                     ]
                                                                 ], 203);
                                                             }
@@ -1262,11 +684,589 @@ class JknMobileAntrian extends RestController
                                                         $this->response([
                                                             'metadata' => [
                                                                 'code' => 203,
-                                                                'message' => 'Invalid Nomor Rujukan'
+                                                                'message' => 'Poli Libur'
                                                             ]
                                                         ], 203);
                                                     }
+                                                } else {
+                                                    $this->response([
+                                                        'metadata' => [
+                                                            'code' => 203,
+                                                            'message' => 'Kode Poli Tidak Terdaftar'
+                                                        ]
+                                                    ], 203);
                                                 }
+                                                //     }
+                                                // } else {
+                                                //     $url2 = $aksesws['burl'] . $aksesws['service'] . 'Rujukan/RS/' . $nomor;
+
+                                                //     $ch2 = curl_init($url2);
+                                                //     curl_setopt($ch2, CURLOPT_TIMEOUT, 50);
+                                                //     curl_setopt($ch2, CURLOPT_CONNECTTIMEOUT, 50);
+                                                //     curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+                                                //     curl_setopt($ch2, CURLOPT_HTTPHEADER, array(
+                                                //         "Content-Type: application/json; charset=utf-8",
+                                                //         "X-cons-id: " . $aksesws['X-cons-id'],
+                                                //         "X-timestamp: " . $aksesws['X-timestamp'],
+                                                //         "X-signature: " . $aksesws['X-signature']
+                                                //     ));
+                                                //     $de2 = curl_exec($ch2);
+                                                //     $d2 = json_decode($de2, true);
+                                                //     curl_close($ch2);
+
+                                                //     if ($d2['metaData']['code'] == '200') {
+
+                                                //         $tglkunjungan = $d2['response']['rujukan']['tglKunjungan'];
+                                                //         $selisih = round((time() - strtotime($tglkunjungan)) / (60 * 60 * 24));
+
+                                                //         if ($selisih >= 90) {
+                                                //             $this->response([
+                                                //                 'metadata' => [
+                                                //                     'code' => 203,
+                                                //                     'message' => 'Invalid rujukan, melebihi 90 hari, ' . $selisih . ' hari. Tgl Rujukan: ' . $tglkunjungan
+                                                //                 ]
+                                                //             ], 203);
+                                                //         } else {
+                                                //             $t = new DateTime($dt['tanggalperiksa']);
+
+                                                //             switch ($t->format('D')) {
+                                                //                 case "Sun":
+                                                //                     $hari = "Minggu";
+                                                //                     break;
+                                                //                 case "Mon":
+                                                //                     $hari = "Senin";
+                                                //                     break;
+                                                //                 case "Tue":
+                                                //                     $hari = "Selasa";
+                                                //                     break;
+                                                //                 case "Wed":
+                                                //                     $hari = "Rabu";
+                                                //                     break;
+                                                //                 case "Thu":
+                                                //                     $hari = "Kamis";
+                                                //                     break;
+                                                //                 case "Fri":
+                                                //                     $hari = "Jumat";
+                                                //                     break;
+                                                //                 case "Sat":
+                                                //                     $hari = "Sabtu";
+                                                //                     break;
+                                                //                 default:
+                                                //                     $hari = "";
+                                                //             }
+
+                                                //             $getkodepoli = $this->mmobilejkn->getKodePoli($dt['kodepoli']);
+
+                                                //             $cekanggotakeluarga = $this->mmobilejkn->cekPasienJkn($dt['nik']);
+
+                                                //             if ($getkodepoli) {
+
+                                                //                 if ($getkodepoli->RuangId == '6101') {
+                                                //                     $cekjampolipagi = $this->mmobilejkn->getJamPoliKebidanan('P', $hari);
+                                                //                 } else {
+                                                //                     $cekjampolipagi = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'P', $hari);
+                                                //                 }
+
+                                                //                 if ($cekjampolipagi) {
+                                                //                     if ($cekjampolipagi->$hari != NULL || $cekjampolipagi->$hari !=  "00:00:00.00000") {
+
+                                                //                         $cekreg = $this->mmobilejkn->cekRegPasienJkn($dt['nik'], $dt['tanggalperiksa'], $cekjampolipagi->KodeKlinik);
+
+                                                //                         if ($cekreg) {
+                                                //                             $this->response([
+                                                //                                 'metadata' => [
+                                                //                                     'code' => 203,
+                                                //                                     'message' => 'Pasien telah terdaftar di poli ini dgn hari yang sama'
+                                                //                                 ]
+                                                //                             ], 203);
+                                                //                         } else {
+                                                //                             $cekpsserverbaru = $this->mmobilejkn->getPasienServerBaru($dt['nomorkartu'], $dt['nik']);
+
+                                                //                             if ($cekpsserverbaru) {
+                                                //                                 // Data Pasien
+                                                //                                 if ($cekanggotakeluarga) {
+                                                //                                     $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
+                                                //                                 } else {
+                                                //                                     // Reg Anggota Keluarga
+                                                //                                     $dtpas['nopasien'] = trim($cekpsserverbaru->Nopasien);
+                                                //                                     $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
+                                                //                                     $dtpas['idakun'] = 'JKN';
+                                                //                                     $dtpas['hubungan'] = 'Orang Lain';
+                                                //                                     $dtpas['namalengkap'] = trim($cekpsserverbaru->NamaPasien);
+                                                //                                     $dtpas['namapanggilan'] = trim($cekpsserverbaru->NamaPasien);
+                                                //                                     $dtpas['ktp'] = trim($cekpsserverbaru->NoKTP);
+                                                //                                     $dtpas['jeniskelamin'] = trim($cekpsserverbaru->JenisKelamin);
+                                                //                                     $dtpas['tempatlahir'] = '';
+                                                //                                     $dtpas['tgllahir'] = trim($cekpsserverbaru->TglLahir);
+                                                //                                     $dtpas['alamat'] = trim($cekpsserverbaru->AlamatPasien);
+                                                //                                     $dtpas['rt'] = '';
+                                                //                                     $dtpas['rw'] = '';
+                                                //                                     $dtpas['provinsi'] = '';
+                                                //                                     $dtpas['kabupaten'] = '';
+                                                //                                     $dtpas['kecamatan'] = '';
+                                                //                                     $dtpas['kodepos'] = '';
+                                                //                                     $dtpas['agama'] = '';
+                                                //                                     $dtpas['goloangandarah'] = '';
+                                                //                                     $dtpas['pendidikan'] = '';
+                                                //                                     $dtpas['statuskawin'] = '';
+                                                //                                     $dtpas['pekerjaan'] = '';
+                                                //                                     $dtpas['wni'] = '';
+                                                //                                     $dtpas['negara'] = '';
+                                                //                                     $dtpas['suku'] = '';
+                                                //                                     $dtpas['bahasa'] = '';
+                                                //                                     $dtpas['alergi'] = '';
+                                                //                                     $dtpas['alamatkantor'] = '';
+                                                //                                     $dtpas['telpkantor'] = '';
+                                                //                                     $dtpas['namakeluarga'] = '';
+                                                //                                     $dtpas['namaayah'] = '';
+                                                //                                     $dtpas['namaibu'] = '';
+                                                //                                     $dtpas['namasuamiistri'] = '';
+                                                //                                     $dtpas['notelpon'] = trim($cekpsserverbaru->TlpPasien);
+                                                //                                     $dtpas['email'] = '';
+
+                                                //                                     $this->mmobilejkn->simpanPasienLama($dtpas);
+                                                //                                 }
+                                                //                             } else {
+                                                //                                 $cekpsserverlama = $this->mmobilejkn->getPasienServerLama($dt['nomorkartu'], $dt['nik']);
+
+                                                //                                 if ($cekpsserverlama) {
+                                                //                                     // Data Pasien
+                                                //                                     if ($cekanggotakeluarga) {
+                                                //                                         $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
+                                                //                                     } else {
+                                                //                                         // Reg Anggota Keluarga
+                                                //                                         $dtpas['nopasien'] = trim($cekpsserverlama->Nopasien);
+                                                //                                         $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
+                                                //                                         $dtpas['idakun'] = 'JKN';
+                                                //                                         $dtpas['hubungan'] = 'Orang Lain';
+                                                //                                         $dtpas['namalengkap'] = trim($cekpsserverlama->NamaPasien);
+                                                //                                         $dtpas['namapanggilan'] = trim($cekpsserverlama->NamaPasien);
+                                                //                                         $dtpas['ktp'] = trim($cekpsserverlama->NoKTP);
+                                                //                                         $dtpas['jeniskelamin'] = trim($cekpsserverlama->JenisKelamin);
+                                                //                                         $dtpas['tempatlahir'] = '';
+                                                //                                         $dtpas['tgllahir'] = trim($cekpsserverlama->TglLahir);
+                                                //                                         $dtpas['alamat'] = trim($cekpsserverlama->AlamatPasien);
+                                                //                                         $dtpas['rt'] = '';
+                                                //                                         $dtpas['rw'] = '';
+                                                //                                         $dtpas['provinsi'] = '';
+                                                //                                         $dtpas['kabupaten'] = '';
+                                                //                                         $dtpas['kecamatan'] = '';
+                                                //                                         $dtpas['kodepos'] = '';
+                                                //                                         $dtpas['agama'] = '';
+                                                //                                         $dtpas['goloangandarah'] = '';
+                                                //                                         $dtpas['pendidikan'] = '';
+                                                //                                         $dtpas['statuskawin'] = '';
+                                                //                                         $dtpas['pekerjaan'] = '';
+                                                //                                         $dtpas['wni'] = '';
+                                                //                                         $dtpas['negara'] = '';
+                                                //                                         $dtpas['suku'] = '';
+                                                //                                         $dtpas['bahasa'] = '';
+                                                //                                         $dtpas['alergi'] = '';
+                                                //                                         $dtpas['alamatkantor'] = '';
+                                                //                                         $dtpas['telpkantor'] = '';
+                                                //                                         $dtpas['namakeluarga'] = '';
+                                                //                                         $dtpas['namaayah'] = '';
+                                                //                                         $dtpas['namaibu'] = '';
+                                                //                                         $dtpas['namasuamiistri'] = '';
+                                                //                                         $dtpas['notelpon'] = trim($cekpsserverlama->TlpPasien);
+                                                //                                         $dtpas['email'] = '';
+
+                                                //                                         $this->mmobilejkn->simpanPasienLama($dtpas);
+                                                //                                     }
+                                                //                                 } else {
+                                                //                                     // Data Pasien
+                                                //                                     if ($cekanggotakeluarga) {
+                                                //                                         $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
+                                                //                                     } else {
+                                                //                                         // Reg Anggota Keluarga
+                                                //                                         $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
+                                                //                                         $dtpas['idakun'] = 'JKN';
+                                                //                                         $dtpas['hubungan'] = 'Orang Lain';
+                                                //                                         $dtpas['namalengkap'] = '';
+                                                //                                         $dtpas['namapanggilan'] = '';
+                                                //                                         $dtpas['ktp'] = $dt['nik'];
+                                                //                                         $dtpas['jeniskelamin'] = '';
+                                                //                                         $dtpas['tempatlahir'] = '';
+                                                //                                         $dtpas['tgllahir'] = '';
+                                                //                                         $dtpas['alamat'] = '';
+                                                //                                         $dtpas['rt'] = '';
+                                                //                                         $dtpas['rw'] = '';
+                                                //                                         $dtpas['provinsi'] = '';
+                                                //                                         $dtpas['kabupaten'] = '';
+                                                //                                         $dtpas['kecamatan'] = '';
+                                                //                                         $dtpas['kodepos'] = '';
+                                                //                                         $dtpas['agama'] = '';
+                                                //                                         $dtpas['goloangandarah'] = '';
+                                                //                                         $dtpas['pendidikan'] = '';
+                                                //                                         $dtpas['statuskawin'] = '';
+                                                //                                         $dtpas['pekerjaan'] = '';
+                                                //                                         $dtpas['wni'] = '';
+                                                //                                         $dtpas['negara'] = '';
+                                                //                                         $dtpas['suku'] = '';
+                                                //                                         $dtpas['bahasa'] = '';
+                                                //                                         $dtpas['alergi'] = '';
+                                                //                                         $dtpas['alamatkantor'] = '';
+                                                //                                         $dtpas['telpkantor'] = '';
+                                                //                                         $dtpas['namakeluarga'] = '';
+                                                //                                         $dtpas['namaayah'] = '';
+                                                //                                         $dtpas['namaibu'] = '';
+                                                //                                         $dtpas['namasuamiistri'] = '';
+                                                //                                         $dtpas['notelpon'] = '';
+                                                //                                         $dtpas['email'] = '';
+
+                                                //                                         $this->mmobilejkn->simpanPasienBaru($dtpas);
+                                                //                                     }
+                                                //                                 }
+                                                //                             }
+
+                                                //                             // Data Registrasi
+                                                //                             $dtreg['idanggotakeluarga'] = $dtpas['idanggotakeluarga'];
+
+                                                //                             $dtreg['bagian'] = $cekjampolipagi->KodeKlinik;
+                                                //                             $dtreg['namabagian'] = $cekjampolipagi->NamaBagian;
+
+                                                //                             $dtreg['penjamin'] = '';
+                                                //                             $dtreg['namapenjamin'] = '';
+
+                                                //                             $dtreg['nopenjamin'] = $dt['nomorkartu'];
+                                                //                             $dtreg['norujukan'] = $dt['nomorreferensi'];
+
+                                                //                             $dtreg['dokter'] = $cekjampolipagi->KodeDokter;
+                                                //                             $dtreg['namadokter'] = $cekjampolipagi->NamaDokter;
+
+                                                //                             $dtreg['waktu'] = 'P';
+
+                                                //                             $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $dt['tanggalperiksa']));
+                                                //                             $dtreg['kodebooking'] = str_replace("-", "", $dt['tanggalperiksa']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
+                                                //                             $jam = "07:00";
+                                                //                             $time = strtotime($jam);
+                                                //                             $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
+
+                                                //                             if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6101") {
+                                                //                                 $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                //                                 $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                //                                 $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                //                                 $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
+
+                                                //                                 $jml = $hitungpendaftaran;
+                                                //                                 $pelayanan = 3;
+                                                //                                 $wkt = $jml * $pelayanan;
+                                                //                                 $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                                                //                                 $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
+                                                //                                 $dtreg['datetime'] = $datetime;
+                                                //                             } else {
+                                                //                                 $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']));
+                                                //                                 $hitungpoli = $this->mregbooking->hitungPoli($getkodepoli->RuangId, str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                //                                 $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                //                                 $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
+
+                                                //                                 $jml = $hitungpendaftaran;
+                                                //                                 $pelayanan = 3;
+                                                //                                 $wkt = $jml * $pelayanan;
+                                                //                                 $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                                                //                                 $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
+                                                //                                 $dtreg['datetime'] = $datetime;
+                                                //                             }
+
+                                                //                             if ($this->mregbooking->simpanBooking($dtreg)) {
+                                                //                                 $this->response([
+                                                //                                     'metadata' => [
+                                                //                                         'code' => 200,
+                                                //                                         'message' => 'OK'
+                                                //                                     ],
+                                                //                                     'response' => [
+                                                //                                         'nomorantrean' => trim($dtreg['noantripendaftaran']),
+                                                //                                         'kodebooking' => trim($dtreg['kodebooking']),
+                                                //                                         'jenisantrean' => 1,
+                                                //                                         'estimasidilayani' => strtotime($dtreg['jamdilayani']) * 1000,
+                                                //                                         'namapoli' => trim($dtreg['namabagian']),
+                                                //                                         'namadokter' => trim($dtreg['namadokter'])
+                                                //                                     ]
+                                                //                                 ], 200);
+                                                //                             } else {
+                                                //                                 $this->response([
+                                                //                                     'metadata' => [
+                                                //                                         'code' => 203,
+                                                //                                         'message' => 'Gagal booking, silahkan periksa data dan coba lagi'
+                                                //                                     ]
+                                                //                                 ], 203);
+                                                //                             }
+                                                //                         }
+                                                //                     } else {
+                                                //                         if ($getkodepoli->RuangId == '6101') {
+                                                //                             $cekjampolisore =  $this->mmobilejkn->getJamPoliKebidanan('S', $hari);
+                                                //                         } else {
+                                                //                             $cekjampolisore = $this->mmobilejkn->getJamPoli($getkodepoli->RuangId, 'S', $hari);
+                                                //                         }
+
+                                                //                         if ($cekjampolisore) {
+                                                //                             if ($cekjampolisore->$hari != NULL || $cekjampolisore->$hari !=  "00:00:00.00000") {
+
+                                                //                                 $cekreg = $this->mmobilejkn->cekRegPasienJkn($dt['nik'], $dt['tanggalperiksa'], $cekjampolisore->KodeKlinik);
+
+                                                //                                 if ($cekreg) {
+                                                //                                     $this->response([
+                                                //                                         'metadata' => [
+                                                //                                             'code' => 203,
+                                                //                                             'message' => 'Pasien telah terdaftar di poli ini dgn hari yang sama'
+                                                //                                         ]
+                                                //                                     ], 203);
+                                                //                                 } else {
+                                                //                                     $cekpsserverbaru = $this->mmobilejkn->getPasienServerBaru($dt['nomorkartu'], $dt['nik']);
+
+                                                //                                     if ($cekpsserverbaru) {
+                                                //                                         // Data Pasien
+                                                //                                         if ($cekanggotakeluarga) {
+                                                //                                             $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
+                                                //                                         } else {
+                                                //                                             // Reg Anggota Keluarga
+                                                //                                             $dtpas['nopasien'] = trim($cekpsserverbaru->Nopasien);
+                                                //                                             $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
+                                                //                                             $dtpas['idakun'] = 'JKN';
+                                                //                                             $dtpas['hubungan'] = 'Orang Lain';
+                                                //                                             $dtpas['namalengkap'] = trim($cekpsserverbaru->NamaPasien);
+                                                //                                             $dtpas['namapanggilan'] = trim($cekpsserverbaru->NamaPasien);
+                                                //                                             $dtpas['ktp'] = trim($cekpsserverbaru->NoKTP);
+                                                //                                             $dtpas['jeniskelamin'] = trim($cekpsserverbaru->JenisKelamin);
+                                                //                                             $dtpas['tempatlahir'] = '';
+                                                //                                             $dtpas['tgllahir'] = trim($cekpsserverbaru->TglLahir);
+                                                //                                             $dtpas['alamat'] = trim($cekpsserverbaru->AlamatPasien);
+                                                //                                             $dtpas['rt'] = '';
+                                                //                                             $dtpas['rw'] = '';
+                                                //                                             $dtpas['provinsi'] = '';
+                                                //                                             $dtpas['kabupaten'] = '';
+                                                //                                             $dtpas['kecamatan'] = '';
+                                                //                                             $dtpas['kodepos'] = '';
+                                                //                                             $dtpas['agama'] = '';
+                                                //                                             $dtpas['goloangandarah'] = '';
+                                                //                                             $dtpas['pendidikan'] = '';
+                                                //                                             $dtpas['statuskawin'] = '';
+                                                //                                             $dtpas['pekerjaan'] = '';
+                                                //                                             $dtpas['wni'] = '';
+                                                //                                             $dtpas['negara'] = '';
+                                                //                                             $dtpas['suku'] = '';
+                                                //                                             $dtpas['bahasa'] = '';
+                                                //                                             $dtpas['alergi'] = '';
+                                                //                                             $dtpas['alamatkantor'] = '';
+                                                //                                             $dtpas['telpkantor'] = '';
+                                                //                                             $dtpas['namakeluarga'] = '';
+                                                //                                             $dtpas['namaayah'] = '';
+                                                //                                             $dtpas['namaibu'] = '';
+                                                //                                             $dtpas['namasuamiistri'] = '';
+                                                //                                             $dtpas['notelpon'] = trim($cekpsserverbaru->TlpPasien);
+                                                //                                             $dtpas['email'] = '';
+
+                                                //                                             $this->mmobilejkn->simpanPasienLama($dtpas);
+                                                //                                         }
+                                                //                                     } else {
+                                                //                                         $cekpsserverlama = $this->mmobilejkn->getPasienServerLama($dt['nomorkartu'], $dt['nik']);
+
+                                                //                                         if ($cekpsserverlama) {
+                                                //                                             // Data Pasien
+                                                //                                             if ($cekanggotakeluarga) {
+                                                //                                                 $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
+                                                //                                             } else {
+                                                //                                                 // Reg Anggota Keluarga
+                                                //                                                 $dtpas['nopasien'] = trim($cekpsserverlama->Nopasien);
+                                                //                                                 $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
+                                                //                                                 $dtpas['idakun'] = 'JKN';
+                                                //                                                 $dtpas['hubungan'] = 'Orang Lain';
+                                                //                                                 $dtpas['namalengkap'] = trim($cekpsserverlama->NamaPasien);
+                                                //                                                 $dtpas['namapanggilan'] = trim($cekpsserverlama->NamaPasien);
+                                                //                                                 $dtpas['ktp'] = trim($cekpsserverlama->NoKTP);
+                                                //                                                 $dtpas['jeniskelamin'] = trim($cekpsserverlama->JenisKelamin);
+                                                //                                                 $dtpas['tempatlahir'] = '';
+                                                //                                                 $dtpas['tgllahir'] = trim($cekpsserverlama->TglLahir);
+                                                //                                                 $dtpas['alamat'] = trim($cekpsserverlama->AlamatPasien);
+                                                //                                                 $dtpas['rt'] = '';
+                                                //                                                 $dtpas['rw'] = '';
+                                                //                                                 $dtpas['provinsi'] = '';
+                                                //                                                 $dtpas['kabupaten'] = '';
+                                                //                                                 $dtpas['kecamatan'] = '';
+                                                //                                                 $dtpas['kodepos'] = '';
+                                                //                                                 $dtpas['agama'] = '';
+                                                //                                                 $dtpas['goloangandarah'] = '';
+                                                //                                                 $dtpas['pendidikan'] = '';
+                                                //                                                 $dtpas['statuskawin'] = '';
+                                                //                                                 $dtpas['pekerjaan'] = '';
+                                                //                                                 $dtpas['wni'] = '';
+                                                //                                                 $dtpas['negara'] = '';
+                                                //                                                 $dtpas['suku'] = '';
+                                                //                                                 $dtpas['bahasa'] = '';
+                                                //                                                 $dtpas['alergi'] = '';
+                                                //                                                 $dtpas['alamatkantor'] = '';
+                                                //                                                 $dtpas['telpkantor'] = '';
+                                                //                                                 $dtpas['namakeluarga'] = '';
+                                                //                                                 $dtpas['namaayah'] = '';
+                                                //                                                 $dtpas['namaibu'] = '';
+                                                //                                                 $dtpas['namasuamiistri'] = '';
+                                                //                                                 $dtpas['notelpon'] = trim($cekpsserverlama->TlpPasien);
+                                                //                                                 $dtpas['email'] = '';
+
+                                                //                                                 $this->mmobilejkn->simpanPasienLama($dtpas);
+                                                //                                             }
+                                                //                                         } else {
+                                                //                                             // Data Pasien
+                                                //                                             if ($cekanggotakeluarga) {
+                                                //                                                 $dtpas['idanggotakeluarga'] = $cekanggotakeluarga->idAnggotaKeluarga;
+                                                //                                             } else {
+                                                //                                                 // Reg Anggota Keluarga
+                                                //                                                 $dtpas['idanggotakeluarga'] = $date . rand(1000, 10000);
+                                                //                                                 $dtpas['idakun'] = 'JKN';
+                                                //                                                 $dtpas['hubungan'] = 'Orang Lain';
+                                                //                                                 $dtpas['namalengkap'] = '';
+                                                //                                                 $dtpas['namapanggilan'] = '';
+                                                //                                                 $dtpas['ktp'] = $dt['nik'];
+                                                //                                                 $dtpas['jeniskelamin'] = '';
+                                                //                                                 $dtpas['tempatlahir'] = '';
+                                                //                                                 $dtpas['tgllahir'] = '';
+                                                //                                                 $dtpas['alamat'] = '';
+                                                //                                                 $dtpas['rt'] = '';
+                                                //                                                 $dtpas['rw'] = '';
+                                                //                                                 $dtpas['provinsi'] = '';
+                                                //                                                 $dtpas['kabupaten'] = '';
+                                                //                                                 $dtpas['kecamatan'] = '';
+                                                //                                                 $dtpas['kodepos'] = '';
+                                                //                                                 $dtpas['agama'] = '';
+                                                //                                                 $dtpas['goloangandarah'] = '';
+                                                //                                                 $dtpas['pendidikan'] = '';
+                                                //                                                 $dtpas['statuskawin'] = '';
+                                                //                                                 $dtpas['pekerjaan'] = '';
+                                                //                                                 $dtpas['wni'] = '';
+                                                //                                                 $dtpas['negara'] = '';
+                                                //                                                 $dtpas['suku'] = '';
+                                                //                                                 $dtpas['bahasa'] = '';
+                                                //                                                 $dtpas['alergi'] = '';
+                                                //                                                 $dtpas['alamatkantor'] = '';
+                                                //                                                 $dtpas['telpkantor'] = '';
+                                                //                                                 $dtpas['namakeluarga'] = '';
+                                                //                                                 $dtpas['namaayah'] = '';
+                                                //                                                 $dtpas['namaibu'] = '';
+                                                //                                                 $dtpas['namasuamiistri'] = '';
+                                                //                                                 $dtpas['notelpon'] = '';
+                                                //                                                 $dtpas['email'] = '';
+
+                                                //                                                 $this->mmobilejkn->simpanPasienBaru($dtpas);
+                                                //                                             }
+                                                //                                         }
+                                                //                                     }
+
+                                                //                                     // Data Registrasi
+                                                //                                     $dtreg['idanggotakeluarga'] = $dtpas['idanggotakeluarga'];
+
+                                                //                                     $dtreg['bagian'] = $cekjampolisore->KodeKlinik;
+                                                //                                     $dtreg['namabagian'] = $cekjampolisore->NamaBagian;
+
+                                                //                                     $dtreg['penjamin'] = '';
+                                                //                                     $dtreg['namapenjamin'] = '';
+
+                                                //                                     $dtreg['nopenjamin'] = $dt['nomorkartu'];
+                                                //                                     $dtreg['norujukan'] = $dt['nomorreferensi'];
+
+                                                //                                     $dtreg['dokter'] = $cekjampolisore->KodeDokter;
+                                                //                                     $dtreg['namadokter'] = $cekjampolisore->NamaDokter;
+
+                                                //                                     $dtreg['waktu'] = 'P';
+
+                                                //                                     $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $dt['tanggalperiksa']));
+                                                //                                     $dtreg['kodebooking'] = str_replace("-", "", $dt['tanggalperiksa']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
+                                                //                                     $jam = "07:00";
+                                                //                                     $time = strtotime($jam);
+                                                //                                     $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
+
+                                                //                                     if ($getkodepoli->RuangId == "6101") {
+                                                //                                         $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                //                                         $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                //                                         $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                //                                         $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
+
+                                                //                                         $jml = $hitungpendaftaran;
+                                                //                                         $pelayanan = 3;
+                                                //                                         $wkt = $jml * $pelayanan;
+                                                //                                         $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                                                //                                         $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
+                                                //                                         $dtreg['datetime'] = $datetime;
+                                                //                                     } else {
+                                                //                                         $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']));
+                                                //                                         $hitungpoli = $this->mregbooking->hitungPoli($getkodepoli->RuangId, str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                //                                         $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                //                                         $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
+
+                                                //                                         $jml = $hitungpendaftaran;
+                                                //                                         $pelayanan = 3;
+                                                //                                         $wkt = $jml * $pelayanan;
+                                                //                                         $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                                                //                                         $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
+                                                //                                         $dtreg['datetime'] = $datetime;
+                                                //                                     }
+
+                                                //                                     if ($this->mregbooking->simpanBooking($dtreg)) {
+                                                //                                         $this->response([
+                                                //                                             'metadata' => [
+                                                //                                                 'code' => 200,
+                                                //                                                 'message' => 'OK'
+                                                //                                             ],
+                                                //                                             'response' => [
+                                                //                                                 'nomorantrean' => trim($dtreg['noantripendaftaran']),
+                                                //                                                 'kodebooking' => trim($dtreg['kodebooking']),
+                                                //                                                 'jenisantrean' => 1,
+                                                //                                                 'estimasidilayani' => strtotime($dtreg['jamdilayani']) * 1000,
+                                                //                                                 'namapoli' => trim($dtreg['namabagian']),
+                                                //                                                 'namadokter' => trim($dtreg['namadokter'])
+                                                //                                             ]
+                                                //                                         ], 200);
+                                                //                                     } else {
+                                                //                                         $this->response([
+                                                //                                             'metadata' => [
+                                                //                                                 'code' => 203,
+                                                //                                                 'message' => 'Gagal booking, silahkan periksa data dan coba lagi'
+                                                //                                             ]
+                                                //                                         ], 203);
+                                                //                                     }
+                                                //                                 }
+                                                //                             } else {
+                                                //                                 $this->response([
+                                                //                                     'metadata' => [
+                                                //                                         'code' => 203,
+                                                //                                         'message' => 'Poli Libur'
+                                                //                                     ]
+                                                //                                 ], 203);
+                                                //                             }
+                                                //                         } else {
+                                                //                             $this->response([
+                                                //                                 'metadata' => [
+                                                //                                     'code' => 203,
+                                                //                                     'message' => 'Poli Libur'
+                                                //                                 ]
+                                                //                             ], 203);
+                                                //                         }
+                                                //                     }
+                                                //                 } else {
+                                                //                     $this->response([
+                                                //                         'metadata' => [
+                                                //                             'code' => 203,
+                                                //                             'message' => 'Poli Libur'
+                                                //                         ]
+                                                //                     ], 203);
+                                                //                 }
+                                                //             } else {
+                                                //                 $this->response([
+                                                //                     'metadata' => [
+                                                //                         'code' => 203,
+                                                //                         'message' => 'Kode Poli Tidak Terdaftar'
+                                                //                     ]
+                                                //                 ], 203);
+                                                //             }
+                                                //         }
+                                                //     } else {
+                                                //         $this->response([
+                                                //             'metadata' => [
+                                                //                 'code' => 203,
+                                                //                 'message' => 'Invalid Nomor Rujukan'
+                                                //             ]
+                                                //         ], 203);
+                                                //     }
+                                                // }
                                             }
                                         }
                                     }
