@@ -30,7 +30,7 @@ class JknMobileKodeBookingOperasi extends RestController
         $dt = array();
         $dt['nopeserta'] = isset($data['nopeserta']) && $data['nopeserta'] ? $data['nopeserta'] : '';
 
-        if ($dt['nopeserta'] == NULL || $dt['nopeserta'] == '') {
+        if ($dt['nopeserta'] === NULL || $dt['nopeserta'] === '') {
             $this->response([
                 'metadata' => [
                     'code' => 203,

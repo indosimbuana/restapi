@@ -18,4 +18,9 @@ class Mpilihtanggal extends CI_Model
     {
         return $this->db->query("SELECT * FROM RegHariLibur WHERE IDhariLibur = '$id'")->result_array();
     }
+
+    function getHariLiburByTanggal($tgl)
+    {
+        return $this->db->query("SELECT * FROM RegHariLibur WHERE TglLibur = '$tgl'")->result_array();
+    }
 }

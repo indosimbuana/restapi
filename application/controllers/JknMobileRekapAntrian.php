@@ -36,7 +36,7 @@ class JknMobileRekapAntrian extends RestController
         $dt['kodepoli'] = isset($data['kodepoli']) && $data['kodepoli'] ? $data['kodepoli'] : '';
         $dt['polieksekutif'] = $data['polieksekutif'];
 
-        if ($dt['tanggalperiksa'] == NULL || $dt['tanggalperiksa'] == '' || $this->validatedate->cekDate($dt['tanggalperiksa']) === false) {
+        if ($dt['tanggalperiksa'] === NULL || $dt['tanggalperiksa'] === '' || $this->validatedate->cekDate($dt['tanggalperiksa']) === false) {
             $this->response([
                 'metadata' => [
                     'code' => 203,
@@ -44,7 +44,7 @@ class JknMobileRekapAntrian extends RestController
                 ]
             ], 203);
         } else {
-            if ($dt['polieksekutif'] == NULL || $dt['polieksekutif'] == '' && ($dt['polieksekutif'] != 0 || $dt['polieksekutif'] != 1)) {
+            if ($dt['polieksekutif'] === NULL || $dt['polieksekutif'] === '' && ($dt['polieksekutif'] != 0 || $dt['polieksekutif'] != 1)) {
                 $this->response([
                     'metadata' => [
                         'code' => 203,
@@ -80,13 +80,13 @@ class JknMobileRekapAntrian extends RestController
                         $hari = "";
                 }
 
-                if ($hari == 'Minggu' || $hari == '') {
+                if ($hari === 'Minggu' || $hari === '') {
                     $this->response([
                         'code' => 203,
                         'message' => 'Informasi poli tidak tersedia'
                     ], 203);
                 } else {
-                    if ($dt['kodepoli'] == NULL || $dt['kodepoli'] == '') {
+                    if ($dt['kodepoli'] === NULL || $dt['kodepoli'] === '') {
                         $this->response([
                             'code' => 203,
                             'message' => 'Silahkan pilih poli dahulu'

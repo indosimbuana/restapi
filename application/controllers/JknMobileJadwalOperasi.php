@@ -33,7 +33,7 @@ class JknMobileJadwalOperasi extends RestController
 
         $this->load->library('validatedate');
 
-        if ($dt['tanggalawal'] == NULL || $dt['tanggalawal'] == '' || $this->validatedate->cekDate($dt['tanggalawal']) === false) {
+        if ($dt['tanggalawal'] === NULL || $dt['tanggalawal'] === '' || $this->validatedate->cekDate($dt['tanggalawal']) === false) {
             $this->response([
                 'metadata' => [
                     'code' => 203,
@@ -41,7 +41,7 @@ class JknMobileJadwalOperasi extends RestController
                 ]
             ], 203);
         } else {
-            if ($dt['tanggalakhir'] == NULL || $dt['tanggalakhir'] == '' || $this->validatedate->cekDate($dt['tanggalakhir']) === false) {
+            if ($dt['tanggalakhir'] === NULL || $dt['tanggalakhir'] === '' || $this->validatedate->cekDate($dt['tanggalakhir']) === false) {
                 $this->response([
                     'metadata' => [
                         'code' => 203,
