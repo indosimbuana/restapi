@@ -5,7 +5,7 @@ class Mmobilejkn extends CI_Model
 {
     function cekAkun($dt)
     {
-        return $this->db->query("SELECT * FROM JKN_User WHERE NamaAkun = '" . $dt['username'] . "' AND password = '" . $dt['password'] . "'")->row();
+        return $this->db->query("SELECT * FROM JKN_User WHERE NamaAkun = '" . $dt['username'] . "' AND Password = '" . $dt['password'] . "' AND Status = 'Y'")->row();
     }
 
     function getPasienServerBaru($nokartu, $nik)
