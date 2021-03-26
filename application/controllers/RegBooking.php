@@ -135,7 +135,11 @@ class RegBooking extends RestController
                 $dt['datetime'] = $datetime;
             }
 
-            if ($this->mregbooking->simpanBooking($dt)) {
+            $antrianpool['idantri'] = date("YmdHis");
+            $antrianpool['noantri'] = substr_replace($dt['noantripendaftaran'], " ", 1, 1);
+            $antrianpool['tglantri'] = $dt['jamdilayani'];
+
+            if ($this->mregbooking->simpanBooking($dt) && $this->mregbooking->simpanAntrianPool($antrianpool)) {
                 $databooking['kodebooking'] = trim($dt['kodebooking']);
                 $databooking['antriandaftar'] = trim($dt['noantripendaftaran']);
                 $databooking['antrianpoli'] = trim($dt['noantripoli']);

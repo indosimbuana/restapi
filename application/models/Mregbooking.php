@@ -84,4 +84,16 @@ class Mregbooking extends CI_Model
         ," . $this->db->escape($data['datetime']) . "
         ," . $this->db->escape($data['waktu']) . ");");
     }
+
+    function simpanAntrianPool($data)
+    {
+        return $this->db->query("INSERT INTO AntrianPool (
+            IdAntri
+            ,NoAntri
+            ,TglAntri)
+        VALUES (
+        " . $this->db->escape($data['idantri']) . "
+        ," . $this->db->escape($data['noantri']) . "
+        ," . $this->db->escape($data['tglantri']) . ");");
+    }
 }
