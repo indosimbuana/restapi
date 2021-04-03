@@ -16,12 +16,12 @@ class Mregbooking extends CI_Model
 
     function hitungPendaftaranLain($tgl)
     {
-        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian != '6101' AND LEFT(kodeBooking,8) = '$tgl'")->num_rows();
+        return $this->db->query("SELECT * FROM RegOnline WHERE (kodeBagian != '6101' OR kodeBagian != '6107') AND LEFT(kodeBooking,8) = '$tgl'")->num_rows();
     }
 
     function hitungPendaftaranObsgyn($tgl, $wkt)
     {
-        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian = '6101' AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
+        return $this->db->query("SELECT * FROM RegOnline WHERE (kodeBagian = '6101' OR kodeBagian = '6107') AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
     }
 
     function hitungPoli($bag, $tgl, $wkt)
