@@ -178,7 +178,8 @@ class RegBooking extends RestController
                 $this->response([
                     'status' => true,
                     'message' => 'Berhasil Simpan Booking',
-                    'data' => $databooking
+                    'data' => $databooking,
+                    'antrianpool' => $antrianpool
                 ], 200);
             } else {
                 $this->response([
