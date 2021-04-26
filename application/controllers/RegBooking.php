@@ -109,8 +109,9 @@ class RegBooking extends RestController
             $time = strtotime($jam);
             $datetime = date("Y-m-d H:i", strtotime($dt['tanggal'] . $jam));
 
-            if ($data['bagian'] == "6101" || $data['bagian'] == "6107") {
-                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $data['tanggal']), $data['waktu']);
+            if ($data['bagian'] == "6101" || $data['bagian'] == "6107" || $data['bagian'] == "6104") {
+                // $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $data['tanggal']), $data['waktu']);
+                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $data['tanggal']));
                 $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
                 $dt['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
                 $dt['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);

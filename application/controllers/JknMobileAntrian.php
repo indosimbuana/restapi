@@ -392,8 +392,9 @@ class JknMobileAntrian extends RestController
                                                                     $time = strtotime($jam);
                                                                     $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
 
-                                                                    if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6101") {
-                                                                        $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                                    if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6107" || $getkodepoli->RuangId == "6104") {
+                                                                        // $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                                        $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']));
                                                                         $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                                                                         $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
                                                                         $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
@@ -624,8 +625,9 @@ class JknMobileAntrian extends RestController
                                                                             $time = strtotime($jam);
                                                                             $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
 
-                                                                            if ($getkodepoli->RuangId == "6101") {
-                                                                                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                                            if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6107" || $getkodepoli->RuangId == "6104") {
+                                                                                // $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
+                                                                                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']));
                                                                                 $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                                                                                 $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
                                                                                 $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
