@@ -14,20 +14,20 @@ class Mregbooking extends CI_Model
         return $this->db->query("SELECT * FROM RegOnline WHERE LEFT(kodeBooking,8) = '$tgl'")->num_rows();
     }
 
-    function hitungPendaftaranLain($tgl)
-    {
-        return $this->db->query("SELECT * FROM RegOnline WHERE (kodeBagian != '6101' OR kodeBagian != '6107') AND LEFT(kodeBooking,8) = '$tgl'")->num_rows();
-    }
+    // function hitungPendaftaranLain($tgl)
+    // {
+    //     return $this->db->query("SELECT * FROM RegOnline WHERE (kodeBagian != '6101' OR kodeBagian != '6107') AND LEFT(kodeBooking,8) = '$tgl'")->num_rows();
+    // }
 
     // function hitungPendaftaranObsgyn($tgl, $wkt)
     // {
     //     return $this->db->query("SELECT * FROM RegOnline WHERE (kodeBagian = '6101' OR kodeBagian = '6107') AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
     // }
 
-    function hitungPendaftaranObsgyn($tgl)
-    {
-        return $this->db->query("SELECT * FROM RegOnline WHERE (kodeBagian = '6101' OR kodeBagian = '6107') AND LEFT(kodeBooking,8) = '$tgl'")->num_rows();
-    }
+    // function hitungPendaftaranObsgyn($tgl)
+    // {
+    //     return $this->db->query("SELECT * FROM RegOnline WHERE (kodeBagian = '6101' OR kodeBagian = '6107') AND LEFT(kodeBooking,8) = '$tgl'")->num_rows();
+    // }
 
     function hitungPoli($bag, $tgl, $wkt)
     {
@@ -100,5 +100,15 @@ class Mregbooking extends CI_Model
         " . $this->db->escape($data['idantri']) . "
         ," . $this->db->escape($data['noantri']) . "
         ," . $this->db->escape($data['tglantri']) . ");");
+    }
+
+    function hitungPendaftaranLain($tgl, $wkt)
+    {
+        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian NOT IN ('6101','6107') AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
+    }
+
+    function hitungPendaftaranObsgyn($tgl, $wkt)
+    {
+        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian IN ('6101', '6107') AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
     }
 }

@@ -109,11 +109,15 @@ class RegBooking extends RestController
             $time = strtotime($jam);
             $datetime = date("Y-m-d H:i", strtotime($dt['tanggal'] . $jam));
 
-            if ($data['bagian'] == "6101" || $data['bagian'] == "6107" || $data['bagian'] == "6104") {
+            if ($data['bagian'] == "6101" || $data['bagian'] == "6107") {
                 // $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $data['tanggal']), $data['waktu']);
-                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $data['tanggal']));
+                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $data['tanggal']), $data['waktu']);
                 $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
-                $dt['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                if ($data['waktu'] == 'P') {
+                    $dt['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                } else {
+                    $dt['noantripendaftaran'] = "C" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                }
                 $dt['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
                 $jml = $hitungpendaftaran;
@@ -123,9 +127,13 @@ class RegBooking extends RestController
                 $dt['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggal'])) . " " . $jamdilayani;
                 $dt['datetime'] = $datetime;
             } else {
-                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $data['tanggal']));
+                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $data['tanggal']), $data['waktu']);
                 $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
-                $dt['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                if ($data['waktu'] == 'P') {
+                    $dt['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                } else {
+                    $dt['noantripendaftaran'] = "D" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                }
                 $dt['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
                 $jml = $hitungpendaftaran;

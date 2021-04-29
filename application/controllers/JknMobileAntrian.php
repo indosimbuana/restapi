@@ -392,11 +392,15 @@ class JknMobileAntrian extends RestController
                                                                     $time = strtotime($jam);
                                                                     $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
 
-                                                                    if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6107" || $getkodepoli->RuangId == "6104") {
+                                                                    if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6107") {
                                                                         // $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                        $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']));
+                                                                        $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                                                                         $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                        $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                        if ($dtreg['waktu'] == 'P') {
+                                                                            $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                        } else {
+                                                                            $dtreg['noantripendaftaran'] = "C" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                        }
                                                                         $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
                                                                         $jml = $hitungpendaftaran;
@@ -406,9 +410,13 @@ class JknMobileAntrian extends RestController
                                                                         $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
                                                                         $dtreg['datetime'] = $datetime;
                                                                     } else {
-                                                                        $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']));
+                                                                        $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                                                                         $hitungpoli = $this->mregbooking->hitungPoli($getkodepoli->RuangId, str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                        $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                        if ($dtreg['waktu'] == 'P') {
+                                                                            $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                        } else {
+                                                                            $dtreg['noantripendaftaran'] = "D" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                        }
                                                                         $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
                                                                         $jml = $hitungpendaftaran;
@@ -625,11 +633,15 @@ class JknMobileAntrian extends RestController
                                                                             $time = strtotime($jam);
                                                                             $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
 
-                                                                            if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6107" || $getkodepoli->RuangId == "6104") {
+                                                                            if ($getkodepoli->RuangId == "6101" || $getkodepoli->RuangId == "6107") {
                                                                                 // $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']));
+                                                                                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                                                                                 $hitungpoli = $this->mregbooking->hitungPoli($dtreg['bagian'], str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                                if ($dtreg['waktu'] == 'P') {
+                                                                                    $dtreg['noantripendaftaran'] = "A" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                                } else {
+                                                                                    $dtreg['noantripendaftaran'] = "C" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                                }
                                                                                 $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
                                                                                 $jml = $hitungpendaftaran;
@@ -639,9 +651,13 @@ class JknMobileAntrian extends RestController
                                                                                 $dtreg['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggalperiksa'])) . " " . $jamdilayani;
                                                                                 $dtreg['datetime'] = $datetime;
                                                                             } else {
-                                                                                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']));
+                                                                                $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
                                                                                 $hitungpoli = $this->mregbooking->hitungPoli($getkodepoli->RuangId, str_replace("-", "", $dt['tanggalperiksa']), $dtreg['waktu']);
-                                                                                $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                                if ($dtreg['waktu'] == 'P') {
+                                                                                    $dtreg['noantripendaftaran'] = "B" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                                } else {
+                                                                                    $dtreg['noantripendaftaran'] = "D" . str_pad($hitungpendaftaran + 1, 4, "0", STR_PAD_LEFT);
+                                                                                }
                                                                                 $dtreg['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
                                                                                 $jml = $hitungpendaftaran;
