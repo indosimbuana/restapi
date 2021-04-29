@@ -388,7 +388,11 @@ class JknMobileAntrian extends RestController
 
                                                                     $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $dt['tanggalperiksa']));
                                                                     $dtreg['kodebooking'] = str_replace("-", "", $dt['tanggalperiksa']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
-                                                                    $jam = "07:00";
+                                                                    if ($data['waktu'] == 'P') {
+                                                                        $jam = "07:00";
+                                                                    } else {
+                                                                        $jam = "11:00";
+                                                                    }
                                                                     $time = strtotime($jam);
                                                                     $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
 
@@ -629,7 +633,11 @@ class JknMobileAntrian extends RestController
 
                                                                             $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $dt['tanggalperiksa']));
                                                                             $dtreg['kodebooking'] = str_replace("-", "", $dt['tanggalperiksa']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
-                                                                            $jam = "07:00";
+                                                                            if ($data['waktu'] == 'P') {
+                                                                                $jam = "07:00";
+                                                                            } else {
+                                                                                $jam = "11:00";
+                                                                            }
                                                                             $time = strtotime($jam);
                                                                             $datetime = date("Y-m-d H:i", strtotime($dt['tanggalperiksa'] . $jam));
 

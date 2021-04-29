@@ -105,7 +105,11 @@ class RegBooking extends RestController
         } else {
             $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $data['tanggal']));
             $dt['kodebooking'] = str_replace("-", "", $data['tanggal']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
-            $jam = "07:00";
+            if ($data['waktu'] == 'P') {
+                $jam = "07:00";
+            } else {
+                $jam = "11:00";
+            }
             $time = strtotime($jam);
             $datetime = date("Y-m-d H:i", strtotime($dt['tanggal'] . $jam));
 
