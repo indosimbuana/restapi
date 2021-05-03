@@ -21,7 +21,7 @@ class Mantrian extends CI_Model
     function daftarpasienpoli($poli, $tgl)
     {
         $db2 = $this->load->database('antrian', TRUE);
-        $sql = $db2->query("SELECT NO as noantri, Klinik as klinik, DOKTER as dokter, No_Pasien as nopasien, Nama as nama, Alamat as alamat, Tanggal as tanggal FROM tbantrianpoli WHERE DATE(Tanggal) = '$tgl' AND Klinik = '$poli'");
+        $sql = $db2->query("SELECT NO as noantri, Klinik as klinik, DOKTER as dokter, No_Pasien as nopasien, Nama as nama, Alamat as alamat, Tanggal as tanggal, Masuk as masuk FROM tbantrianpoli WHERE DATE(Tanggal) = '$tgl' AND Klinik = '$poli'");
         return $sql->result_array();
     }
 

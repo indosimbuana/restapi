@@ -37,6 +37,7 @@ class PasienPoli extends RestController
                 $data[$n]['nama'] = $a['nama'];
                 $data[$n]['alamat'] = $a['alamat'];
                 $data[$n]['tanggal'] = date_format(date_create($a['tanggal']), 'd-m-Y');
+                $data[$n]['masuk'] = $a['masuk'];
                 $n++;
             }
             $this->response([
