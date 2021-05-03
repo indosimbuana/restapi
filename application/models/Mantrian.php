@@ -4,45 +4,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Mantrian extends CI_Model
 {
 
-    function pendaftaran()
+    function pendaftaran($tgl)
     {
         $db2 = $this->load->database('antrian', TRUE);
-        $sql = $db2->query("SELECT * FROM tbantrian");
+        $sql = $db2->query("SELECT MAX(NoAntri) as noantri, Tanggal as tanggal, Panggil as panggil FROM tbnoantri WHERE DATE(Tanggal) = '$tgl' AND Panggil = 1 GROUP BY LEFT(NoAntri,1)");
         return $sql->result_array();
     }
 
-    function daftarpoli()
+    function poli($tgl)
     {
         $db2 = $this->load->database('antrian', TRUE);
-        $sql = $db2->query("SELECT Klinik FROM tbantrianpoli GROUP BY Klinik");
+        $sql = $db2->query("SELECT MAX(NO) as noantri, Klinik as klinik, DOKTER as dokter, Tanggal as tanggal FROM tbantrianpoli WHERE DATE(Tanggal) = '$tgl' AND Masuk = 1 GROUP BY Klinik");
         return $sql->result_array();
-    }
-
-    function poli($poli, $tgl)
-    {
-        $db2 = $this->load->database('antrian', TRUE);
-        $sql = $db2->query("SELECT * FROM tbantrianpoli WHERE Klinik = '$poli' AND DATE(Tanggal) = '$tgl' AND Masuk = 0 AND Lewati = 0 ORDER BY NO LIMIT 1");
-        return $sql->row();
-    }
-
-    function totalBelumMasuk($poli, $tgl)
-    {
-        $db2 = $this->load->database('antrian', TRUE);
-        $sql = $db2->query("SELECT COUNT(NO) AS Jumlah FROM tbantrianpoli WHERE Klinik = '$poli' AND DATE(Tanggal) = '$tgl' AND Masuk = 0 AND Lewati = 0");
-        return $sql->row();
-    }
-
-    function totalSudahMasuk($poli, $tgl)
-    {
-        $db2 = $this->load->database('antrian', TRUE);
-        $sql = $db2->query("SELECT COUNT(NO) AS Jumlah FROM tbantrianpoli WHERE Klinik = '$poli' AND DATE(Tanggal) = '$tgl' AND Masuk = 1 AND Lewati = 0");
-        return $sql->row();
-    }
-
-    function totalDilewati($poli, $tgl)
-    {
-        $db2 = $this->load->database('antrian', TRUE);
-        $sql = $db2->query("SELECT COUNT(NO) AS Jumlah FROM tbantrianpoli WHERE Klinik = '$poli' AND DATE(Tanggal) = '$tgl' AND Masuk = 1 AND Lewati = 1");
-        return $sql->row();
     }
 }

@@ -21,34 +21,25 @@ class Antrian extends RestController
     public function index_get()
     {
         $lokasi = $this->get('lokasi');
-        $poli = str_replace('%20', ' ', $this->get('poli'));
         $tgl = $this->get('tgl');
 
         $this->load->model('mantrian');
-        if ($lokasi === "pendaftaran") {
-            $i = $this->mantrian->pendaftaran();
-            if ($i) {
-                $this->response([
-                    'status' => true,
-                    'message' => 'Data found',
-                    'data' => $i
-                ], 200);
-            } else {
-                $this->response([
-                    'status' => false,
-                    'message' => 'No info were found'
-                ], 404);
-            }
-        } else if ($lokasi === "poli") {
-            if ($poli === NULL and $tgl === NULL) {
-                $p = $this->mantrian->daftarpoli();
-                if ($p) {
+        if ($lokasi === null) {
+            $this->response([
+                'status' => false,
+                'message' => 'Lokasi masih kosong'
+            ], 203);
+        } else {
+            if ($lokasi == 'pendaftaran') {
+                $an = $this->mantrian->pendaftaran($tgl);
+                if ($an) {
+                    $data = array();
                     $n = 0;
-                    foreach ($p as $dt) {
-                        if (trim($dt['Klinik']) != '') {
-                            $data[$n]['poli'] = $dt['Klinik'];
-                            $n++;
-                        }
+                    foreach ($an as $a) {
+                        $data[$n]['noantri'] = $a['noantri'];
+                        $data[$n]['tanggal'] = date_format(date_create($a['tanggal']), 'd-m-Y');
+                        $data[$n]['panggil'] = $a['panggil'];
+                        $n++;
                     }
                     $this->response([
                         'status' => true,
@@ -58,49 +49,33 @@ class Antrian extends RestController
                 } else {
                     $this->response([
                         'status' => false,
-                        'message' => 'No bagian were found'
+                        'message' => 'Data not found'
                     ], 404);
                 }
             } else {
-                if ($poli === NULL) {
-                    $this->response([
-                        'status' => false,
-                        'message' => 'No info were found'
-                    ], 404);
-                } else {
-                    $i = $this->mantrian->poli($poli, $tgl);
-                    $b = $this->mantrian->totalBelumMasuk($poli, $tgl);
-                    $m = $this->mantrian->totalSudahMasuk($poli, $tgl);
-                    $l = $this->mantrian->totalDilewati($poli, $tgl);
-                    // if ($i) {
-                    $data = array(
-                        'no' => $i ? $i->NO : '',
-                        'poli' => $i ? $i->Klinik : '',
-                        'dokter' => $i ? $i->DOKTER : '',
-                        'nopasien' => $i ? str_pad($i->No_Pasien + 1, 8, "0", STR_PAD_LEFT) : '',
-                        'namapasien' => $i ? $i->Nama : ''
-                    );
+                $an = $this->mantrian->poli($tgl);
+                if ($an) {
+                    $data = array();
+                    $n = 0;
+                    foreach ($an as $a) {
+                        $data[$n]['noantri'] = $a['noantri'];
+                        $data[$n]['klinik'] = $a['klinik'];
+                        $data[$n]['dokter'] = $a['dokter'];
+                        $data[$n]['tanggal'] = date_format(date_create($a['tanggal']), 'd-m-Y');
+                        $n++;
+                    }
                     $this->response([
                         'status' => true,
                         'message' => 'Data found',
-                        'sekarang' => $data,
-                        'blmmasuk' => $b ? $b->Jumlah : '',
-                        'sdhmasuk' => $m ? $m->Jumlah : '',
-                        'dilewati' => $l ? $l->Jumlah : ''
+                        'data' => $data
                     ], 200);
-                    // } else {
-                    //     $this->response([
-                    //         'status' => false,
-                    //         'message' => 'No info were found'
-                    //     ], 404);
-                    // }
+                } else {
+                    $this->response([
+                        'status' => false,
+                        'message' => 'Data not found'
+                    ], 404);
                 }
             }
-        } else {
-            $this->response([
-                'status' => false,
-                'message' => 'No info were found'
-            ], 404);
         }
     }
 }
