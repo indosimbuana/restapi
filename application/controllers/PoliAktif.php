@@ -24,7 +24,7 @@ class PoliAktif extends RestController
 
         $this->load->model('mantrian');
 
-        $an = $this->mantrian->poli($tgl);
+        $an = $this->mantrian->poliaktif($tgl);
         if ($an) {
             $data = array();
             $n = 0;
