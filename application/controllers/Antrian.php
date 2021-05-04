@@ -36,9 +36,27 @@ class Antrian extends RestController
                     $data = array();
                     $n = 0;
                     foreach ($an as $a) {
+                        if (substr($a['noantri'], 0, 1) == 'A') {
+                            $waktu = 'Pagi';
+                            $judul = 'Obsgyn';
+                        } else if (substr($a['noantri'], 0, 1) == 'B') {
+                            $waktu = 'Pagi';
+                            $judul = 'Non Obsgyn';
+                        } else if (substr($a['noantri'], 0, 1) == 'C') {
+                            $waktu = 'Sore';
+                            $judul = 'Obsgyn';
+                        } else if (substr($a['noantri'], 0, 1) == 'D') {
+                            $waktu = 'Sore';
+                            $judul = 'Non Obsgyn';
+                        } else {
+                            $waktu = '-';
+                            $judul = '-';
+                        }
+                        $data[$n]['waktu'] = $waktu;
+                        $data[$n]['judul'] = $judul;
                         $data[$n]['noantri'] = $a['noantri'];
                         $data[$n]['tanggal'] = date_format(date_create($a['tanggal']), 'd-m-Y');
-                        $data[$n]['panggil'] = $a['panggil'];
+                        // $data[$n]['panggil'] = $a['panggil'];
                         $n++;
                     }
                     $this->response([
