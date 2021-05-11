@@ -11,10 +11,27 @@ class Mantrian extends CI_Model
         return $sql->result_array();
     }
 
+    // function poli($tgl)
+    // {
+    //     $db2 = $this->load->database('antrian', TRUE);
+    //     $sql = $db2->query("SELECT MAX(NO) as noantri, Klinik as klinik, DOKTER as dokter, Tanggal as tanggal FROM tbantrianpoli WHERE DATE(Tanggal) = '$tgl' AND Masuk = 1 GROUP BY Klinik");
+    //     return $sql->result_array();
+    // }
+
     function poli($tgl)
     {
         $db2 = $this->load->database('antrian', TRUE);
-        $sql = $db2->query("SELECT MAX(NO) as noantri, Klinik as klinik, DOKTER as dokter, Tanggal as tanggal FROM tbantrianpoli WHERE DATE(Tanggal) = '$tgl' AND Masuk = 1 GROUP BY Klinik");
+        $sql = $db2->query("SELECT a.NO as noantri, a.Klinik as klinik, a.DOKTER as dokter, a.Nama as nama, a.Alamat as alamat, a.No_Pasien as nopasien, a.Tanggal as tanggal
+        FROM tbantrianpoli a
+        INNER JOIN 
+        (
+        SELECT MAX(NO) AS Nomor, Klinik, DOKTER, Nama, Alamat, No_Pasien, Tanggal, Masuk
+        FROM tbantrianpoli 
+        WHERE DATE(Tanggal) = '$tgl' AND Masuk = 1
+        GROUP BY Klinik
+        ) b
+        ON a.NO = b.Nomor AND a.Klinik = b.Klinik AND DATE(a.Tanggal) = DATE(b.Tanggal) AND a.Masuk = b.Masuk
+        ORDER BY a.Klinik");
         return $sql->result_array();
     }
 

@@ -77,9 +77,12 @@ class Antrian extends RestController
                     $n = 0;
                     foreach ($an as $a) {
                         $data[$n]['noantri'] = $a['noantri'];
-                        $data[$n]['klinik'] = $a['klinik'];
-                        $data[$n]['dokter'] = $a['dokter'];
+                        $data[$n]['klinik'] = trim($a['klinik']);
+                        $data[$n]['dokter'] = trim($a['dokter']);
                         $data[$n]['tanggal'] = date_format(date_create($a['tanggal']), 'd-m-Y');
+                        $data[$n]['nama'] = trim($a['nama']);
+                        $data[$n]['alamat'] = trim($a['alamat']);
+                        $data[$n]['nopasien'] = trim($a['nopasien']);
                         $n++;
                     }
                     $this->response([
