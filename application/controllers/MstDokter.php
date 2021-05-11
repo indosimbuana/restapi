@@ -29,7 +29,7 @@ class Mstdokter extends RestController
                 $n = 0;
                 foreach ($a as $dt) {
                     $data[$n]['kddokter'] = $dt['KodeDokter'];
-                    $data[$n]['nmdokter'] = trim($dt['NamaDokter']);
+                    $data[$n]['nmdokter'] = ucwords($dt['NamaDokter']);
                     $n++;
                 }
                 $this->response([
@@ -47,7 +47,7 @@ class Mstdokter extends RestController
             $da = $this->mdokter->getDokterById($id);
             if ($da) {
                 $data['kddokter'] = $da->KodeDokter;
-                $data['nmdokter'] = trim($da->NamaDokter);
+                $data['nmdokter'] = ucwords($da->NamaDokter);
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',

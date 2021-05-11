@@ -37,7 +37,7 @@ class Riwayatreg extends RestController
                     foreach ($a as $dt) {
                         $data[$n]['kodebooking'] = trim($dt['kodeBooking']);
                         $data[$n]['idanggotakeluarga'] = trim($dt['idAnggotaKeluarga']);
-                        $data[$n]['poli'] = trim($dt['namaBagian']);
+                        $data[$n]['poli'] = ucwords($dt['namaBagian']);
                         $data[$n]['waktu'] = trim($dt['waktuPemeriksaan']);
                         $data[$n]['tglperiksa'] = date_format(date_create($dt['tglPemeriksaan']), "d-m-Y");
                         $n++;
@@ -98,7 +98,7 @@ class Riwayatreg extends RestController
                 $data['antrianpoli'] = trim($da->noAntrianKlinik);
                 $data['jamdilayani'] = date_format(date_create($da->jamDilayani), "H:i");
                 $data['idanggotakeluarga'] = trim($da->idAnggotaKeluarga);
-                $data['poli'] = trim($da->namaBagian);
+                $data['poli'] = ucwords($da->namaBagian);
                 $data['waktu'] = trim($da->waktuPemeriksaan);
                 $data['jampoli'] = isset($jp) ? $jp : '';
                 $data['jamtutuppoli'] = isset($jptutup) ? $jptutup : '';
@@ -106,7 +106,7 @@ class Riwayatreg extends RestController
                 $data['penjamin'] = trim($da->namaPenjamin);
                 $data['nopenjamin'] = trim($da->noPenjamin);
                 $data['norujukan'] = trim($da->noRujukan);
-                $data['dokter'] = trim($da->namaDokter);
+                $data['dokter'] = ucwords($da->namaDokter);
                 $data['tgldaftar'] = date_format(date_create($da->dateEntry), "d-m-Y");
                 $this->response([
                     'status' => true,

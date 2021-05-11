@@ -37,8 +37,8 @@ class Rating extends RestController
                 foreach ($cek as $c) {
                     $dt[$nc]['kodebooking'] = trim($c['KodeBooking']);
                     $dt[$nc]['idanggotakeluarga'] = trim($c['idAnggotaKeluarga']);
-                    $dt[$nc]['nama'] = trim($c['NamaLengkap']);
-                    $dt[$nc]['poli'] = trim($c['NamaBagian']);
+                    $dt[$nc]['nama'] = ucwords($c['NamaLengkap']);
+                    $dt[$nc]['poli'] = ucwords($c['NamaBagian']);
                     $dt[$nc]['tglperiksa'] = date_format(date_create(($c['TglReg'])), "d-m-Y");
                 }
 

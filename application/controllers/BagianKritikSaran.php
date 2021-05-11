@@ -29,7 +29,7 @@ class BagianKritikSaran extends RestController
                 $n = 0;
                 foreach ($a as $dt) {
                     $data[$n]['kdbag'] = $dt['KodeBagian'];
-                    $data[$n]['nmbag'] = trim($dt['NamaBagian']);
+                    $data[$n]['nmbag'] = ucwords($dt['NamaBagian']);
                     $n++;
                 }
                 $this->response([
@@ -49,7 +49,7 @@ class BagianKritikSaran extends RestController
                 $n = 0;
                 foreach ($da as $dt) {
                     $data[$n]['kdbag'] = $dt['KodeBagian'];
-                    $data[$n]['nmbag'] = trim($dt['NamaBagian']);
+                    $data[$n]['nmbag'] = ucwords($dt['NamaBagian']);
                     $n++;
                 }
                 $this->response([

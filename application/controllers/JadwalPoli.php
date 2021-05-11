@@ -30,9 +30,9 @@ class Jadwalpoli extends RestController
                 $n = 0;
                 foreach ($pol as $p) {
                     $data[$n]['kodeklinik'] = $p['KodeKlinik'];
-                    $data[$n]['namaklinik'] = $p['NamaBagian'];
+                    $data[$n]['namaklinik'] = ucwords($p['NamaBagian']);
                     $data[$n]['jnswkt'] = $p['JenisWaktu'];
-                    $data[$n]['dokter'] = $p['NamaDokter'];
+                    $data[$n]['dokter'] = ucwords($p['NamaDokter']);
                     $data[$n]['kodedokter'] = $p['KodeDokter'];
                     $data[$n]['senin'] = $p['Senin'] == NULL ||  $p['Senin'] == "00:00:00.00000" ? "Libur" : date_format(date_create($p['Senin']), "H:i");
                     $data[$n]['senintutup'] = $p['SeninTutup'] == NULL ||  $p['SeninTutup'] == "00:00:00.00000" ? "Libur" : date_format(date_create($p['SeninTutup']), "H:i");
@@ -50,7 +50,7 @@ class Jadwalpoli extends RestController
                     $data[$n]['minggututup'] = $p['MingguTutup'] == NULL ||  $p['MingguTutup'] == "00:00:00.00000" ? "Libur" : date_format(date_create($p['MingguTutup']), "H:i");
                     $data[$n]['bukadaftar'] = date_format(date_create($p['JamBukaPendaftaran']), "H:i");
                     $data[$n]['tutupdaftar'] = date_format(date_create($p['JamTutupPendaftaran']), "H:i");
-                    $data[$n]['ket'] = $p['Keterangan'];
+                    $data[$n]['ket'] = ucwords($p['Keterangan']);
                     $n++;
                 }
                 $this->response([
@@ -70,9 +70,9 @@ class Jadwalpoli extends RestController
                 $n = 0;
                 foreach ($pol as $p) {
                     $data[$n]['kodeklinik'] = $p['KodeKlinik'];
-                    $data[$n]['namaklinik'] = $p['NamaBagian'];
+                    $data[$n]['namaklinik'] = ucwords($p['NamaBagian']);
                     $data[$n]['jnswkt'] = $p['JenisWaktu'];
-                    $data[$n]['dokter'] = $p['NamaDokter'];
+                    $data[$n]['dokter'] = ucwords($p['NamaDokter']);
                     $data[$n]['kodedokter'] = $p['KodeDokter'];
                     $data[$n]['senin'] = $p['Senin'] == NULL ||  $p['Senin'] == "00:00:00.00000" ? "Libur" : date_format(date_create($p['Senin']), "H:i");
                     $data[$n]['senintutup'] = $p['SeninTutup'] == NULL ||  $p['SeninTutup'] == "00:00:00.00000" ? "Libur" : date_format(date_create($p['SeninTutup']), "H:i");
@@ -90,7 +90,7 @@ class Jadwalpoli extends RestController
                     $data[$n]['minggututup'] = $p['MingguTutup'] == NULL ||  $p['MingguTutup'] == "00:00:00.00000" ? "Libur" : date_format(date_create($p['MingguTutup']), "H:i");
                     $data[$n]['bukadaftar'] = date_format(date_create($p['JamBukaPendaftaran']), "H:i");
                     $data[$n]['tutupdaftar'] = date_format(date_create($p['JamTutupPendaftaran']), "H:i");
-                    $data[$n]['ket'] = $p['Keterangan'];
+                    $data[$n]['ket'] = ucwords($p['Keterangan']);
                     $n++;
                 }
                 $this->response([

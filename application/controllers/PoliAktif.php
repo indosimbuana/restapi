@@ -33,8 +33,8 @@ class PoliAktif extends RestController
                 $data[$n]['klinik'] = $a['klinik'];
                 $data[$n]['dokter'] = $a['dokter'];
                 $data[$n]['nopasien'] = $a['nopasien'];
-                $data[$n]['nama'] = $a['nama'];
-                $data[$n]['alamat'] = $a['alamat'];
+                $data[$n]['nama'] = ucwords($a['nama']);
+                $data[$n]['alamat'] = ucwords($a['alamat']);
                 $data[$n]['tanggal'] = date_format(date_create($a['tanggal']), 'd-m-Y');
                 $n++;
             }
