@@ -42,6 +42,13 @@ class Mantrian extends CI_Model
         return $sql->result_array();
     }
 
+    function detailantrianpoli($tgl, $klinik)
+    {
+        $db2 = $this->load->database('antrian', TRUE);
+        $sql = $db2->query("SELECT Klinik as klinik, COUNT(*) AS total, SUM(IF(Masuk = '1',1,0)) AS jumlahmasuk  FROM tbantrianpoli WHERE DATE(Tanggal) = '$tgl' AND Klinik = '$klinik'");
+        return $sql->row();
+    }
+
     function daftarpasienpoli($poli, $tgl)
     {
         $db2 = $this->load->database('antrian', TRUE);

@@ -80,9 +80,12 @@ class Antrian extends RestController
                         $data[$n]['klinik'] = ucwords($a['klinik']);
                         $data[$n]['dokter'] = ucwords($a['dokter']);
                         $data[$n]['tanggal'] = date_format(date_create($a['tanggal']), 'd-m-Y');
-                        $data[$n]['nama'] = ucwords($a['nama']);
-                        $data[$n]['alamat'] = ucwords($a['alamat']);
-                        $data[$n]['nopasien'] = trim($a['nopasien']);
+                        // $data[$n]['nama'] = ucwords($a['nama']);
+                        // $data[$n]['alamat'] = ucwords($a['alamat']);
+                        // $data[$n]['nopasien'] = trim($a['nopasien']);
+                        $data[$n]['nama'] = "";
+                        $data[$n]['alamat'] = "";
+                        $data[$n]['nopasien'] = "";
                         $n++;
                     }
                     $this->response([
