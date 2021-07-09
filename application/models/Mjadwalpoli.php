@@ -19,7 +19,7 @@ class Mjadwalpoli extends CI_Model
         FROM RegJadwalKlinik jk 
         LEFT JOIN MasterInstalasi mi ON mi.KodeBagian = jk.KodeKlinik
         LEFT JOIN MasterDokter md ON md.KodeDokter = jk.KodeDokter
-        WHERE jk.StsAktif = 'Y' AND jk.KodeKlinik = '$id' ORDER BY mi.NamaBagian DESC")->result_array();
+        WHERE jk.StsAktif = 'Y' AND jk.KodeKlinik = '$id' ORDER BY mi.NamaBagian DESC, jk.JenisWaktu ASC")->result_array();
     }
 
     function cekJadwalPoli($data)
