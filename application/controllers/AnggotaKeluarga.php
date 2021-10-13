@@ -24,6 +24,7 @@ class Anggotakeluarga extends RestController
         $akun = $this->get('akun');
 
         $this->load->model('manggotakeluarga');
+        $this->load->model('mcekpasienlama');
         if ($id === null) {
             if ($akun === null || $akun === '') {
                 $this->response([
@@ -37,10 +38,18 @@ class Anggotakeluarga extends RestController
                     foreach ($a as $dt) {
                         $data[$n]['idanggota'] = $dt['idAnggotaKeluarga'];
                         $data[$n]['hubungan'] = trim($dt['hubunganAkun']);
-                        $data[$n]['nopasien'] = trim($dt['noPasien']);
-                        $data[$n]['namalengkap'] = ucwords($dt['NamaLengkap']);
-                        $data[$n]['jnskelamin'] = trim($dt['JenisKelamin']);
-                        $data[$n]['tgllahir'] = trim($dt['TglLahir']);
+                        if ($dt['noPasien'] == '') {
+                            $data[$n]['nopasien'] = trim($dt['noPasien']);
+                            $data[$n]['namalengkap'] = ucwords($dt['NamaLengkap']);
+                            $data[$n]['jnskelamin'] = trim($dt['JenisKelamin']);
+                            $data[$n]['tgllahir'] = trim($dt['TglLahir']);
+                        } else {
+                            $gp = $this->mcekpasienlama->getPasien($dt['noPasien']);
+                            $data[$n]['nopasien'] = trim($dt['noPasien']);
+                            $data[$n]['namalengkap'] = ucwords($gp->NamaPasien);
+                            $data[$n]['jnskelamin'] = trim($gp->JenisKelamin);
+                            $data[$n]['tgllahir'] = trim($gp->TglLahir);
+                        }
                         $n++;
                     }
                     $this->response([
@@ -60,10 +69,19 @@ class Anggotakeluarga extends RestController
             if ($da) {
                 $data['idanggota'] = $da->idAnggotaKeluarga;
                 $data['hubungan'] = trim($da->hubunganAkun);
-                $data['nopasien'] = trim($da->noPasien);
-                $data['namalengkap'] = ucwords($da->NamaLengkap);
-                $data['jnskelamin'] = trim($da->JenisKelamin);
-                $data['tgllahir'] = trim($da->TglLahir);
+                if ($da->noPasien == '') {
+                    $data['nopasien'] = trim($da->noPasien);
+                    $data['namalengkap'] = ucwords($da->NamaLengkap);
+                    $data['jnskelamin'] = trim($da->JenisKelamin);
+                    $data['tgllahir'] = trim($da->TglLahir);
+                } else {
+                    $gp = $this->mcekpasienlama->getPasien($da->noPasien);
+                    $data['nopasien'] = trim($da->noPasien);
+                    $data['namalengkap'] = ucwords($gp->NamaPasien);
+                    $data['jnskelamin'] = trim($gp->JenisKelamin);
+                    $data['tgllahir'] = trim($gp->TglLahir);
+                }
+
                 $this->response([
                     'status' => true,
                     'message' => 'Data found',
