@@ -25,6 +25,7 @@ class Anggotakeluarga extends RestController
 
         $this->load->model('manggotakeluarga');
         $this->load->model('mcekpasienlama');
+        $this->load->model('mcekpasienserverlama');
         if ($id === null) {
             if ($akun === null || $akun === '') {
                 $this->response([
@@ -51,7 +52,7 @@ class Anggotakeluarga extends RestController
                                 $data[$n]['jnskelamin'] = trim($gp->JenisKelamin);
                                 $data[$n]['tgllahir'] = trim($gp->TglLahir);
                             } else {
-                                $gpl = $this->Mcekpasienserverlama->getPasien($dt['noPasien']);
+                                $gpl = $this->mcekpasienserverlama->getPasien($dt['noPasien']);
                                 if ($gpl) {
                                     $data[$n]['nopasien'] = trim($dt['noPasien']);
                                     $data[$n]['namalengkap'] = ucwords($gpl->NamaPasien);
@@ -97,7 +98,7 @@ class Anggotakeluarga extends RestController
                         $data['jnskelamin'] = trim($gp->JenisKelamin);
                         $data['tgllahir'] = trim($gp->TglLahir);
                     } else {
-                        $gpl = $this->Mcekpasienserverlama->getPasien($da->noPasien);
+                        $gpl = $this->mcekpasienserverlama->getPasien($da->noPasien);
                         if ($gpl) {
                             $data['nopasien'] = trim($da->noPasien);
                             $data['namalengkap'] = ucwords($gpl->NamaPasien);
