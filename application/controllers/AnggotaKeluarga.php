@@ -45,10 +45,25 @@ class Anggotakeluarga extends RestController
                             $data[$n]['tgllahir'] = trim($dt['TglLahir']);
                         } else {
                             $gp = $this->mcekpasienlama->getPasien($dt['noPasien']);
-                            $data[$n]['nopasien'] = trim($dt['noPasien']);
-                            $data[$n]['namalengkap'] = ucwords($gp->NamaPasien);
-                            $data[$n]['jnskelamin'] = trim($gp->JenisKelamin);
-                            $data[$n]['tgllahir'] = trim($gp->TglLahir);
+                            if ($gp) {
+                                $data[$n]['nopasien'] = trim($dt['noPasien']);
+                                $data[$n]['namalengkap'] = ucwords($gp->NamaPasien);
+                                $data[$n]['jnskelamin'] = trim($gp->JenisKelamin);
+                                $data[$n]['tgllahir'] = trim($gp->TglLahir);
+                            } else {
+                                $gpl = $this->Mcekpasienserverlama->getPasien($dt['noPasien']);
+                                if ($gpl) {
+                                    $data[$n]['nopasien'] = trim($dt['noPasien']);
+                                    $data[$n]['namalengkap'] = ucwords($gpl->NamaPasien);
+                                    $data[$n]['jnskelamin'] = trim($gpl->JenisKelamin);
+                                    $data[$n]['tgllahir'] = trim($gpl->TglLahir);
+                                } else {
+                                    $data[$n]['nopasien'] = trim($dt['noPasien']);
+                                    $data[$n]['namalengkap'] = '';
+                                    $data[$n]['jnskelamin'] = '';
+                                    $data[$n]['tgllahir'] = '';
+                                }
+                            }
                         }
                         $n++;
                     }
@@ -76,10 +91,25 @@ class Anggotakeluarga extends RestController
                     $data['tgllahir'] = trim($da->TglLahir);
                 } else {
                     $gp = $this->mcekpasienlama->getPasien($da->noPasien);
-                    $data['nopasien'] = trim($da->noPasien);
-                    $data['namalengkap'] = ucwords($gp->NamaPasien);
-                    $data['jnskelamin'] = trim($gp->JenisKelamin);
-                    $data['tgllahir'] = trim($gp->TglLahir);
+                    if ($gp) {
+                        $data['nopasien'] = trim($da->noPasien);
+                        $data['namalengkap'] = ucwords($gp->NamaPasien);
+                        $data['jnskelamin'] = trim($gp->JenisKelamin);
+                        $data['tgllahir'] = trim($gp->TglLahir);
+                    } else {
+                        $gpl = $this->Mcekpasienserverlama->getPasien($da->noPasien);
+                        if ($gpl) {
+                            $data['nopasien'] = trim($da->noPasien);
+                            $data['namalengkap'] = ucwords($gpl->NamaPasien);
+                            $data['jnskelamin'] = trim($gpl->JenisKelamin);
+                            $data['tgllahir'] = trim($gpl->TglLahir);
+                        } else {
+                            $data['nopasien'] = trim($da->noPasien);
+                            $data['namalengkap'] = '';
+                            $data['jnskelamin'] = '';
+                            $data['tgllahir'] = '';
+                        }
+                    }
                 }
 
                 $this->response([
