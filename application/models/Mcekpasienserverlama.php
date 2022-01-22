@@ -13,6 +13,15 @@ class Mcekpasienserverlama extends CI_Model
         return $sql->row();
     }
 
+    function cariPasienByName($dt)
+    {
+        $db2 = $this->load->database('serverlama', TRUE);
+        $sql = $db2->query("SELECT NORM AS Nopasien, NAMA AS NamaPasien, NamaPanggilan AS NamaPanggilan, TEMPATLAHIR AS TempatLahir, TGLLAHIR AS TglLahir, JNSKELAMIN AS JenisKelamin, ALAMAT AS AlamatPasien, RT AS RT, RW AS RW, NEGARA AS Negara, KODEPOS AS KodePos, NOTELP AS TlpPasien, NamaPasangan AS NamaSuamiIstri, NOKTP AS NoKTP 
+        FROM tbpasien 
+        WHERE NAMA LIKE '%" . $dt['nama'] . "%' AND TGLLAHIR = '" . $dt['tgllahir'] . "'");
+        return $sql->row();
+    }
+
     function getPasien($no)
     {
         $db2 = $this->load->database('serverlama', TRUE);

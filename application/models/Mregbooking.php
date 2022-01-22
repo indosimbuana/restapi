@@ -111,4 +111,9 @@ class Mregbooking extends CI_Model
     {
         return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian IN ('6101', '6107') AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
     }
+
+    function hitungBookingPerPoli($bag, $tgl, $wkt)
+    {
+        return $this->db->query("SELECT * FROM RegOnline WHERE kodeBagian = '$bag' AND LEFT(kodeBooking,8) = '$tgl' AND waktuPemeriksaan = '$wkt'")->num_rows();
+    }
 }

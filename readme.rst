@@ -129,6 +129,19 @@ Method POST
 }
 
 **************************
+Cari Pasien Lama by Nama
+**************************
+
+URL Request : http://localhost/restapi/caripasienbyname
+
+Method POST
+
+{
+	"nama": "nama pasien",
+	"tgllahir": "yyyy-mm-dd"
+}
+
+**************************
 Master Level Akun 
 **************************
 

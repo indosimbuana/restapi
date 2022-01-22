@@ -9,6 +9,11 @@ class Mcekpasienlama extends CI_Model
         return $this->db->query("SELECT * FROM MasterPasien WHERE Nopasien = '" . $dt['nopasien'] . "' AND TglLahir = '" . $dt['tgllahir'] . "'")->row();
     }
 
+    function cariPasienByName($dt)
+    {
+        return $this->db->query("SELECT * FROM MasterPasien WHERE NamaPasien LIKE '%" . $dt['nama'] . "%' AND TglLahir = '" . $dt['tgllahir'] . "'")->row();
+    }
+
     function getPasien($no)
     {
         return $this->db->query("SELECT * FROM MasterPasien WHERE Nopasien = '" . $no . "'")->row();

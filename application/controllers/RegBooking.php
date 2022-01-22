@@ -88,14 +88,6 @@ class RegBooking extends RestController
                 $hari = "";
         }
 
-        $jdwpoli = $this->mregbooking->getJamPoli($data['bagian'], $data['waktu'], $data['dokter']);
-
-        if ($jdwpoli) {
-            $jp = date_format(date_create($jdwpoli->$hari), "H:i");
-            $ttp = $hari . 'Tutup';
-            $jptutup = date_format(date_create($jdwpoli->$ttp), "H:i");
-        }
-
         $cekbooking = $this->mregbooking->cekBooking($data['idanggotakeluarga'], $data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
         if ($cekbooking) {
             $this->response([
@@ -103,15 +95,58 @@ class RegBooking extends RestController
                 'message' => 'Maaf pasien ini sudah terdaftar di klinik yang sama pada tanggal yang sama'
             ], 400);
         } else {
+            $jdwpoli = $this->mregbooking->getJamPoli($data['bagian'], $data['waktu'], $data['dokter']);
+
+            // if ($jdwpoli) {
+            $jp = date_format(date_create($dt['tanggal'] . ' ' . $jdwpoli->$hari), "Y-m-d H:i");
+            $ttp = $hari . 'Tutup';
+            $jptutup = date_format(date_create($dt['tanggal'] . ' ' . $jdwpoli->$ttp), "Y-m-d H:i");
+            // }
+
+            // Jam dilayani
+            $tm = strtotime($jp);
+            $w = 30; //Waktu konfirmasi pendaftaran sebelum jam buka poli (menit)
+            $wlimit = 30; //Batas waktu pendaftaran setelah jam buka poli (menit)
+            $prs = 3; //Lama proses pendaftaran
+            $jmlloket = 2; //Jumlah loket yang melayani
+            $jmldaftar = $this->mregbooking->hitungBookingPerPoli($data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']); //Jumlah pendaftar poli
+            $totaldaftar = floor(($prs * $jmldaftar) / $jmlloket);
+            // $totaldaftar = floor(($prs * 300) / $jmlloket);
+            $daftar = date("Y-m-d H:i", strtotime('-' . $w . ' minutes', $tm)); //Jam buka pendaftaran per poli
+            $dilayani = date("Y-m-d H:i", strtotime('+' . $totaldaftar . ' minutes', strtotime($daftar))); //Jam dilayani
+            $jamlebih = date("Y-m-d H:i", strtotime('+' . $wlimit . ' minutes', strtotime($jp))); //Jam dilayani setelah melebihi dari wlimit
+            $selisih = strtotime($dilayani) - strtotime($daftar);
+            // $dt['SELISIH'] = $selisih; //CEK
+            // $dt['TOTALDETIK'] = $wlimit * 60;
+            // $dt['DILAYANIII'] = $dilayani; //CEK
+            // $dt['DL'] = $dilayani;
+            // $dt['DF'] = $daftar;
+            // $dt['JP'] = $jp;
+            // $dt['JPTUTUP'] = $jptutup;
+            // $dt['PENDAFTAR'] = $jmldaftar;
+            // $dt['TOTALDAFTAR'] = $totaldaftar;
+
+            if ($selisih > ($wlimit * 60)) {
+                $dt['jamdilayani'] = $jamlebih;
+            } else {
+                if ($selisih < 0) {
+                    $dt['jamdilayani'] = $daftar;
+                } else {
+                    $dt['jamdilayani'] = $dilayani;
+                }
+            }
+
             $hitungbooking = $this->mregbooking->hitungBooking(str_replace("-", "", $data['tanggal']));
             $dt['kodebooking'] = str_replace("-", "", $data['tanggal']) . str_pad($hitungbooking + 1, 4, "0", STR_PAD_LEFT);
-            if ($data['waktu'] == 'P') {
-                $jam = "07:00";
-            } else {
-                $jam = "11:00";
-            }
-            $time = strtotime($jam);
-            $datetime = date("Y-m-d H:i", strtotime($dt['tanggal'] . $jam));
+            $dt['datetime'] = $daftar;
+
+            // if ($data['waktu'] == 'P') {
+            //     $jam = "07:00";
+            // } else {
+            //     $jam = "11:00";
+            // }
+            // $time = strtotime($jam);
+            // $datetime = date("Y-m-d H:i", strtotime($dt['tanggal'] . $jam));
 
             if ($data['bagian'] == "6101" || $data['bagian'] == "6107") {
                 // $hitungpendaftaran = $this->mregbooking->hitungPendaftaranObsgyn(str_replace("-", "", $data['tanggal']), $data['waktu']);
@@ -124,12 +159,12 @@ class RegBooking extends RestController
                 }
                 $dt['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
-                $jml = $hitungpendaftaran;
-                $pelayanan = 3;
-                $wkt = $jml * $pelayanan;
-                $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
-                $dt['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggal'])) . " " . $jamdilayani;
-                $dt['datetime'] = $datetime;
+                // $jml = $hitungpendaftaran;
+                // $pelayanan = 3;
+                // $wkt = $jml * $pelayanan;
+                // $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                // $dt['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggal'])) . " " . $jamdilayani;
+                // $dt['datetime'] = $datetime;
             } else {
                 $hitungpendaftaran = $this->mregbooking->hitungPendaftaranLain(str_replace("-", "", $data['tanggal']), $data['waktu']);
                 $hitungpoli = $this->mregbooking->hitungPoli($data['bagian'], str_replace("-", "", $data['tanggal']), $data['waktu']);
@@ -140,12 +175,12 @@ class RegBooking extends RestController
                 }
                 $dt['noantripoli'] = str_pad($hitungpoli + 1, 3, "0", STR_PAD_LEFT);
 
-                $jml = $hitungpendaftaran;
-                $pelayanan = 3;
-                $wkt = $jml * $pelayanan;
-                $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
-                $dt['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggal'])) . " " . $jamdilayani;
-                $dt['datetime'] = $datetime;
+                // $jml = $hitungpendaftaran;
+                // $pelayanan = 3;
+                // $wkt = $jml * $pelayanan;
+                // $jamdilayani = date("H:i", strtotime('+' . $wkt . ' minutes', $time));
+                // $dt['jamdilayani'] = date("Y-m-d", strtotime($dt['tanggal'])) . " " . $jamdilayani;
+                // $dt['datetime'] = $datetime;
             }
 
             $antrianpool['idantri'] = date("YmdHis");
@@ -200,6 +235,14 @@ class RegBooking extends RestController
                     'message' => 'Gagal Simpan Booking'
                 ], 400);
             }
+
+            //---------- KEPERLUAN CEK -----------
+            // $this->response([
+            //     'status' => true,
+            //     'message' => 'Berhasil Simpan Booking',
+            //     'data' => $dt,
+            //     'antrianpool' => $antrianpool
+            // ], 200);
         }
     }
 }
